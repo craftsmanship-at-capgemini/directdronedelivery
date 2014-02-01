@@ -2,21 +2,51 @@ package dronelogistic.comandcenter;
 
 import java.util.List;
 
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Schedule;
+import javax.ejb.Stateful;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
+import dronelogistic.comandcenter.businessrules.CargoSpecyfication;
+import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
+import dronelogistic.comandcenter.businessrules.OrderPriorityCalculator;
+import dronelogistic.comandcenter.businessrules.PlaceOfDeliverySpecyfication;
+import dronelogistic.comandcenter.businessrules.ProfitabilityAndPriorityAcceptanceStrategy;
+import dronelogistic.comandcenter.businessrules.ProfitabilityCalculator;
+import dronelogistic.comandcenter.businessrules.WeatherSpecyfication;
+import dronelogistic.dronflightcontrol.AvaliableDrones;
+import dronelogistic.dronflightcontrol.DronFlightControlService;
+import dronelogistic.dronflightcontrol.Drone;
+import dronelogistic.dronflightcontrol.DroneAvaliableEvent;
+import dronelogistic.dronflightcontrol.DroneNotAvaliableException;
+import dronelogistic.orderinformations.ConsignmentChangedEvent;
+import dronelogistic.orderinformations.ConsignmentInformation;
+import dronelogistic.orderinformations.OrderAndCargoInformation;
+import dronelogistic.orderinformations.OrderUpdatedEvent;
+import dronelogistic.orderinformations.OrdersInformationService;
+import dronelogistic.warehaus.NewCargoInWarehausEvent;
+import dronelogistic.weather.ActualWeather;
+import dronelogistic.weather.WeatherService;
+
 @Stateful
 @LocalBean
 public class VesselChooseProcess {
     
     @EJB OrdersInformationService ordersInformationService;
     @EJB WeatherService weatherService;
-    @Inject Event<DroneTakeOffDecision> droneTakeOffDecisionEvent;
-    
     @EJB DronFlightControlService dronFlightControlService;
     @EJB TakeOffDecisionRepository takeOffDecisionRepository;
+    @Inject Event<DroneTakeOffDecision> droneTakeOffDecisionEvent;
     
     @Inject CargoSpecyfication cargoSpecyfication;
     @Inject PlaceOfDeliverySpecyfication placeOfDeliverySpecyfication;
-    @Inject ProfitabilitySpecyfication profitabilitySpecyfication;
-    @Inject OrderPrioritySpecyfication orderPrioritySpecyfication;
+    @Inject ProfitabilityCalculator profitabilityCalculator;
+    @Inject OrderPriorityCalculator orderPriorityCalculator;
+    @Inject ProfitabilityAndPriorityAcceptanceStrategy profitabilityAndPriorityAcceptanceStrategy;
+    @Inject DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy;
     @Inject WeatherSpecyfication weatherSpecyfication;
     
     public void newCargoInWarehaus(@Observes NewCargoInWarehausEvent newCargoInWarehausEvent) {
@@ -26,14 +56,15 @@ public class VesselChooseProcess {
         OrderAndCargoInformation orderAndCargoInformation = ordersInformationService
                 .getOrderAndCargoInformation(cargoId);
         
-        TakeOffDecision takeOffDecision = takeOffDecisionRepository.newDecision(warehausId, cargoId)
-                .withPossibleDronTypes(
-                        cargoSpecyfication.possibleDronTypes(orderAndCargoInformation))
-                .placeOfDeliveryAccepted(
-                        placeOfDeliverySpecyfication.matches(orderAndCargoInformation));
+        TakeOffDecision takeOffDecision = takeOffDecisionRepository.newDecision(warehausId, cargoId);
+        takeOffDecision.setPossibleDronTypes(
+                cargoSpecyfication.possibleDronTypes(orderAndCargoInformation));
+        takeOffDecision.setPlaceOfDeliveryAccepted(
+                placeOfDeliverySpecyfication.isAcceptable(orderAndCargoInformation));
         takeOffDecisionRepository.save(takeOffDecision);
         
-        // no information about consignements taked into account yet ...
+        // no information about profitability and priority taken into account
+        // yet ...
     }
     
     public void orderUpdated(@Observes OrderUpdatedEvent orderUpdatedEvent) {
@@ -43,87 +74,110 @@ public class VesselChooseProcess {
                 .getOrderAndCargoInformation(cargoId);
         
         TakeOffDecision takeOffDecision = takeOffDecisionRepository.get(cargoId);
-        takeOffDecision
-                .withPossibleDronTypes(
-                        cargoSpecyfication.evaluatePossibleDronTypes(orderAndCargoInformation))
-                .placeOfDeliveryAccepted(
-                        placeOfDeliverySpecyfication.isDeliveryPossible(orderAndCargoInformation));
+        boolean originalDecision = takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy);
+        takeOffDecision.setPossibleDronTypes(
+                cargoSpecyfication.possibleDronTypes(orderAndCargoInformation));
+        takeOffDecision.setPlaceOfDeliveryAccepted(
+                placeOfDeliverySpecyfication.isAcceptable(orderAndCargoInformation));
         takeOffDecisionRepository.save(takeOffDecision);
         
-        if (takeOffDecision.isPositive()) {
+        if (!originalDecision && takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy)) {
             takeOffIfDronAvaliable(takeOffDecision);
         }
     }
     
-    public void consignementChanged(@Observes ConsignementChangedEvent consignementChangedEvent) {
-        Integer consignementID = consignementChangedEvent.getConsignementID();
-        ConsignementInformation consignementInformation = ordersInformationService
-                .getOrderAndCargoInformation(consignementID);
+    public void consignmentChanged(@Observes ConsignmentChangedEvent consignmentChangedEvent) {
+        Integer consignmentID = consignmentChangedEvent.getConsignmentID();
         
-        for (OrderAndCargoInformation orderAndCargoInformation : consignementInformation.getCargosInConsignement()) {
-            TakeOffDecision takeOffDecision = takeOffDecisionRepository.get(cargoId);
-            boolean originalDecision = takeOffDecision.isPositive();
-            if (takeOffDecision.isCargoAndOrderAcceptable()) {
-                takeOffDecision.profitabilityEvaluation(
-                        profitabilitySpecyfication.evaluateProfitability(orderAndCargoInformation,
-                                consignementInformation));
-                takeOffDecision.orderPriorityEvaluation(
-                        orderPrioritySpecyfication.evaluatePriority(orderAndCargoInformation, consignementInformation));
-                takeOffDecisionRepository.save(takeOffDecision);
-                
-                if (!originalDecision && takeOffDecision.isPositive()) {
-                    takeOffIfDronAvaliable(takeOffDecision);
-                }
+        ConsignmentInformation consignmentInformation = ordersInformationService
+                .getConsignmentInformation(consignmentID);
+        
+        for (OrderAndCargoInformation orderAndCargoInformation : consignmentInformation.getCargosInConsignment()) {
+            
+            TakeOffDecision takeOffDecision = takeOffDecisionRepository.get(orderAndCargoInformation.getCargoId());
+            boolean originalDecision = takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy);
+            takeOffDecision.setProfitabilityAndPriorityAcceptance(
+                    profitabilityAndPriorityAcceptanceStrategy.isPositive(
+                            profitabilityCalculator.evaluateProfitability(orderAndCargoInformation,
+                                    consignmentInformation),
+                            orderPriorityCalculator.evaluatePriority(orderAndCargoInformation,
+                                    consignmentInformation)));
+            takeOffDecisionRepository.save(takeOffDecision);
+            
+            if (!originalDecision && takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy)) {
+                takeOffIfDronAvaliable(takeOffDecision);
             }
         }
     }
     
     @Schedule(minute = "*/15")
-    private void periodicalWeatherCheck() {
+    public void periodicalWeatherCheck() {
         boolean currentWeatherConditionsDecision = takeOffDecisionRepository.getCurrentWeatherConditionsDecision();
         
         ActualWeather actualWeather = weatherService.getActualWeather();
-        boolean newWeatherConditionsDecision = weatherSpecyfication.matches(actualWeather);
+        boolean newWeatherConditionsDecision = weatherSpecyfication.isAcceptable(actualWeather);
         
         if (currentWeatherConditionsDecision != newWeatherConditionsDecision) {
             takeOffDecisionRepository.saveCurrentWeatherConditionsDecision(newWeatherConditionsDecision);
             
             if (newWeatherConditionsDecision) {
-                AvaliableDrones avaliableDrones = dronFlightControlService.getAvaliableDrones();
-                for (String droneTyp : avaliableDrones.getDroneTypesInAscSizeOrder()) {
-                    Integer countLimit = avaliableDrones.getCount(droneTyp);
-                    List<TakeOffDecision> takeOffDecisions = takeOffDecisionRepository.getPositiveDecisions(droneTyp,
-                            countLimit);
-                    for (TakeOffDecision takeOffDecision : takeOffDecisions) {
-                        Drone drone = dronFlightControlService.reserveDrone(droneTyp);
-                        droneTakeOffDecisionEvent.emit(new DroneTakeOffDecision(drone, takeOffDecision.getCargoID()));
-                    }
+                takeOffAllAvaliableDrones();
+            }
+        }
+    }
+    
+    @Schedule(minute = "01,31")
+    public void deliveryTimeAcceptanceCheck() {
+        takeOffAllAvaliableDrones();
+    }
+    
+    public void droneAvaliable(@Observes DroneAvaliableEvent droneAvaliableEvent) {
+        try {
+            String droneTyp = droneAvaliableEvent.getDroneTyp();
+            List<TakeOffDecision> takeOffDecisions = takeOffDecisionRepository.getPositiveDecisions(droneTyp,
+                    deliveryTimeAcceptanceStrategy, 1);
+            
+            if (!takeOffDecisions.isEmpty()) {
+                Drone drone = dronFlightControlService.reserveDrone(droneTyp);
+                droneTakeOffDecisionEvent.fire(new DroneTakeOffDecision(drone, takeOffDecisions.get(0).getCargoID()));
+            }
+        } catch (DroneNotAvaliableException e) {
+        }
+    }
+    
+    private void takeOffIfDronAvaliable(TakeOffDecision takeOffDecision) {
+        AvaliableDrones avaliableDrones = dronFlightControlService.getAvaliableDrones();
+        
+        for (String droneTyp : takeOffDecision.getPossibleDronTypes()) {
+            Integer countLimit = avaliableDrones.getCount(droneTyp);
+            if (countLimit > 0) {
+                try {
+                    Drone drone = dronFlightControlService.reserveDrone(droneTyp);
+                    droneTakeOffDecisionEvent.fire(new DroneTakeOffDecision(drone, takeOffDecision.getCargoID()));
+                } catch (DroneNotAvaliableException e) {
+                    continue;
                 }
             }
         }
     }
     
-    public void droneAvaliable(@Observes DroneAvaliableEvent droneAvaliableEvent) {
-        String droneTyp = droneAvaliableEvent.getDroneTyp();
-        List<TakeOffDecision> takeOffDecisions = takeOffDecisionRepository.getPositiveDecisions(drone.getDroneTyp(), 1);
-        
-        if (!takeOffDecisions.isEmpty()) {
-            Drone drone = dronFlightControlService.reserveDrone(droneTyp);
-            droneTakeOffDecisionEvent.emit(new DroneTakeOffDecision(drone, takeOffDecisions.get(0).getCargoID()));
-        }
-    }
-    
-    private void takeOffIfDronAvaliable(TakeOffDecision takeOffDecision) {
-        assert takeOffDecision.isPositive();
-        
-        AvaliableDrones avaliableDrones = dronFlightControlService
-                .getAvaliableDrones(takeOffDecision.getPossibleDronTypes());
-        
+    private void takeOffAllAvaliableDrones() {
+        AvaliableDrones avaliableDrones = dronFlightControlService.getAvaliableDrones();
         for (String droneTyp : avaliableDrones.getDroneTypesInAscSizeOrder()) {
-            Integer countLimit = avaliableDrones.getCount(droneTyp);
-            if (countLimit > 0) {
-                Drone drone = dronFlightControlService.reserveDrone(droneTyp);
-                droneTakeOffDecisionEvent.emit(new DroneTakeOffDecision(drone, takeOffDecision.getCargoID()));
+            Integer droneCount = avaliableDrones.getCount(droneTyp);
+            if (droneCount == 0) {
+                continue;
+            }
+            List<TakeOffDecision> takeOffDecisions = takeOffDecisionRepository
+                    .getPositiveDecisions(droneTyp, deliveryTimeAcceptanceStrategy, droneCount);
+            try {
+                for (TakeOffDecision takeOffDecision : takeOffDecisions) {
+                    Drone drone = dronFlightControlService.reserveDrone(droneTyp);
+                    droneTakeOffDecisionEvent
+                            .fire(new DroneTakeOffDecision(drone, takeOffDecision.getCargoID()));
+                }
+            } catch (DroneNotAvaliableException e) {
+                continue;
             }
         }
     }
