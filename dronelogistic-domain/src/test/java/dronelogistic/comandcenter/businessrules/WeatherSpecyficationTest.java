@@ -8,20 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import testing.Testing;
-import dronelogistic.weather.ActualWeather;
-import dronelogistic.weather.ActualWeatherBuilder;
+import dronelogistic.weather.Weather;
+import dronelogistic.weather.WeatherBuilder;
 
 public class WeatherSpecyficationTest {
-    
-    // 5. WeatherSpecyfication Warunki pogodowe umożliwiają wysłanie Paczki
-    // (Cargo) Dronem (Vessel)
-    // - siła wiatru jest mniejsza niż 20km/h
-    // - brak wyładowań atmosferycznych (burzy)
-    // - brak deszczu
-    // - brak gradu
-    // - brak śniegu
-    // - temperatura powietrza jest wyższa niż 10 stopni i niższa niż 30 stopni
-    // - wilgotność powietrza nie przekracza 55%
     
     @Inject WeatherSpecyfication weatherSpecyfication;
     
@@ -32,7 +22,7 @@ public class WeatherSpecyficationTest {
     
     @Test
     public void shouldAcceptWeakWind() {
-        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(3.0).build();
         
         boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
@@ -42,7 +32,7 @@ public class WeatherSpecyficationTest {
     
     @Test
     public void shouldAcceptMaximalWindStrength() {
-        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(5.56).build();
         
         boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
@@ -52,7 +42,7 @@ public class WeatherSpecyficationTest {
     
     @Test
     public void shouldAcceptStrongWind() {
-        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(6.0).build();
         
         boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
@@ -62,7 +52,7 @@ public class WeatherSpecyficationTest {
     
     @Test
     public void shouldAcceptWeatherWhennLightningsArePossible() {
-        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withLightningsPossible(true).build();
         
         boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
@@ -72,7 +62,7 @@ public class WeatherSpecyficationTest {
     
     @Test
     public void shouldNotAcceptPrecipitation() {
-        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withPrecipitationPossible(true).build();
         
         boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
@@ -82,12 +72,92 @@ public class WeatherSpecyficationTest {
     
     @Test
     public void shouldAcceptWeatherWihtNoLightningsAndPrecipitation() {
-        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withLightningsPossible(false).withPrecipitationPossible(false).build();
         
         boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
         
         assertThat(weatherAcceptable).isTrue();
+    }
+    
+    @Test
+    public void shouldAcceptTemperatureInAcceptableRange() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withTemperatureInCelsius(15).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isTrue();
+    }
+    
+    @Test
+    public void shouldAcceptTemperatureOnLowerBoundry() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withTemperatureInCelsius(10).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isTrue();
+    }
+    
+    @Test
+    public void shouldAcceptTemperatureOnUpperBoundry() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withTemperatureInCelsius(30).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isTrue();
+    }
+    
+    @Test
+    public void shouldNotAcceptTemperatureUnderLowerBoundry() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withTemperatureInCelsius(9).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isFalse();
+    }
+    
+    @Test
+    public void shouldNotAcceptTemperatureOverUpperBoundry() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withTemperatureInCelsius(31).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isFalse();
+    }
+    
+    @Test
+    public void shouldAcceptWeatherWithLowHumidity() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withHumidityInPercent(30).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isTrue();
+    }
+    
+    @Test
+    public void shouldAcceptWeatherWithMaximalHumidity() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withHumidityInPercent(55).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isTrue();
+    }
+    
+    @Test
+    public void shouldNotAcceptWeatherWithHighHumidity() {
+        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
+                .but().withHumidityInPercent(60).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isFalse();
     }
     
 }

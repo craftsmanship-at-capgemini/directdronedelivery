@@ -28,7 +28,7 @@ import dronelogistic.orderinformations.OrderAndCargoInformation;
 import dronelogistic.orderinformations.OrderUpdatedEvent;
 import dronelogistic.orderinformations.OrdersInformationService;
 import dronelogistic.warehaus.NewCargoInWarehausEvent;
-import dronelogistic.weather.ActualWeather;
+import dronelogistic.weather.Weather;
 import dronelogistic.weather.WeatherService;
 
 @Stateful
@@ -114,7 +114,7 @@ public class VesselChooseProcess {
     public void periodicalWeatherCheck() {
         boolean currentWeatherConditionsDecision = takeOffDecisionRepository.getCurrentWeatherConditionsDecision();
         
-        ActualWeather actualWeather = weatherService.getActualWeather();
+        Weather actualWeather = weatherService.getActualWeather();
         boolean newWeatherConditionsDecision = weatherSpecyfication.isAcceptable(actualWeather);
         
         if (currentWeatherConditionsDecision != newWeatherConditionsDecision) {

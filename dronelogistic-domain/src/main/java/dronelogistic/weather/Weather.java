@@ -6,10 +6,12 @@ import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-public class ActualWeather {
+public class Weather {
     
-    @Getter protected double wind;
+    @Getter protected double windInPMS;
     @Getter protected boolean lightningsPossible;
     @Getter protected boolean precipitationPossible;
+    @Getter protected int temperatureInCelsius;
+    @Getter protected int humidityInPercent;
     
 }

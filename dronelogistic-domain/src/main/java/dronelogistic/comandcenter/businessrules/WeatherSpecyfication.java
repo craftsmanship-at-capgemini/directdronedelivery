@@ -1,26 +1,37 @@
 package dronelogistic.comandcenter.businessrules;
 
-import dronelogistic.weather.ActualWeather;
+import dronelogistic.weather.Weather;
 
 public class WeatherSpecyfication {
     
     private static final double MAXIMAL_WIND_IN_MPS = 5.56;
+    private static final int MAXIMAL_TEMPERATURE_C = 30;
+    private static final int MINIMAL_TEMPERATURE_C = 10;
+    private static final int MAXIMAL_HUMIDITY = 55;
     
-    public boolean isAcceptable(ActualWeather actualWeather) {
+    public boolean isAcceptable(Weather weather) {
         
-        if (actualWeather.getWind() > MAXIMAL_WIND_IN_MPS) {
+        if (weather.getWindInPMS() > MAXIMAL_WIND_IN_MPS) {
             return false;
         }
         
-        if (actualWeather.isLightningsPossible()) {
+        if (weather.isLightningsPossible()) {
             return false;
         }
         
-        if (actualWeather.isPrecipitationPossible()) {
+        if (weather.isPrecipitationPossible()) {
+            return false;
+        }
+        
+        if (weather.getTemperatureInCelsius() < MINIMAL_TEMPERATURE_C
+                || MAXIMAL_TEMPERATURE_C < weather.getTemperatureInCelsius()) {
+            return false;
+        }
+        
+        if (weather.getHumidityInPercent() > MAXIMAL_HUMIDITY) {
             return false;
         }
         
         return true;
     }
-    
 }
