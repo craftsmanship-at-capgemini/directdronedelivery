@@ -24,16 +24,6 @@ public class CargoSpecyficationTest {
         Testing.inject(this);
     }
     
-    // 1. CargoSpecyfication Warunki techniczne Paczki (Cargo) umożliwiają
-    // wysłanie jej Dronem (Vessel)
-    // - Paczka (Cargo) ma wagę do 5kg
-    // - Maksymalne wymiary długość/szerokość/wysokość umożliwiają dostarczenie
-    // paczki Dronem (Vessel)
-    // - Towar (Commodity) jest odpowiednio odporny na wstrząsy (np. może być
-    // problem z przewożeniem szkła)
-    // - Towar (Commodity) nie jest niebezpieczny ani łatwopalny (tzw. Dangerous
-    // Goods np. 2l kanisterek benzyny może być problematyczny)
-    
     @Test
     public void shouldNotAcceptCargoWeighingOver5Kilos() {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
@@ -127,4 +117,43 @@ public class CargoSpecyficationTest {
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
     
+    @Test
+    public void shouldAcceptNonFragileCommodityInCargo() {
+        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
+                .but().withFragileCommodity(false).build();
+        
+        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        
+        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
+    }
+    
+    @Test
+    public void shouldNotAcceptFragileCommodityInCargo() {
+        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
+                .but().withFragileCommodity(true).build();
+        
+        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        
+        assertThat(possibleDronTypes).isEmpty();
+    }
+    
+    @Test
+    public void shouldAcceptNonDangerousGoods() {
+        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
+                .but().withDangerousGoods(false).build();
+        
+        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        
+        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
+    }
+    
+    @Test
+    public void shouldNotAcceptDangerousGoods() {
+        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
+                .but().withDangerousGoods(true).build();
+        
+        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        
+        assertThat(possibleDronTypes).isEmpty();
+    }
 }

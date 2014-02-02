@@ -6,6 +6,8 @@ public class OrderAndCargoInformation {
     protected int weight;
     protected Size size;
     protected boolean fixedOrientation;
+    protected boolean fragileCommodity;
+    protected boolean dangerousGoods;
     
     public Integer getCargoId() {
         return cargoId;
@@ -21,6 +23,14 @@ public class OrderAndCargoInformation {
     
     public boolean isFixedOrientation() {
         return fixedOrientation;
+    }
+    
+    public boolean isFragileCommodity() {
+        return fragileCommodity;
+    }
+    
+    public boolean isDangerousGoods() {
+        return dangerousGoods;
     }
     
 }

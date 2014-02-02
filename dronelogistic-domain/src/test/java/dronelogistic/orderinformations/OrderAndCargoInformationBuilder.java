@@ -46,6 +46,16 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
+    public OrderAndCargoInformationBuilder withFragileCommodity(boolean fragileCommodity) {
+        underConstruction.fragileCommodity = fragileCommodity;
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withDangerousGoods(boolean dangerousGoods) {
+        underConstruction.dangerousGoods = dangerousGoods;
+        return this;
+    }
+    
     public OrderAndCargoInformation build() {
         OrderAndCargoInformation builded = underConstruction;
         underConstruction = new OrderAndCargoInformation();

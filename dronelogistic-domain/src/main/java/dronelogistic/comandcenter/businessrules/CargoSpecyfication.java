@@ -27,6 +27,14 @@ public class CargoSpecyfication {
             return Collections.emptyList();
         }
         
+        if (orderAndCargoInformation.isFragileCommodity()) {
+            return Collections.emptyList();
+        }
+        
+        if (orderAndCargoInformation.isDangerousGoods()) {
+            return Collections.emptyList();
+        }
+        
         return POSSIBLE_DRONE_TYPES;
     }
     
