@@ -15,8 +15,6 @@ public interface TakeOffDecisionRepository {
     List<TakeOffDecision> getPositiveDecisions(String droneTyp,
             DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit);
     
-    boolean getCurrentWeatherConditionsDecision();
-    
-    void saveCurrentWeatherConditionsDecision(boolean newWeatherConditionsDecision);
+    CargoIndependentSubDecisions getCargoIndependentSubDecisions();
     
 }

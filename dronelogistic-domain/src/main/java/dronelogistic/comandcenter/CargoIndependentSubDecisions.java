@@ -7,9 +7,27 @@ import lombok.ToString;
 @ToString
 public class CargoIndependentSubDecisions {
     
+    private boolean manuallFlightCancellation = false;
+    private boolean weatherAcceptable = false;
+    
     public boolean arePositive() {
-        // TODO Auto-generated method stub
-        return false;
+        return !manuallFlightCancellation && weatherAcceptable;
+    }
+    
+    protected void cancelFlights() {
+        manuallFlightCancellation = true;
+    }
+    
+    protected void allowFlights() {
+        manuallFlightCancellation = false;
+    }
+    
+    public boolean isWeatherAcceptable() {
+        return weatherAcceptable;
+    }
+    
+    public void setWeatherAcceptable(boolean weatherAcceptable) {
+        this.weatherAcceptable = weatherAcceptable;
     }
     
 }

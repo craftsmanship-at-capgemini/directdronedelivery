@@ -112,13 +112,15 @@ public class VesselChooseProcess {
     
     @Schedule(minute = "*/15")
     public void periodicalWeatherCheck() {
-        boolean currentWeatherConditionsDecision = takeOffDecisionRepository.getCurrentWeatherConditionsDecision();
+        CargoIndependentSubDecisions cargoIndependentSubDecisions = takeOffDecisionRepository
+                .getCargoIndependentSubDecisions();
+        boolean currentWeatherConditionsDecision = cargoIndependentSubDecisions.isWeatherAcceptable();
         
         Weather actualWeather = weatherService.getActualWeather();
         boolean newWeatherConditionsDecision = weatherSpecyfication.isAcceptable(actualWeather);
         
         if (currentWeatherConditionsDecision != newWeatherConditionsDecision) {
-            takeOffDecisionRepository.saveCurrentWeatherConditionsDecision(newWeatherConditionsDecision);
+            cargoIndependentSubDecisions.setWeatherAcceptable(newWeatherConditionsDecision);
             
             if (newWeatherConditionsDecision) {
                 takeOffAllAvaliableDrones();
