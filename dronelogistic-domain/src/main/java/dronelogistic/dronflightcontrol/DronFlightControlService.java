@@ -1,6 +1,5 @@
 package dronelogistic.dronflightcontrol;
 
-
 public interface DronFlightControlService {
     
     AvaliableDrones getAvaliableDrones();

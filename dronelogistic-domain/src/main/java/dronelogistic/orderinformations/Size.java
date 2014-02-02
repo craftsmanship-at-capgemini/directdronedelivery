@@ -2,6 +2,11 @@ package dronelogistic.orderinformations;
 
 import java.util.Arrays;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@EqualsAndHashCode
+@ToString
 public class Size {
     
     int length;

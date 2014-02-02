@@ -1,7 +1,11 @@
 package dronelogistic.comandcenter;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import dronelogistic.dronflightcontrol.Drone;
 
+@EqualsAndHashCode
+@ToString
 public class DroneTakeOffDecision {
     
     private Drone drone;

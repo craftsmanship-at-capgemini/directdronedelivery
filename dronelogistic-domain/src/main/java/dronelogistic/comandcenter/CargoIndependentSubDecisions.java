@@ -1,5 +1,10 @@
 package dronelogistic.comandcenter;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@EqualsAndHashCode
+@ToString
 public class CargoIndependentSubDecisions {
     
     public boolean arePositive() {

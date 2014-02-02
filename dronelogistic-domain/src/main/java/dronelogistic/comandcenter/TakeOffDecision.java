@@ -3,9 +3,13 @@ package dronelogistic.comandcenter;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
 import dronelogistic.orderinformations.AcceptableDeliveryTime;
 
+@EqualsAndHashCode
+@ToString
 public class TakeOffDecision {
     
     private Integer cargoID;
