@@ -9,5 +9,7 @@ import lombok.ToString;
 public class ActualWeather {
     
     @Getter protected double wind;
+    @Getter protected boolean lightningsPossible;
+    @Getter protected boolean precipitationPossible;
     
 }

@@ -1,6 +1,5 @@
 package dronelogistic.weather;
 
-
 public class ActualWeatherBuilder {
     
     private ActualWeather underConstruction = null;
@@ -30,6 +29,16 @@ public class ActualWeatherBuilder {
         ActualWeather builded = underConstruction;
         underConstruction = new ActualWeather();
         return builded;
+    }
+    
+    public ActualWeatherBuilder withLightningsPossible(boolean lightningsPossible) {
+        underConstruction.lightningsPossible = lightningsPossible;
+        return this;
+    }
+    
+    public ActualWeatherBuilder withPrecipitationPossible(boolean precipitationPossible) {
+        underConstruction.precipitationPossible = precipitationPossible;
+        return this;
     }
     
 }

@@ -12,6 +12,14 @@ public class WeatherSpecyfication {
             return false;
         }
         
+        if (actualWeather.isLightningsPossible()) {
+            return false;
+        }
+        
+        if (actualWeather.isPrecipitationPossible()) {
+            return false;
+        }
+        
         return true;
     }
     

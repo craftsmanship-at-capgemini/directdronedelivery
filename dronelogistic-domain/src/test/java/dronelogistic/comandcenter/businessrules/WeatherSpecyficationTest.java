@@ -60,4 +60,34 @@ public class WeatherSpecyficationTest {
         assertThat(weatherAcceptable).isFalse();
     }
     
+    @Test
+    public void shouldAcceptWeatherWhennLightningsArePossible() {
+        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+                .but().withLightningsPossible(true).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isFalse();
+    }
+    
+    @Test
+    public void shouldNotAcceptPrecipitation() {
+        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+                .but().withPrecipitationPossible(true).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isFalse();
+    }
+    
+    @Test
+    public void shouldAcceptWeatherWihtNoLightningsAndPrecipitation() {
+        ActualWeather weather = ActualWeatherBuilder.aWeather().likeNiceWeather()
+                .but().withLightningsPossible(false).withPrecipitationPossible(false).build();
+        
+        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        
+        assertThat(weatherAcceptable).isTrue();
+    }
+    
 }
