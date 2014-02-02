@@ -1,16 +1,13 @@
 package dronelogistic.dronflightcontrol;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
 public class DroneAvaliableEvent {
     
-    private String droneTyp;
-    
-    public String getDroneTyp() {
-        return droneTyp;
-    }
+    @Getter private String droneTyp;
     
 }

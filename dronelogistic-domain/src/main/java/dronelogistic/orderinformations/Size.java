@@ -3,17 +3,18 @@ package dronelogistic.orderinformations;
 import java.util.Arrays;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
 public class Size {
     
-    int length;
-    int width;
-    int height;
+    @Getter int length;
+    @Getter int width;
+    @Getter int height;
     
-    protected Size() {
+    private Size() {
     }
     
     public static Size newSizeInMilimeters(int length, int width, int height) {
@@ -23,18 +24,6 @@ public class Size {
         cargoSize.height = height;
         
         return cargoSize;
-    }
-    
-    public int getLength() {
-        return length;
-    }
-    
-    public int getWidth() {
-        return width;
-    }
-    
-    public int getHeight() {
-        return height;
     }
     
     public boolean fitsIn(Size otherSize) {

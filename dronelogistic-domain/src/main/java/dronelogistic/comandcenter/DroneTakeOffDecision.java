@@ -1,6 +1,7 @@
 package dronelogistic.comandcenter;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import dronelogistic.dronflightcontrol.Drone;
 
@@ -8,20 +9,12 @@ import dronelogistic.dronflightcontrol.Drone;
 @ToString
 public class DroneTakeOffDecision {
     
-    private Drone drone;
-    private Integer cargoID;
+    @Getter private Drone drone;
+    @Getter private Integer cargoID;
     
     public DroneTakeOffDecision(Drone drone, Integer cargoID) {
         this.drone = drone;
         this.cargoID = cargoID;
-    }
-    
-    public Drone getDrone() {
-        return drone;
-    }
-    
-    public Integer getCargoID() {
-        return cargoID;
     }
     
 }

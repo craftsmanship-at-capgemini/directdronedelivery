@@ -1,16 +1,13 @@
 package dronelogistic.orderinformations;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
 public class OrderUpdatedEvent {
     
-    private Integer cargoID;
-    
-    public Integer getCargoID() {
-        return cargoID;
-    }
+    @Getter private Integer cargoID;
     
 }
