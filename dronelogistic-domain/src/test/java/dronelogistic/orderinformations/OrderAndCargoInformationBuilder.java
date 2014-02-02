@@ -12,6 +12,8 @@ public class OrderAndCargoInformationBuilder {
     
     public OrderAndCargoInformationBuilder likeSmallGift() {
         withWeightInGrams(850);
+        withSizeInMilimeters(250, 100, 10);
+        withFixedOrientation(false);
         return this;
     }
     
@@ -34,8 +36,13 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
-    public OrderAndCargoInformationBuilder withSizeInMilimeters(int x, int y, int z) {
-        underConstruction.size = Size.newSizeInMilimeters(x, y, z);
+    public OrderAndCargoInformationBuilder withSizeInMilimeters(int length, int width, int height) {
+        underConstruction.size = Size.newSizeInMilimeters(length, width, height);
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withFixedOrientation(boolean fixedOrientation) {
+        underConstruction.fixedOrientation = fixedOrientation;
         return this;
     }
     
