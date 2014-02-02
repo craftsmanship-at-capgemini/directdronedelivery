@@ -2,7 +2,10 @@ package dronelogistic.orderinformations;
 
 public class OrderAndCargoInformationBuilder {
     
-    private OrderAndCargoInformation underConstruction = null;
+    private OrderAndCargoInformation underConstruction;
+    
+    private OrderAndCargoInformationBuilder() {
+    }
     
     public static OrderAndCargoInformationBuilder aCargo() {
         OrderAndCargoInformationBuilder builder = new OrderAndCargoInformationBuilder();
@@ -14,6 +17,9 @@ public class OrderAndCargoInformationBuilder {
         withWeightInGrams(850);
         withSizeInMilimeters(250, 100, 10);
         withFixedOrientation(false);
+        withFragileCommodity(false);
+        withDangerousGoods(false);
+        withUnimitedDeliveryTime();
         return this;
     }
     
@@ -22,12 +28,12 @@ public class OrderAndCargoInformationBuilder {
     }
     
     public OrderAndCargoInformationBuilder withWeightInGrams(int weightInGrams) {
-        underConstruction.weight = weightInGrams;
+        underConstruction.weightInGrams = weightInGrams;
         return this;
     }
     
     public OrderAndCargoInformationBuilder withWeightInKilos(int weightInKilos) {
-        underConstruction.weight = 1000 * weightInKilos;
+        underConstruction.weightInGrams = 1000 * weightInKilos;
         return this;
     }
     
@@ -53,6 +59,23 @@ public class OrderAndCargoInformationBuilder {
     
     public OrderAndCargoInformationBuilder withDangerousGoods(boolean dangerousGoods) {
         underConstruction.dangerousGoods = dangerousGoods;
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(AcceptableDeliveryTime acceptableDeliveryTime) {
+        underConstruction.acceptableDeliveryTime = acceptableDeliveryTime;
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(
+            AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder) {
+        underConstruction.acceptableDeliveryTime = acceptableDeliveryTimeBuilder.build();
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withUnimitedDeliveryTime() {
+        underConstruction.acceptableDeliveryTime = AcceptableDeliveryTimeBuilder.aTime()
+                .addInterval("00:00-24:00").build();
         return this;
     }
     
