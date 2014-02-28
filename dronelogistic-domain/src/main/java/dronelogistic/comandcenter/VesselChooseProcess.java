@@ -56,7 +56,7 @@ public class VesselChooseProcess {
         OrderAndCargoInformation orderAndCargoInformation = ordersInformationService
                 .getOrderAndCargoInformation(cargoId);
         
-        TakeOffDecision takeOffDecision = takeOffDecisionRepository.newDecision(warehausId, cargoId);
+        TakeOffDecision takeOffDecision = takeOffDecisionRepository.newDecision(warehausId, cargoId, orderAndCargoInformation.getAcceptableDeliveryTime());
         takeOffDecision.setPossibleDronTypes(
                 cargoSpecyfication.possibleDronTypes(orderAndCargoInformation));
         takeOffDecision.setPlaceOfDeliveryAccepted(
@@ -94,7 +94,7 @@ public class VesselChooseProcess {
         
         for (OrderAndCargoInformation orderAndCargoInformation : consignmentInformation.getCargosInConsignment()) {
             
-            TakeOffDecision takeOffDecision = takeOffDecisionRepository.get(orderAndCargoInformation.getCargoId());
+            TakeOffDecision takeOffDecision = takeOffDecisionRepository.get(orderAndCargoInformation.getCargoID());
             boolean originalDecision = takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy);
             takeOffDecision.setProfitabilityAndPriorityAcceptance(
                     profitabilityAndPriorityAcceptanceStrategy.isPositive(
@@ -129,7 +129,7 @@ public class VesselChooseProcess {
     }
     
     @Schedule(minute = "01,31")
-    public void deliveryTimeAcceptanceCheck() {
+    public void periodicalDeliveryTimeAcceptanceCheck() {
         takeOffAllAvaliableDrones();
     }
     
@@ -156,6 +156,7 @@ public class VesselChooseProcess {
                 try {
                     Drone drone = dronFlightControlService.reserveDrone(droneTyp);
                     droneTakeOffDecisionEvent.fire(new DroneTakeOffDecision(drone, takeOffDecision.getCargoID()));
+                    break;
                 } catch (DroneNotAvaliableException e) {
                     continue;
                 }

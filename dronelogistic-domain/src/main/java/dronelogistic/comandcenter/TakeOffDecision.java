@@ -20,14 +20,15 @@ public class TakeOffDecision {
     private AcceptableDeliveryTime acceptableDeliveryTime;
     private transient CargoIndependentSubDecisions cargoIndependentSubDecisions;
     
-    TakeOffDecision(Integer cargoID, Integer warehausID, CargoIndependentSubDecisions cargoIndependentSubDecisions) {
+    TakeOffDecision(Integer cargoID, Integer warehausID, AcceptableDeliveryTime acceptableDeliveryTime, CargoIndependentSubDecisions cargoIndependentSubDecisions) {
         this.cargoID = cargoID;
         this.warehausID = warehausID;
         this.cargoIndependentSubDecisions = cargoIndependentSubDecisions;
         
-        possibleDronTypes = Collections.emptyList();
-        placeOfDeliveryAccepted = false;
-        profitabilityAndPriorityAcceptance = false;
+        this.possibleDronTypes = Collections.emptyList();
+        this.placeOfDeliveryAccepted = false;
+        this.profitabilityAndPriorityAcceptance = false;
+        this.acceptableDeliveryTime = acceptableDeliveryTime;
     }
     
     public boolean isCargoAndOrderAcceptable() {
