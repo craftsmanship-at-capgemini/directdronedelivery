@@ -6,7 +6,7 @@ public class PlaceOfDeliverySpecyfication {
     
     public boolean isAcceptable(OrderAndCargoInformation orderAndCargoInformation) {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
     
 }
