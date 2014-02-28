@@ -4,6 +4,9 @@ public class WeatherBuilder {
     
     private Weather underConstruction = null;
     
+    private WeatherBuilder() {
+    }
+    
     public static WeatherBuilder aWeather() {
         WeatherBuilder builder = new WeatherBuilder();
         builder.underConstruction = new Weather();
@@ -43,15 +46,15 @@ public class WeatherBuilder {
         return this;
     }
     
+    public WeatherBuilder withHumidityInPercent(int humidityInPercent) {
+        underConstruction.humidityInPercent = humidityInPercent;
+        return this;
+    }
+    
     public Weather build() {
         Weather builded = underConstruction;
         underConstruction = new Weather();
         return builded;
-    }
-    
-    public WeatherBuilder withHumidityInPercent(int humidityInPercent) {
-        underConstruction.humidityInPercent = humidityInPercent;
-        return this;
     }
     
 }

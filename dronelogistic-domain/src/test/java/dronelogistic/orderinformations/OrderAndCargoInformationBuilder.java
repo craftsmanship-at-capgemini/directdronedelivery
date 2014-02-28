@@ -1,6 +1,10 @@
 package dronelogistic.orderinformations;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class OrderAndCargoInformationBuilder {
+    
+    private static AtomicInteger nextCargoID = new AtomicInteger(1313);
     
     private OrderAndCargoInformation underConstruction;
     
@@ -14,12 +18,18 @@ public class OrderAndCargoInformationBuilder {
     }
     
     public OrderAndCargoInformationBuilder likeSmallGift() {
+        withCargoID(nextCargoID.incrementAndGet());
         withWeightInGrams(850);
         withSizeInMilimeters(250, 100, 10);
         withFixedOrientation(false);
         withFragileCommodity(false);
         withDangerousGoods(false);
         withUnimitedDeliveryTime();
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withCargoID(int cargoID) {
+        underConstruction.cargoID = cargoID;
         return this;
     }
     
@@ -83,6 +93,10 @@ public class OrderAndCargoInformationBuilder {
         OrderAndCargoInformation builded = underConstruction;
         underConstruction = new OrderAndCargoInformation();
         return builded;
+    }
+    
+    public static int nextCargoID() {
+        return nextCargoID.incrementAndGet();
     }
     
 }

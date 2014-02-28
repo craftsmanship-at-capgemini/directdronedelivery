@@ -20,7 +20,8 @@ public class TakeOffDecision {
     private AcceptableDeliveryTime acceptableDeliveryTime;
     private transient CargoIndependentSubDecisions cargoIndependentSubDecisions;
     
-    TakeOffDecision(Integer cargoID, Integer warehausID, AcceptableDeliveryTime acceptableDeliveryTime, CargoIndependentSubDecisions cargoIndependentSubDecisions) {
+    TakeOffDecision(Integer cargoID, Integer warehausID, AcceptableDeliveryTime acceptableDeliveryTime,
+            CargoIndependentSubDecisions cargoIndependentSubDecisions) {
         this.cargoID = cargoID;
         this.warehausID = warehausID;
         this.cargoIndependentSubDecisions = cargoIndependentSubDecisions;

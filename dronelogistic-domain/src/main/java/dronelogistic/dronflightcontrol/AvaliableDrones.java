@@ -1,6 +1,8 @@
 package dronelogistic.dronflightcontrol;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -9,14 +11,24 @@ import lombok.ToString;
 @ToString
 public class AvaliableDrones {
     
+    public List<String> droneTypes;
+    public Map<String, Integer> droneCounts;
+    
+    protected AvaliableDrones(List<String> droneTypesInAscSizeOrder, Map<String, Integer> droneCounts) {
+        this.droneTypes = droneTypesInAscSizeOrder;
+        this.droneCounts = droneCounts;
+    }
+    
     public List<String> getDroneTypesInAscSizeOrder() {
-        // TODO Auto-generated method stub
-        return null;
+        return Collections.unmodifiableList(droneTypes);
     }
     
     public Integer getCount(String droneTyp) {
-        // TODO Auto-generated method stub
-        return 0;
+        if (droneCounts.containsKey(droneTyp)) {
+            return droneCounts.get(droneTyp);
+        } else {
+            return 0;
+        }
     }
     
 }

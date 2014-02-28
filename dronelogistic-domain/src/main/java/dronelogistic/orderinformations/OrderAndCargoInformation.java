@@ -8,7 +8,7 @@ import lombok.ToString;
 @ToString
 public class OrderAndCargoInformation {
     
-    @Getter protected Integer cargoId;
+    @Getter protected Integer cargoID;
     @Getter protected int weightInGrams;
     @Getter protected Size size;
     @Getter protected boolean fixedOrientation;
@@ -16,4 +16,6 @@ public class OrderAndCargoInformation {
     @Getter protected boolean dangerousGoods;
     @Getter protected AcceptableDeliveryTime acceptableDeliveryTime;
     
+    OrderAndCargoInformation() {
+    }
 }

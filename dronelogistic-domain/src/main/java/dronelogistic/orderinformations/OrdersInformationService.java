@@ -2,7 +2,7 @@ package dronelogistic.orderinformations;
 
 public interface OrdersInformationService {
     
-    OrderAndCargoInformation getOrderAndCargoInformation(Integer cargoId);
+    OrderAndCargoInformation getOrderAndCargoInformation(Integer cargoID);
     
     ConsignmentInformation getConsignmentInformation(Integer consignmentID);
     

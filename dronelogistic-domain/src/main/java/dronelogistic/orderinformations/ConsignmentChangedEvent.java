@@ -1,15 +1,15 @@
 package dronelogistic.orderinformations;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
+@AllArgsConstructor
 public class ConsignmentChangedEvent {
     
-    public Integer getConsignmentID() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    @Getter private Integer consignmentID;
     
 }

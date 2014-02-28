@@ -56,7 +56,8 @@ public class VesselChooseProcess {
         OrderAndCargoInformation orderAndCargoInformation = ordersInformationService
                 .getOrderAndCargoInformation(cargoId);
         
-        TakeOffDecision takeOffDecision = takeOffDecisionRepository.newDecision(warehausId, cargoId, orderAndCargoInformation.getAcceptableDeliveryTime());
+        TakeOffDecision takeOffDecision = takeOffDecisionRepository.newDecision(warehausId, cargoId,
+                orderAndCargoInformation.getAcceptableDeliveryTime());
         takeOffDecision.setPossibleDronTypes(
                 cargoSpecyfication.possibleDronTypes(orderAndCargoInformation));
         takeOffDecision.setPlaceOfDeliveryAccepted(
