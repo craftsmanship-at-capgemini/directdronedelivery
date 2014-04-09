@@ -1,0 +1,2879 @@
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/Route.java b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/Route.java
+new file mode 100644
+index 0000000..750f908
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/Route.java
+@@ -0,0 +1,5 @@
++package dronelogistic.comandcenter;
++
++public class Route {
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecision.java b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecision.java
+index 32cfa19..7bdfb31 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecision.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecision.java
+@@ -1,70 +1,70 @@
+-package dronelogistic.comandcenter;
+-
+-import java.util.Collections;
+-import java.util.List;
+-
+-import lombok.EqualsAndHashCode;
+-import lombok.ToString;
+-import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
+-import dronelogistic.orderinformations.AcceptableDeliveryTime;
+-
+-@EqualsAndHashCode
+-@ToString
+-public class TakeOffDecision {
+-    
+-    private Integer cargoID;
+-    private Integer warehausID;
+-    private List<String> possibleDronTypes;
+-    private boolean placeOfDeliveryAccepted;
+-    private boolean profitabilityAndPriorityAcceptance;
+-    private AcceptableDeliveryTime acceptableDeliveryTime;
+-    private transient CargoIndependentSubDecisions cargoIndependentSubDecisions;
+-    
+-    TakeOffDecision(Integer cargoID, Integer warehausID, AcceptableDeliveryTime acceptableDeliveryTime,
+-            CargoIndependentSubDecisions cargoIndependentSubDecisions) {
+-        this.cargoID = cargoID;
+-        this.warehausID = warehausID;
+-        this.cargoIndependentSubDecisions = cargoIndependentSubDecisions;
+-        
+-        this.possibleDronTypes = Collections.emptyList();
+-        this.placeOfDeliveryAccepted = false;
+-        this.profitabilityAndPriorityAcceptance = false;
+-        this.acceptableDeliveryTime = acceptableDeliveryTime;
+-    }
+-    
+-    public boolean isCargoAndOrderAcceptable() {
+-        return !possibleDronTypes.isEmpty() && placeOfDeliveryAccepted;
+-    }
+-    
+-    public boolean isPositive(DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy) {
+-        return isCargoAndOrderAcceptable()
+-                && profitabilityAndPriorityAcceptance
+-                && cargoIndependentSubDecisions.arePositive()
+-                && deliveryTimeAcceptanceStrategy.isPositive(acceptableDeliveryTime);
+-    }
+-    
+-    public Integer getCargoID() {
+-        return cargoID;
+-    }
+-    
+-    public Integer getWarehausID() {
+-        return warehausID;
+-    }
+-    
+-    public List<String> getPossibleDronTypes() {
+-        return possibleDronTypes;
+-    }
+-    
+-    public void setPossibleDronTypes(List<String> possibleDronTypes) {
+-        this.possibleDronTypes = possibleDronTypes;
+-    }
+-    
+-    public void setPlaceOfDeliveryAccepted(boolean placeOfDeliveryAccepted) {
+-        this.placeOfDeliveryAccepted = placeOfDeliveryAccepted;
+-        
+-    }
+-    
+-    public void setProfitabilityAndPriorityAcceptance(boolean profitabilityAndPriorityAcceptance) {
+-        this.profitabilityAndPriorityAcceptance = profitabilityAndPriorityAcceptance;
+-    }
+-}
++package dronelogistic.comandcenter;
++
++import java.util.Collections;
++import java.util.List;
++
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
++import dronelogistic.orderinformations.AcceptableDeliveryTime;
++
++@EqualsAndHashCode
++@ToString
++public class TakeOffDecision {
++    
++    private Integer cargoID;
++    private Integer warehausID;
++    private List<String> possibleDronTypes;
++    private boolean placeOfDeliveryAccepted;
++    private boolean profitabilityAndPriorityAcceptance;
++    private AcceptableDeliveryTime acceptableDeliveryTime;
++    private transient CargoIndependentSubDecisions cargoIndependentSubDecisions;
++    
++    TakeOffDecision(Integer cargoID, Integer warehausID, AcceptableDeliveryTime acceptableDeliveryTime,
++            CargoIndependentSubDecisions cargoIndependentSubDecisions) {
++        this.cargoID = cargoID;
++        this.warehausID = warehausID;
++        this.cargoIndependentSubDecisions = cargoIndependentSubDecisions;
++        
++        this.possibleDronTypes = Collections.emptyList();
++        this.placeOfDeliveryAccepted = false;
++        this.profitabilityAndPriorityAcceptance = false;
++        this.acceptableDeliveryTime = acceptableDeliveryTime;
++    }
++    
++    public boolean isCargoAndOrderAcceptable() {
++        return !possibleDronTypes.isEmpty() && placeOfDeliveryAccepted;
++    }
++    
++    public boolean isPositive(DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy) {
++        return isCargoAndOrderAcceptable()
++                && profitabilityAndPriorityAcceptance
++                && cargoIndependentSubDecisions.arePositive()
++                && deliveryTimeAcceptanceStrategy.isPositive(acceptableDeliveryTime);
++    }
++    
++    public Integer getCargoID() {
++        return cargoID;
++    }
++    
++    public Integer getWarehausID() {
++        return warehausID;
++    }
++    
++    public List<String> getPossibleDronTypes() {
++        return possibleDronTypes;
++    }
++    
++    public void setPossibleDronTypes(List<String> possibleDronTypes) {
++        this.possibleDronTypes = possibleDronTypes;
++    }
++    
++    public void setPlaceOfDeliveryAccepted(boolean placeOfDeliveryAccepted) {
++        this.placeOfDeliveryAccepted = placeOfDeliveryAccepted;
++        
++    }
++    
++    public void setProfitabilityAndPriorityAcceptance(boolean profitabilityAndPriorityAcceptance) {
++        this.profitabilityAndPriorityAcceptance = profitabilityAndPriorityAcceptance;
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecisionRepository.java b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecisionRepository.java
+index c120d6b..06b1155 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecisionRepository.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/TakeOffDecisionRepository.java
+@@ -1,21 +1,21 @@
+-package dronelogistic.comandcenter;
+-
+-import java.util.List;
+-
+-import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
+-import dronelogistic.orderinformations.AcceptableDeliveryTime;
+-
+-public interface TakeOffDecisionRepository {
+-    
+-    TakeOffDecision newDecision(Integer warehausID, Integer cargoID, AcceptableDeliveryTime acceptableDeliveryTime);
+-    
+-    void save(TakeOffDecision takeOffDecision);
+-    
+-    TakeOffDecision get(Integer cargoID);
+-    
+-    List<TakeOffDecision> getPositiveDecisions(String droneTyp,
+-            DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit);
+-    
+-    CargoIndependentSubDecisions getCargoIndependentSubDecisions();
+-    
+-}
++package dronelogistic.comandcenter;
++
++import java.util.List;
++
++import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
++import dronelogistic.orderinformations.AcceptableDeliveryTime;
++
++public interface TakeOffDecisionRepository {
++    
++    TakeOffDecision newDecision(Integer warehausID, Integer cargoID, AcceptableDeliveryTime acceptableDeliveryTime);
++    
++    void save(TakeOffDecision takeOffDecision);
++    
++    TakeOffDecision get(Integer cargoID);
++    
++    List<TakeOffDecision> getPositiveDecisions(String droneTyp,
++            DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit);
++    
++    CargoIndependentSubDecisions getCargoIndependentSubDecisions();
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/PlaceOfDeliverySpecyfication.java b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/PlaceOfDeliverySpecyfication.java
+index c90806e..91f5aa6 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/PlaceOfDeliverySpecyfication.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/PlaceOfDeliverySpecyfication.java
+@@ -1,12 +1,12 @@
+-package dronelogistic.comandcenter.businessrules;
+-
+-import dronelogistic.orderinformations.OrderAndCargoInformation;
+-
+-public class PlaceOfDeliverySpecyfication {
+-    
+-    public boolean isAcceptable(OrderAndCargoInformation orderAndCargoInformation) {
+-        // TODO Auto-generated method stub
+-        return true;
+-    }
+-    
+-}
++package dronelogistic.comandcenter.businessrules;
++
++import dronelogistic.orderinformations.OrderAndCargoInformation;
++
++public class PlaceOfDeliverySpecyfication {
++    
++    public boolean isAcceptable(OrderAndCargoInformation orderAndCargoInformation) {
++        // TODO Auto-generated method stub
++        return true;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/ProfitabilityAndPriorityAcceptanceStrategy.java b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/ProfitabilityAndPriorityAcceptanceStrategy.java
+index 498758c..fbd20e8 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/ProfitabilityAndPriorityAcceptanceStrategy.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/comandcenter/businessrules/ProfitabilityAndPriorityAcceptanceStrategy.java
+@@ -1,10 +1,10 @@
+-package dronelogistic.comandcenter.businessrules;
+-
+-public class ProfitabilityAndPriorityAcceptanceStrategy {
+-    
+-    public boolean isPositive(double profitability, double priority) {
+-        // TODO Auto-generated method stub
+-        return true;
+-    }
+-    
+-}
++package dronelogistic.comandcenter.businessrules;
++
++public class ProfitabilityAndPriorityAcceptanceStrategy {
++    
++    public boolean isPositive(double profitability, double priority) {
++        // TODO Auto-generated method stub
++        return true;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronesystem/api/DroneSystemImpl.java b/dronelogistic-domain/src/main/java/dronelogistic/dronesystem/api/DroneSystemImpl.java
+new file mode 100644
+index 0000000..fa3d0c7
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronesystem/api/DroneSystemImpl.java
+@@ -0,0 +1,26 @@
++package dronelogistic.dronesystem.api;
++
++import dronelogistic.comandcenter.Route;
++
++public class DroneSystemImpl implements DroneSytem {
++    
++    
++    @Override
++    public boolean uploadRoute(Integer droneId, Route route) {
++        // TODO Auto-generated method stub
++        return false;
++    }
++    
++    @Override
++    public boolean getDroneStatus() {
++        // TODO Auto-generated method stub
++        return false;
++    }
++    
++    @Override
++    public boolean startDrone() {
++        // TODO Auto-generated method stub
++        return false;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronesystem/api/DroneSytem.java b/dronelogistic-domain/src/main/java/dronelogistic/dronesystem/api/DroneSytem.java
+new file mode 100644
+index 0000000..ce0f485
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronesystem/api/DroneSytem.java
+@@ -0,0 +1,15 @@
++package dronelogistic.dronesystem.api;
++
++import java.rmi.Remote;
++
++import dronelogistic.comandcenter.Route;
++
++public interface DroneSytem extends Remote {
++    
++    public boolean uploadRoute(Integer droneId, Route route);
++    
++    public boolean getDroneStatus();
++    
++    public boolean startDrone();
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/AvaliableDrones.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/AvaliableDrones.java
+index 4c917ba..75ca2fb 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/AvaliableDrones.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/AvaliableDrones.java
+@@ -1,34 +1,34 @@
+-package dronelogistic.dronflightcontrol;
+-
+-import java.util.Collections;
+-import java.util.List;
+-import java.util.Map;
+-
+-import lombok.EqualsAndHashCode;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-public class AvaliableDrones {
+-    
+-    public List<String> droneTypes;
+-    public Map<String, Integer> droneCounts;
+-    
+-    protected AvaliableDrones(List<String> droneTypesInAscSizeOrder, Map<String, Integer> droneCounts) {
+-        this.droneTypes = droneTypesInAscSizeOrder;
+-        this.droneCounts = droneCounts;
+-    }
+-    
+-    public List<String> getDroneTypesInAscSizeOrder() {
+-        return Collections.unmodifiableList(droneTypes);
+-    }
+-    
+-    public Integer getCount(String droneTyp) {
+-        if (droneCounts.containsKey(droneTyp)) {
+-            return droneCounts.get(droneTyp);
+-        } else {
+-            return 0;
+-        }
+-    }
+-    
+-}
++package dronelogistic.dronflightcontrol;
++
++import java.util.Collections;
++import java.util.List;
++import java.util.Map;
++
++import lombok.EqualsAndHashCode;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++public class AvaliableDrones {
++    
++    public List<String> droneTypes;
++    public Map<String, Integer> droneCounts;
++    
++    protected AvaliableDrones(List<String> droneTypesInAscSizeOrder, Map<String, Integer> droneCounts) {
++        this.droneTypes = droneTypesInAscSizeOrder;
++        this.droneCounts = droneCounts;
++    }
++    
++    public List<String> getDroneTypesInAscSizeOrder() {
++        return Collections.unmodifiableList(droneTypes);
++    }
++    
++    public Integer getCount(String droneTyp) {
++        if (droneCounts.containsKey(droneTyp)) {
++            return droneCounts.get(droneTyp);
++        } else {
++            return 0;
++        }
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DronFlightControlService.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DronFlightControlService.java
+index 5b47b6f..8a91408 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DronFlightControlService.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DronFlightControlService.java
+@@ -6,4 +6,6 @@
+     
+     Drone reserveDrone(String droneTyp) throws DroneNotAvaliableException;
+     
++    public void notifyDroneProblem(Integer droneID, DroneProblemTypes droneProblemType, String log);
++    
+ }
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/Drone.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/Drone.java
+index 85d9b45..29f0b70 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/Drone.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/Drone.java
+@@ -1,16 +1,35 @@
+-package dronelogistic.dronflightcontrol;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-@AllArgsConstructor
+-public class Drone {
+-    
+-    @Getter int droneID;
+-    @Getter String droneType;
+-    
+-}
++package dronelogistic.dronflightcontrol;
++
++import dronelogistic.warehaus.Box;
++import dronelogistic.warehaus.Terminal;
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class Drone {
++    
++    @Getter int droneID;
++    @Getter String droneType;
++    @Getter Terminal terminal;
++    @Getter Box box;
++    
++    public Drone(int droneID, String droneType){
++        this.droneID = droneID;
++        this.droneType = droneType;
++    }
++    public void atachBox(Box box){
++        this.box = box;
++    }
++    
++    public void deattachkBox(){
++        this.box = null;
++    }
++    
++    public void dockInTerminal(Terminal terminal){
++        this.terminal = terminal;
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneAvaliableEvent.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneAvaliableEvent.java
+index 9f77083..9d4d1a9 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneAvaliableEvent.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneAvaliableEvent.java
+@@ -1,15 +1,15 @@
+-package dronelogistic.dronflightcontrol;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-@AllArgsConstructor
+-public class DroneAvaliableEvent {
+-    
+-    @Getter private String droneTyp;
+-    
+-}
++package dronelogistic.dronflightcontrol;
++
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class DroneAvaliableEvent {
++    
++    @Getter private String droneTyp;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneLoaded.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneLoaded.java
+new file mode 100644
+index 0000000..61967e3
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneLoaded.java
+@@ -0,0 +1,19 @@
++package dronelogistic.dronflightcontrol;
++
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++public class DroneLoaded {
++    
++    @Getter private Integer droneID;
++    @Getter private Integer cargoID;
++    
++    public DroneLoaded(Integer droneID, Integer cargoID) {
++        this.droneID = droneID;
++        this.cargoID = cargoID;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneProblem.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneProblem.java
+new file mode 100644
+index 0000000..d13983f
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneProblem.java
+@@ -0,0 +1,19 @@
++package dronelogistic.dronflightcontrol;
++
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++public class DroneProblem {
++    
++    @Getter DroneProblemTypes droneProblemTypes;
++    @Getter String log;
++    
++    public DroneProblem(DroneProblemTypes droneProblemTypes, String log) {
++        this.droneProblemTypes = droneProblemTypes;
++        this.log = log;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneProblemTypes.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneProblemTypes.java
+new file mode 100644
+index 0000000..f5157b8
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneProblemTypes.java
+@@ -0,0 +1,7 @@
++package dronelogistic.dronflightcontrol;
++
++public enum DroneProblemTypes {
++    
++    TECHNICAL, LOGISTIC;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneRepository.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneRepository.java
+new file mode 100644
+index 0000000..fb9c379
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneRepository.java
+@@ -0,0 +1,9 @@
++package dronelogistic.dronflightcontrol;
++
++
++
++public interface DroneRepository {
++    
++    public Drone findDrone(int droneID);
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneTechnicalException.java b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneTechnicalException.java
+new file mode 100644
+index 0000000..eacbf27
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/dronflightcontrol/DroneTechnicalException.java
+@@ -0,0 +1,7 @@
++package dronelogistic.dronflightcontrol;
++
++public class DroneTechnicalException extends Exception {
++
++    private static final long serialVersionUID = 1L;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentChangedEvent.java b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentChangedEvent.java
+index 6ad4f4a..70a0515 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentChangedEvent.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentChangedEvent.java
+@@ -1,15 +1,15 @@
+-package dronelogistic.orderinformations;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-@AllArgsConstructor
+-public class ConsignmentChangedEvent {
+-    
+-    @Getter private Integer consignmentID;
+-    
+-}
++package dronelogistic.orderinformations;
++
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class ConsignmentChangedEvent {
++    
++    @Getter private Integer consignmentID;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentInformation.java b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentInformation.java
+index 8efb189..f28b71b 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentInformation.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/ConsignmentInformation.java
+@@ -1,23 +1,23 @@
+-package dronelogistic.orderinformations;
+-
+-import java.util.Collections;
+-import java.util.List;
+-
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-public class ConsignmentInformation {
+-    
+-    @Getter protected int consignmentID;
+-    protected List<OrderAndCargoInformation> cargosInConsignment;
+-    
+-    public List<OrderAndCargoInformation> getCargosInConsignment() {
+-        return Collections.unmodifiableList(cargosInConsignment);
+-    }
+-    
+-    ConsignmentInformation() {
+-    }
+-}
++package dronelogistic.orderinformations;
++
++import java.util.Collections;
++import java.util.List;
++
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++public class ConsignmentInformation {
++    
++    @Getter protected int consignmentID;
++    protected List<OrderAndCargoInformation> cargosInConsignment;
++    
++    public List<OrderAndCargoInformation> getCargosInConsignment() {
++        return Collections.unmodifiableList(cargosInConsignment);
++    }
++    
++    ConsignmentInformation() {
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderAndCargoInformation.java b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderAndCargoInformation.java
+index e70f7a1..0ee6552 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderAndCargoInformation.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderAndCargoInformation.java
+@@ -1,21 +1,21 @@
+-package dronelogistic.orderinformations;
+-
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-public class OrderAndCargoInformation {
+-    
+-    @Getter protected Integer cargoID;
+-    @Getter protected int weightInGrams;
+-    @Getter protected Size size;
+-    @Getter protected boolean fixedOrientation;
+-    @Getter protected boolean fragileCommodity;
+-    @Getter protected boolean dangerousGoods;
+-    @Getter protected AcceptableDeliveryTime acceptableDeliveryTime;
+-    
+-    OrderAndCargoInformation() {
+-    }
+-}
++package dronelogistic.orderinformations;
++
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++public class OrderAndCargoInformation {
++    
++    @Getter protected Integer cargoID;
++    @Getter protected int weightInGrams;
++    @Getter protected Size size;
++    @Getter protected boolean fixedOrientation;
++    @Getter protected boolean fragileCommodity;
++    @Getter protected boolean dangerousGoods;
++    @Getter protected AcceptableDeliveryTime acceptableDeliveryTime;
++    
++    OrderAndCargoInformation() {
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderUpdatedEvent.java b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderUpdatedEvent.java
+index a52a027..53e868c 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderUpdatedEvent.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrderUpdatedEvent.java
+@@ -1,15 +1,15 @@
+-package dronelogistic.orderinformations;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-@AllArgsConstructor
+-public class OrderUpdatedEvent {
+-    
+-    @Getter private Integer cargoID;
+-    
+-}
++package dronelogistic.orderinformations;
++
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class OrderUpdatedEvent {
++    
++    @Getter private Integer cargoID;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrdersInformationService.java b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrdersInformationService.java
+index 12e6c29..6b3ee3f 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrdersInformationService.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/OrdersInformationService.java
+@@ -1,9 +1,9 @@
+-package dronelogistic.orderinformations;
+-
+-public interface OrdersInformationService {
+-    
+-    OrderAndCargoInformation getOrderAndCargoInformation(Integer cargoID);
+-    
+-    ConsignmentInformation getConsignmentInformation(Integer consignmentID);
+-    
+-}
++package dronelogistic.orderinformations;
++
++public interface OrdersInformationService {
++    
++    OrderAndCargoInformation getOrderAndCargoInformation(Integer cargoID);
++    
++    ConsignmentInformation getConsignmentInformation(Integer consignmentID);
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/Size.java b/dronelogistic-domain/src/main/java/dronelogistic/orderinformations/Size.java
+old mode 100755
+new mode 100644
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Box.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Box.java
+new file mode 100644
+index 0000000..94a636e
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Box.java
+@@ -0,0 +1,34 @@
++package dronelogistic.warehaus;
++
++import lombok.Getter;
++import dronelogistic.orderinformations.Size;
++
++public class Box {
++    
++    @Getter protected Integer boxID;
++    @Getter protected Size size;
++    @Getter protected int weightInGrams;
++    @Getter protected BoxType boxType;
++    
++    public Box(int boxID, Size size, int weightInGrams, BoxType boxtype) {
++        this.boxID = boxID;
++        this.size = size;
++        this.weightInGrams = weightInGrams;
++        this.boxType = boxtype;
++    }
++    
++    
++    public boolean sameIdentityAs(final Box other) {
++      return other != null && other.boxID.equals(other.boxID);
++    }
++
++
++    @Override
++    public boolean equals(final Object object) {
++      if (this == object) return true;
++      if (object == null || getClass() != object.getClass()) return false;
++
++      final Box other = (Box) object;
++      return sameIdentityAs(other);
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxRepository.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxRepository.java
+new file mode 100644
+index 0000000..c5b64bf
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxRepository.java
+@@ -0,0 +1,15 @@
++package dronelogistic.warehaus;
++
++import java.util.List;
++
++public interface BoxRepository {
++    
++    public Box findBox(Integer boxID);
++    
++    public Box findAppropriateBox(BoxSpecification boxSpecification);
++    
++    public List<Box> findAll();
++    
++    public void init();
++   
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxSpecification.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxSpecification.java
+new file mode 100644
+index 0000000..8c44cd1
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxSpecification.java
+@@ -0,0 +1,48 @@
++package dronelogistic.warehaus;
++
++import lombok.Getter;
++import dronelogistic.orderinformations.Size;
++import static dronelogistic.warehaus.BoxType.*;
++
++public class BoxSpecification {
++
++    
++    public static final int MAX_HEIGHT = 1000;
++    public static final int MAX_LENGTH = 1000;
++    public static final int MAX_WIDTH = 1000;
++    
++    public static final int SMALL_MAX_HEIGHT = 300;
++    public static final int SMALL_MAX_LENGTH = 300;
++    public static final int SMALL_MAX_WIDTH = 300;  
++    
++    @Getter protected Size size;
++    @Getter protected int weightInGrams;
++    @Getter protected BoxType boxType;
++    
++    //@Getter protected boolean fragileCommodity;
++    //@Getter protected boolean dangerousGoods;
++    
++    public BoxSpecification(Size size, int weightInGrams) {
++        this.size = size;
++        this.weightInGrams = weightInGrams;
++        this.boxType = defineBoxType();
++        //this.fragileCommodity = fragileCommodity;
++        //this.dangerousGoods = dangerousGoods;
++    }
++    
++    public BoxType defineBoxType(){
++        
++        if (size.getHeight() < SMALL_MAX_HEIGHT && 
++                size.getLength() < SMALL_MAX_LENGTH && 
++                size.getWidth() < SMALL_MAX_WIDTH){
++            return SMALL;
++        } else if (size.getHeight() > MAX_HEIGHT || 
++                size.getLength() > MAX_LENGTH || 
++                size.getWidth() > MAX_WIDTH) {
++            return UNKOWN;
++            
++        } else {
++            return BIG;
++        }
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxType.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxType.java
+new file mode 100644
+index 0000000..e2fad81
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/BoxType.java
+@@ -0,0 +1,5 @@
++package dronelogistic.warehaus;
++
++public enum BoxType {
++    SMALL, BIG, UNKOWN;    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/CargoLoadService.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/CargoLoadService.java
+new file mode 100644
+index 0000000..a3f411e
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/CargoLoadService.java
+@@ -0,0 +1,16 @@
++package dronelogistic.warehaus;
++
++import javax.enterprise.event.Observes;
++
++import dronelogistic.comandcenter.DroneTakeOffDecision;
++import dronelogistic.dronflightcontrol.DroneProblemTypes;
++
++public interface CargoLoadService {
++    
++    public Box chooseBox(@Observes DroneTakeOffDecision droneTakeOffDecision);
++    
++    public void confirmLoad(Integer droneID, Integer cargoID, Integer taskID, Integer boxID);
++    
++    public void reportProblem(DroneProblemTypes problemType, String log, Integer droneID);
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/NewCargoInWarehausEvent.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/NewCargoInWarehausEvent.java
+index a159da9..9aedbf5 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/NewCargoInWarehausEvent.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/NewCargoInWarehausEvent.java
+@@ -1,16 +1,16 @@
+-package dronelogistic.warehaus;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.EqualsAndHashCode;
+-import lombok.Getter;
+-import lombok.ToString;
+-
+-@EqualsAndHashCode
+-@ToString
+-@AllArgsConstructor
+-public class NewCargoInWarehausEvent {
+-    
+-    @Getter private Integer cargoID;
+-    @Getter private Integer warehausID;
+-    
+-}
++package dronelogistic.warehaus;
++
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class NewCargoInWarehausEvent {
++    
++    @Getter private Integer cargoID;
++    @Getter private Integer warehausID;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Task.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Task.java
+new file mode 100644
+index 0000000..20522fc
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Task.java
+@@ -0,0 +1,18 @@
++package dronelogistic.warehaus;
++
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class Task {
++    
++    @Getter private int taskID;
++    @Getter private int cargoID;
++    @Getter private int terminalID;
++    @Getter private BoxType boxType;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Terminal.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Terminal.java
+new file mode 100644
+index 0000000..4ab4fe6
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/Terminal.java
+@@ -0,0 +1,13 @@
++package dronelogistic.warehaus;
++
++import lombok.Getter;
++
++public class Terminal {
++    
++    @Getter int terminalID;
++    
++    public Terminal (int terminaID){
++        this.terminalID = terminaID;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/TerminalRepository.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/TerminalRepository.java
+new file mode 100644
+index 0000000..e0b0506
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/TerminalRepository.java
+@@ -0,0 +1,11 @@
++package dronelogistic.warehaus;
++
++import java.util.List;
++
++public interface TerminalRepository {
++    
++    public Terminal findTerminal(int terminalID);
++    
++    public List<Terminal> findAll();
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/WarehouseEmployee.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/WarehouseEmployee.java
+new file mode 100644
+index 0000000..017868a
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/WarehouseEmployee.java
+@@ -0,0 +1,20 @@
++package dronelogistic.warehaus;
++
++import java.util.List;
++
++import lombok.AllArgsConstructor;
++import lombok.EqualsAndHashCode;
++import lombok.Getter;
++import lombok.ToString;
++
++@EqualsAndHashCode
++@ToString
++@AllArgsConstructor
++public class WarehouseEmployee {
++    
++    @Getter int employeeID;
++    @Getter String surname;
++    @Getter String name;
++    @Getter List<Task> taskList;
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/WarehouseEmployeeService.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/WarehouseEmployeeService.java
+new file mode 100644
+index 0000000..68eecf8
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/WarehouseEmployeeService.java
+@@ -0,0 +1,10 @@
++package dronelogistic.warehaus;
++
++
++public interface WarehouseEmployeeService {
++    
++    public Integer addNewTask(Integer cargoID, Integer terminalID, Integer boxID);
++    
++    public void closeTask(Integer taskID);
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/imlp/CargoLoadServiceImpl.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/imlp/CargoLoadServiceImpl.java
+new file mode 100644
+index 0000000..d11cd02
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/imlp/CargoLoadServiceImpl.java
+@@ -0,0 +1,104 @@
++package dronelogistic.warehaus.imlp;
++
++import javax.ejb.EJB;
++import javax.enterprise.event.Event;
++import javax.enterprise.event.Observes;
++import javax.inject.Inject;
++
++import dronelogistic.comandcenter.DroneTakeOffDecision;
++import dronelogistic.dronflightcontrol.DronFlightControlService;
++import dronelogistic.dronflightcontrol.Drone;
++import dronelogistic.dronflightcontrol.DroneLoaded;
++import dronelogistic.dronflightcontrol.DroneProblemTypes;
++import dronelogistic.dronflightcontrol.DroneRepository;
++import dronelogistic.orderinformations.OrderAndCargoInformation;
++import dronelogistic.orderinformations.OrdersInformationService;
++import dronelogistic.warehaus.Box;
++import dronelogistic.warehaus.BoxRepository;
++import dronelogistic.warehaus.BoxSpecification;
++import dronelogistic.warehaus.CargoLoadService;
++import dronelogistic.warehaus.WarehouseEmployeeService;
++
++/**
++ * This service supports the load process of the cargo on drones. The process consists mainly of the automatically steps but also
++ * of the manually action, which have to be done by a human (warehouse employee).
++ *  
++ * The service has 3 business methods: choose a Box, confirm load and report problems.
++ * 
++ * The choose a Box method choose a box for the cargo according to the box specification and delegate the task creation 
++ * for a warehouse employee via Warehouse Employee Service. 
++ * 
++ * After the task "Load the cargo" has been completed, the warehouse employee confirms , that the cargo is loaded on the drone.
++ * The box is physically applied to the drone and the the task will be closed (also via Warehouse Employee Service). At the end service 
++ * fires the event, that the cargo is loaded.
++ * 
++ * The warehouse employee has also a possibility to report a problem (technical or logistical). In this case service notify 
++ * the DronFlightControlService, which is responsible for the processing of the reported problem. The load process is aborted.
++ * 
++ * @author Grzesiek
++ *
++ */
++public class CargoLoadServiceImpl implements CargoLoadService {
++    
++    @EJB DronFlightControlService dronFlightControlService;
++    @EJB OrdersInformationService ordersInformationService;
++    @EJB WarehouseEmployeeService warehouseEmployeeService;
++    
++    @Inject private BoxRepository boxRepository;
++    @Inject DroneRepository droneRepository;
++    @Inject Event<DroneLoaded> droneLoadedEvent;
++    @Inject Event<LoadProcessAbort> loadProcessAbortEvent;
++    
++
++    @Override
++    public Box chooseBox(@Observes DroneTakeOffDecision droneTakeOffDecision) {
++        
++        Integer cargoID = droneTakeOffDecision.getCargoID();
++        Drone drone = droneTakeOffDecision.getDrone();
++        Integer terminalID = drone.getTerminal().getTerminalID();
++        
++        //Order and cargo information for the cargo with cargoID
++        //TODO: Pytanie: OrderAndCargoInformation, nie mieszamy tu modeli? Nazwa skaldajaca sie z dwoch nazw encji biznesowych nie jest 
++        //moim zdaniem najlepsza. Proponuje nazwe Delivery  
++        OrderAndCargoInformation orderAndCargoInformation = ordersInformationService.getOrderAndCargoInformation(cargoID);
++        
++        //define box specification according to the cargo information
++        BoxSpecification boxSpecification = new BoxSpecification(orderAndCargoInformation.getSize(), orderAndCargoInformation.getWeightInGrams());
++        
++        //find appropriate box for the cargo according to the box specification
++         Box box = boxRepository.findAppropriateBox(boxSpecification);
++        
++        warehouseEmployeeService.addNewTask(cargoID, terminalID, box.getBoxID());
++        return box;
++    }
++
++    @Override
++    public void confirmLoad(Integer droneID, Integer cargoID, Integer taskID, Integer boxID) {
++        
++        //Attach box to the drone
++        Drone drone = droneRepository.findDrone(droneID);
++        Box box = boxRepository.findBox(boxID);
++        drone.atachBox(box);
++        
++        //fire event: drone loaded
++        droneLoadedEvent.fire(new DroneLoaded(droneID, cargoID));
++        
++        //close the task
++        warehouseEmployeeService.closeTask(taskID);
++        
++    }
++
++    @Override
++    public void reportProblem(DroneProblemTypes problemType, String log, Integer droneID) {
++        
++        dronFlightControlService.notifyDroneProblem(droneID, problemType, log);
++        
++        Drone drone = droneRepository.findDrone(droneID);
++        Integer boxID = drone.getBox() !=null ? drone.getBox().getBoxID(): null;
++        //TODO: w zadnym miejscu nie mamy zdefiniowanego powiazania pomiedzy dronem a cargiem, ktorego dron transportuje
++        Integer cargoID = null; //drone.getCargo.getCargoID(); 
++        loadProcessAbortEvent.fire(new LoadProcessAbort(droneID, cargoID , boxID));
++             
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/warehaus/imlp/LoadProcessAbort.java b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/imlp/LoadProcessAbort.java
+new file mode 100644
+index 0000000..7ba1cd6
+--- /dev/null
++++ b/dronelogistic-domain/src/main/java/dronelogistic/warehaus/imlp/LoadProcessAbort.java
+@@ -0,0 +1,16 @@
++package dronelogistic.warehaus.imlp;
++
++import lombok.Getter;
++
++public class LoadProcessAbort {
++    
++    @Getter Integer droneID;
++    @Getter Integer cargoID;
++    @Getter Integer boxID;
++    
++    LoadProcessAbort(Integer droneID, Integer cargoID, Integer boxID){
++        this.droneID = droneID;
++        this.cargoID = cargoID;
++        this.boxID = boxID;
++    }
++}
+diff --git a/dronelogistic-domain/src/main/java/dronelogistic/weather/WeatherService.java b/dronelogistic-domain/src/main/java/dronelogistic/weather/WeatherService.java
+index fe2f318..7094c28 100644
+--- a/dronelogistic-domain/src/main/java/dronelogistic/weather/WeatherService.java
++++ b/dronelogistic-domain/src/main/java/dronelogistic/weather/WeatherService.java
+@@ -1,7 +1,7 @@
+-package dronelogistic.weather;
+-
+-public interface WeatherService {
+-    
+-    Weather getActualWeather();
+-    
+-}
++package dronelogistic.weather;
++
++public interface WeatherService {
++    
++    Weather getActualWeather();
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/TestInMemoryTakeOffDecisionRepository.java b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/TestInMemoryTakeOffDecisionRepository.java
+new file mode 100644
+index 0000000..66adf33
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/TestInMemoryTakeOffDecisionRepository.java
+@@ -0,0 +1,83 @@
++package dronelogistic.comandcenter;
++
++import java.util.HashMap;
++import java.util.LinkedList;
++import java.util.List;
++import java.util.Map;
++
++import lombok.ToString;
++import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
++import dronelogistic.orderinformations.AcceptableDeliveryTime;
++
++@ToString
++class TestInMemoryTakeOffDecisionRepository implements TakeOffDecisionRepository {
++    
++    private CargoIndependentSubDecisions cargoIndependentSubDecisions = new CargoIndependentSubDecisions();
++    private Map<Integer, TakeOffDecision> inMemoryStore = new HashMap<>();
++    
++    public static Configurator configure(TakeOffDecisionRepository instance) {
++        return ((TestInMemoryTakeOffDecisionRepository) instance).new Configurator();
++    }
++    
++    public class Configurator {
++        public Configurator configureTestRepository() {
++            return this;
++        }
++        
++        public Configurator withCargoIndependentSubDecisions(
++                CargoIndependentSubDecisions cargoIndependentSubDecisions) {
++            TestInMemoryTakeOffDecisionRepository.this.cargoIndependentSubDecisions = new CargoIndependentSubDecisions();
++            return this;
++        }
++        
++        public Configurator withPositiveCargoIndependentSubDecisions() {
++            cargoIndependentSubDecisions.allowFlights();
++            cargoIndependentSubDecisions.setWeatherAcceptable(true);
++            return this;
++        }
++        
++        public Configurator withWeatherAcceptable(boolean b) {
++            cargoIndependentSubDecisions.setWeatherAcceptable(true);
++            return this;
++        }
++        
++        public Configurator withStoredTakeOffDecision(Integer warehausID, Integer cargoID,
++                AcceptableDeliveryTime acceptableDeliveryTime) {
++            save(newDecision(warehausID, cargoID, acceptableDeliveryTime));
++            return this;
++        }
++    }
++    
++    @Override
++    public void save(TakeOffDecision takeOffDecision) {
++        inMemoryStore.put(takeOffDecision.getCargoID(), takeOffDecision);
++    }
++    
++    @Override
++    public TakeOffDecision newDecision(Integer warehausID, Integer cargoID,
++            AcceptableDeliveryTime acceptableDeliveryTime) {
++        return new TakeOffDecision(cargoID, warehausID, acceptableDeliveryTime, cargoIndependentSubDecisions);
++    }
++    
++    @Override
++    public List<TakeOffDecision> getPositiveDecisions(String droneTyp,
++            DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit) {
++        List<TakeOffDecision> positive = new LinkedList<>();
++        for (TakeOffDecision takeOffDecision : inMemoryStore.values()) {
++            if (takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy)) {
++                positive.add(takeOffDecision);
++            }
++        }
++        return positive;
++    }
++    
++    @Override
++    public CargoIndependentSubDecisions getCargoIndependentSubDecisions() {
++        return cargoIndependentSubDecisions;
++    }
++    
++    @Override
++    public TakeOffDecision get(Integer cargoID) {
++        return inMemoryStore.get(cargoID);
++    }
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/VesselChooseProcessExampleScenariosTest.java b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/VesselChooseProcessExampleScenariosTest.java
+new file mode 100644
+index 0000000..88f0109
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/VesselChooseProcessExampleScenariosTest.java
+@@ -0,0 +1,381 @@
++package dronelogistic.comandcenter;
++
++import static dronelogistic.dronflightcontrol.AvaliableDronesBuilder.anAvaliableDrones;
++import static dronelogistic.dronflightcontrol.AvaliableDronesBuilder.newDrone;
++import static dronelogistic.orderinformations.AcceptableDeliveryTimeBuilder.aTime;
++import static dronelogistic.orderinformations.ConsignmentInformationBuilder.aConsignment;
++import static dronelogistic.orderinformations.OrderAndCargoInformationBuilder.aCargo;
++import static org.fest.assertions.api.Assertions.assertThat;
++
++import javax.inject.Inject;
++
++import org.junit.Before;
++import org.junit.Test;
++import org.mockito.Mock;
++import org.mockito.Mockito;
++
++import testing.TestEvent;
++import testing.Testing;
++import dronelogistic.comandcenter.businessrules.CargoSpecyfication;
++import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
++import dronelogistic.comandcenter.businessrules.OrderPriorityCalculator;
++import dronelogistic.comandcenter.businessrules.PlaceOfDeliverySpecyfication;
++import dronelogistic.comandcenter.businessrules.ProfitabilityAndPriorityAcceptanceStrategy;
++import dronelogistic.comandcenter.businessrules.ProfitabilityCalculator;
++import dronelogistic.comandcenter.businessrules.TestDeliveryTimeAcceptanceStrategy;
++import dronelogistic.comandcenter.businessrules.WeatherSpecyfication;
++import dronelogistic.dronflightcontrol.AvaliableDrones;
++import dronelogistic.dronflightcontrol.DronFlightControlService;
++import dronelogistic.dronflightcontrol.Drone;
++import dronelogistic.dronflightcontrol.DroneAvaliableEvent;
++import dronelogistic.dronflightcontrol.DroneNotAvaliableException;
++import dronelogistic.orderinformations.ConsignmentChangedEvent;
++import dronelogistic.orderinformations.ConsignmentInformation;
++import dronelogistic.orderinformations.OrderAndCargoInformation;
++import dronelogistic.orderinformations.OrderAndCargoInformationBuilder;
++import dronelogistic.orderinformations.OrderUpdatedEvent;
++import dronelogistic.orderinformations.OrdersInformationService;
++import dronelogistic.warehaus.NewCargoInWarehausEvent;
++import dronelogistic.weather.Weather;
++import dronelogistic.weather.WeatherBuilder;
++import dronelogistic.weather.WeatherService;
++
++public class VesselChooseProcessExampleScenariosTest {
++    
++    @Inject VesselChooseProcess processUnderTest;
++    
++    @Mock OrdersInformationService ordersInformationService;
++    @Mock WeatherService weatherService;
++    @Mock DronFlightControlService dronFlightControlService;
++    @Inject TakeOffDecisionRepository takeOffDecisionRepository = new TestInMemoryTakeOffDecisionRepository();
++    @Inject TestEvent<DroneTakeOffDecision> droneTakeOffDecisionEvent = new TestEvent<>();
++    
++    @Inject CargoSpecyfication cargoSpecyfication;
++    @Inject PlaceOfDeliverySpecyfication placeOfDeliverySpecyfication;
++    @Inject ProfitabilityCalculator profitabilityCalculator;
++    @Inject OrderPriorityCalculator orderPriorityCalculator;
++    @Inject ProfitabilityAndPriorityAcceptanceStrategy profitabilityAndPriorityAcceptanceStrategy;
++    @Inject DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy = new TestDeliveryTimeAcceptanceStrategy();
++    @Inject WeatherSpecyfication weatherSpecyfication;
++    
++    private Integer warehausID = 1;
++    
++    @Before
++    public void setUp() throws Exception {
++        Testing.inject(this);
++        
++        // prepare TakeOffDecisionRepository
++        TestInMemoryTakeOffDecisionRepository.configure(takeOffDecisionRepository)
++                .withPositiveCargoIndependentSubDecisions();
++    }
++    
++    @Test
++    public void shouldDecideToStartDronWhenCargoIsDeliverableDronesAreAvaliableAndWeatherIsOK()
++            throws DroneNotAvaliableException {
++        Drone drone = createOneAvailableDrone();
++        cheatTheCurrentTime("18:00");
++        createNiceWeatherConditions();
++        
++        // STEP 0. Weather evaluation
++        // right now there is no cargo in Warehouse:
++        processUnderTest.periodicalWeatherCheck();
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Cargo deliverable with Drone
++        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .withAcceptableDeliveryTime(aTime().addInterval("17:00 - 21:00")).build();
++        prepareCargoDeliverableWithDrone(orderAndCargoInformation);
++        
++        // STEP 1. Cargo is scanned in Warehouse:
++        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
++        processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        ConsignmentInformation consignementInformation = assignCargoToNewConsignmentWithNotProfitableTruckDelivery(orderAndCargoInformation);
++        
++        // STEP 2. Cargo is added to Consignment
++        // assigned to concrete Truck Delivery:
++        ConsignmentChangedEvent consignmentChangedEvent = new ConsignmentChangedEvent(
++                consignementInformation.getConsignmentID());
++        processUnderTest.consignmentChanged(consignmentChangedEvent);
++        
++        // final decision should be taken
++        DroneTakeOffDecision outcomeEvent = droneTakeOffDecisionEvent.getFirstEvent();
++        assertThat(outcomeEvent.getCargoID()).isEqualTo(cargoID);
++        assertThat(outcomeEvent.getDrone()).isEqualTo(drone);
++    }
++    
++    @Test
++    public void shouldDecideToStartDronsWhenWeatherChangesToAcceptable() throws DroneNotAvaliableException {
++        Drone drone = createOneAvailableDrone();
++        cheatTheCurrentTime("18:00");
++        createBADWeatherConditions();
++        
++        // STEP 0. Weather evaluation
++        // right now there is no cargo in Warehouse:
++        processUnderTest.periodicalWeatherCheck();
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Cargo deliverable with Drone
++        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .withAcceptableDeliveryTime(aTime().addInterval("17:00 - 21:00")).build();
++        prepareCargoDeliverableWithDrone(orderAndCargoInformation);
++        
++        // STEP 1. Cargo is scanned in Warehouse:
++        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
++        processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Consignment with not profitable Truck Delivery
++        ConsignmentInformation consignementInformation = assignCargoToNewConsignmentWithNotProfitableTruckDelivery(orderAndCargoInformation);
++        
++        // STEP 2. Cargo is added to Consignment
++        // assigned to concrete Truck Delivery:
++        ConsignmentChangedEvent consignmentChangedEvent = new ConsignmentChangedEvent(
++                consignementInformation.getConsignmentID());
++        processUnderTest.consignmentChanged(consignmentChangedEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // change Weather conditions
++        createNiceWeatherConditions();
++        
++        // STEP 3. Weather evaluation:
++        processUnderTest.periodicalWeatherCheck();
++        
++        // final decision should be taken
++        DroneTakeOffDecision outcomeEevent =
++                droneTakeOffDecisionEvent.getFirstEvent();
++        assertThat(outcomeEevent.getCargoID()).isEqualTo(cargoID);
++        assertThat(outcomeEevent.getDrone()).isEqualTo(drone);
++    }
++    
++    @Test
++    public void shouldDecideToStartDronsWhenDeliveryTimeIsChangedToAcceptable() throws DroneNotAvaliableException {
++        Drone drone = createOneAvailableDrone();
++        cheatTheCurrentTime("15:00");
++        createNiceWeatherConditions();
++        
++        // STEP 0. Weather evaluation
++        // right now there is no cargo in Warehouse:
++        processUnderTest.periodicalWeatherCheck();
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Cargo deliverable with Drone
++        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .withAcceptableDeliveryTime(aTime().addInterval("17:00 - 21:00")).build();
++        prepareCargoDeliverableWithDrone(orderAndCargoInformation);
++        
++        // STEP 1. Cargo is scanned in Warehouse:
++        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
++        processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Consignment with not profitable Truck Delivery
++        ConsignmentInformation consignementInformation = assignCargoToNewConsignmentWithNotProfitableTruckDelivery(orderAndCargoInformation);
++        
++        // STEP 2. Cargo is added to Consignment
++        // assigned to concrete Truck Delivery:
++        ConsignmentChangedEvent consignmentChangedEvent = new ConsignmentChangedEvent(
++                consignementInformation.getConsignmentID());
++        processUnderTest.consignmentChanged(consignmentChangedEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // STEP 3. time flies:
++        cheatTheCurrentTime("17:00");
++        processUnderTest.periodicalDeliveryTimeAcceptanceCheck();
++        
++        // final decision should be taken
++        DroneTakeOffDecision outcomeEevent =
++                droneTakeOffDecisionEvent.getFirstEvent();
++        assertThat(outcomeEevent.getCargoID()).isEqualTo(cargoID);
++        assertThat(outcomeEevent.getDrone()).isEqualTo(drone);
++    }
++    
++    @Test
++    public void shouldDecideToStartDronWhenOrderInformationsAreUpdatedAndNowCargoIsDeliverable()
++            throws DroneNotAvaliableException {
++        Drone drone = createOneAvailableDrone();
++        createNiceWeatherConditions();
++        
++        // STEP 0. Weather evaluation
++        // right now there is no cargo in Warehouse:
++        processUnderTest.periodicalWeatherCheck();
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Cargo NOT deliverable with Drone
++        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .but().withDangerousGoods(true).withWeightInKilos(16).build();
++        prepareCargoNOTDeliverableWithDrone(orderAndCargoInformation);
++        
++        // STEP 1. Cargo is scanned in Warehouse:
++        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
++        processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        ConsignmentInformation consignementInformation = assignCargoToNewConsignmentWithNotProfitableTruckDelivery(orderAndCargoInformation);
++        
++        // STEP 2. Cargo is added to Consignment
++        // assigned to concrete Truck Delivery:
++        ConsignmentChangedEvent consignmentChangedEvent = new ConsignmentChangedEvent(
++                consignementInformation.getConsignmentID());
++        processUnderTest.consignmentChanged(consignmentChangedEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // change Informations to Cargo deliverable with Drone
++        OrderAndCargoInformation actualisedOrderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .build();
++        prepareCargoDeliverableWithDrone(actualisedOrderAndCargoInformation);
++        
++        // STEP 3. Cargo informations changed
++        OrderUpdatedEvent orderUpdatedEvent = new OrderUpdatedEvent(cargoID);
++        processUnderTest.orderUpdated(orderUpdatedEvent);
++        
++        // final decision should be taken
++        DroneTakeOffDecision outcomeEvent = droneTakeOffDecisionEvent.getFirstEvent();
++        assertThat(outcomeEvent.getCargoID()).isEqualTo(cargoID);
++        assertThat(outcomeEvent.getDrone()).isEqualTo(drone);
++    }
++    
++    @Test
++    public void shouldDecideToStartDronWhenDroneIsBackToWarehouse()
++            throws DroneNotAvaliableException {
++        noAvailableDrone();
++        createNiceWeatherConditions();
++        
++        // STEP 0. Weather evaluation
++        // right now there is no cargo in Warehouse:
++        processUnderTest.periodicalWeatherCheck();
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // create Cargo deliverable with Drone
++        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .withAcceptableDeliveryTime(aTime().addInterval("17:00 - 21:00")).build();
++        prepareCargoDeliverableWithDrone(orderAndCargoInformation);
++        
++        // STEP 1. Cargo is scanned in Warehouse:
++        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
++        processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        ConsignmentInformation consignementInformation = assignCargoToNewConsignmentWithNotProfitableTruckDelivery(orderAndCargoInformation);
++        
++        // STEP 2. Cargo is added to Consignment
++        // assigned to concrete Truck Delivery:
++        ConsignmentChangedEvent consignmentChangedEvent = new ConsignmentChangedEvent(
++                consignementInformation.getConsignmentID());
++        processUnderTest.consignmentChanged(consignmentChangedEvent);
++        // Decision can not be taken for now
++        assertThat(droneTakeOffDecisionEvent.getEvents()).isEmpty();
++        
++        // STEP 3. Drone is now available:
++        Drone drone = createOneAvailableDrone();
++        DroneAvaliableEvent droneAvaliableEvent = new DroneAvaliableEvent(drone.getDroneType());
++        processUnderTest.droneAvaliable(droneAvaliableEvent);
++        
++        // final decision should be taken
++        DroneTakeOffDecision outcomeEvent = droneTakeOffDecisionEvent.getFirstEvent();
++        assertThat(outcomeEvent.getCargoID()).isEqualTo(cargoID);
++        assertThat(outcomeEvent.getDrone()).isEqualTo(drone);
++    }
++    
++    private Drone createOneAvailableDrone() throws DroneNotAvaliableException {
++        // create one available Drone
++        Drone drone = newDrone();
++        AvaliableDrones avaliableDrones = anAvaliableDrones().likeNoDronesAvaliable().but().withDrone(drone).build();
++        Mockito.reset(dronFlightControlService); // yep, I know...
++        Mockito.when(dronFlightControlService.getAvaliableDrones()).thenReturn(avaliableDrones);
++        Mockito.when(dronFlightControlService.reserveDrone(drone.getDroneType())).thenReturn(drone);
++        return drone;
++    }
++    
++    private void noAvailableDrone() throws DroneNotAvaliableException {
++        AvaliableDrones avaliableDrones = anAvaliableDrones().likeNoDronesAvaliable().build();
++        Mockito.reset(dronFlightControlService); // yep, I know...
++        Mockito.when(dronFlightControlService.getAvaliableDrones()).thenReturn(avaliableDrones);
++        Mockito.when(dronFlightControlService.reserveDrone(Mockito.<String> any())).thenThrow(
++                new DroneNotAvaliableException());
++    }
++    
++    private void cheatTheCurrentTime(String hHmm) {
++        // cheat the current time to given
++        TestDeliveryTimeAcceptanceStrategy.configure(deliveryTimeAcceptanceStrategy).withFixedCurrentTime(hHmm);
++    }
++    
++    private void createNiceWeatherConditions() {
++        // change to nice Weather conditions
++        Weather niceWeather =
++                WeatherBuilder.aWeather().likeNiceWeather().build();
++        Mockito.when(weatherService.getActualWeather()).thenReturn(niceWeather);
++        // be sure Weather is acceptable
++        assertThat(weatherSpecyfication.isAcceptable(niceWeather))
++                .describedAs("test definition is wrong, Weather should be acceptable for drone flight").isTrue();
++    }
++    
++    private void createBADWeatherConditions() {
++        // create a BAD Weather conditions
++        Weather badWeather =
++                WeatherBuilder.aWeather().likeNiceWeather().but().withWindInMetersPerSecond(1000).build();
++        Mockito.when(weatherService.getActualWeather()).thenReturn(badWeather);
++        // be sure Weather is NOT acceptable
++        assertThat(weatherSpecyfication.isAcceptable(badWeather))
++                .describedAs("test definition is wrong, Weather should be NOT acceptable for drone flight").isFalse();
++        TestInMemoryTakeOffDecisionRepository.configure(takeOffDecisionRepository).withWeatherAcceptable(false);
++    }
++    
++    private void prepareCargoDeliverableWithDrone(OrderAndCargoInformation orderAndCargoInformation) {
++        Mockito.when(ordersInformationService.getOrderAndCargoInformation(orderAndCargoInformation.getCargoID()))
++                .thenReturn(orderAndCargoInformation);
++        // be sure Cargo is deliverable with Drone,
++        // otherwise test definition is wrong
++        assertThat(cargoSpecyfication.possibleDronTypes(orderAndCargoInformation))
++                .describedAs("test definition is wrong, drone delivery should be possible").isNotEmpty();
++        assertThat(placeOfDeliverySpecyfication.isAcceptable(orderAndCargoInformation))
++                .describedAs("test definition is wrong, drone delivery should be possible").isTrue();
++    }
++    
++    private void prepareCargoNOTDeliverableWithDrone(OrderAndCargoInformation orderAndCargoInformation) {
++        Mockito.when(ordersInformationService.getOrderAndCargoInformation(orderAndCargoInformation.getCargoID()))
++                .thenReturn(orderAndCargoInformation);
++        // be sure Cargo is NOT deliverable with Drone,
++        // otherwise test definition is wrong
++        assertThat(!cargoSpecyfication.possibleDronTypes(orderAndCargoInformation).isEmpty()
++                && placeOfDeliverySpecyfication.isAcceptable(orderAndCargoInformation))
++                .describedAs("test definition is wrong, drone delivery should be NOT possible").isFalse();
++    }
++    
++    private ConsignmentInformation assignCargoToNewConsignmentWithNotProfitableTruckDelivery(
++            OrderAndCargoInformation orderAndCargoInformation) {
++        ConsignmentInformation consignementInformation = aConsignment().likeEmptyConsignment()
++                .but().withCargo(orderAndCargoInformation).build();
++        Mockito.when(ordersInformationService.getConsignmentInformation(consignementInformation.getConsignmentID()))
++                .thenReturn(consignementInformation);
++        // be sure Drone delivery is profitable and/or justified by priority,
++        // otherwise test definition is wrong
++        assertThat(profitabilityAndPriorityAcceptanceStrategy.isPositive(
++                profitabilityCalculator.evaluateProfitability(orderAndCargoInformation, consignementInformation),
++                orderPriorityCalculator.evaluatePriority(orderAndCargoInformation, consignementInformation)))
++                .describedAs(
++                        "test definition is wrong, Drone delivery should be profitable and/or justified by priority")
++                .isTrue();
++        return consignementInformation;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/CargoSpecyficationTest.java b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/CargoSpecyficationTest.java
+new file mode 100644
+index 0000000..2b9feeb
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/CargoSpecyficationTest.java
+@@ -0,0 +1,159 @@
++package dronelogistic.comandcenter.businessrules;
++
++import static dronelogistic.orderinformations.OrderAndCargoInformationBuilder.aCargo;
++import static org.fest.assertions.api.Assertions.assertThat;
++
++import java.util.List;
++
++import javax.inject.Inject;
++
++import org.junit.Before;
++import org.junit.Test;
++
++import testing.Testing;
++import dronelogistic.orderinformations.OrderAndCargoInformation;
++
++public class CargoSpecyficationTest {
++    
++    private static final int COUNT_OF_DRONE_TYPES = 2;
++    
++    @Inject CargoSpecyfication cargoSpecyfication;
++    
++    @Before
++    public void setUp() throws Exception {
++        Testing.inject(this);
++    }
++    
++    @Test
++    public void shouldNotAcceptCargoWeighingOver5Kilos() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withWeightInKilos(6).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).isEmpty();
++    }
++    
++    @Test
++    public void shouldAcceptCargoWeighingExactly5Kilos() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withWeightInKilos(5).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++    }
++    
++    @Test
++    public void shouldAcceptCargoWeighingUnder5Kilos() {
++        int[] someWeightsInGrams = { 0, 1, 2, 10, 42, 50, 120, 550, 666, 999, 1000, 1001, 2500, 3000, 3333, 4242, 4999 };
++        for (int weightInGrams : someWeightsInGrams) {
++            OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                    .but().withWeightInGrams(weightInGrams).build();
++            
++            List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++            
++            assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++        }
++    }
++    
++    @Test
++    public void shouldNotAcceptToBigCargoSize() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withSizeInMilimeters(10, 1000, 10).withFixedOrientation(false).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).isEmpty();
++    }
++    
++    @Test
++    public void shouldAcceptMaximalCargoSize() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withSizeInMilimeters(250, 150, 100).withFixedOrientation(false).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++    }
++    
++    @Test
++    public void shouldNotAcceptCargoSizeEvenWhenItMatchesAfterRotationWHWhenFixedOrientationIsChecked() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withSizeInMilimeters(250, 100, 150).withFixedOrientation(true).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).isEmpty();
++    }
++    
++    @Test
++    public void shouldNotAcceptCargoSizeEvenWhenItMatchesAfterRotationLHWhenFixedOrientationIsChecked() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withSizeInMilimeters(100, 150, 250).withFixedOrientation(true).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).isEmpty();
++    }
++    
++    @Test
++    public void shouldAcceptCargoSizeAfterRotationWH() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withSizeInMilimeters(250, 100, 150).withFixedOrientation(false).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++    }
++    
++    @Test
++    public void shouldAcceptCargoSizeAfterRotationLH() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withSizeInMilimeters(100, 150, 250).withFixedOrientation(false).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++    }
++    
++    @Test
++    public void shouldAcceptNonFragileCommodityInCargo() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withFragileCommodity(false).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++    }
++    
++    @Test
++    public void shouldNotAcceptFragileCommodityInCargo() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withFragileCommodity(true).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).isEmpty();
++    }
++    
++    @Test
++    public void shouldAcceptNonDangerousGoods() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withDangerousGoods(false).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
++    }
++    
++    @Test
++    public void shouldNotAcceptDangerousGoods() {
++        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
++                .but().withDangerousGoods(true).build();
++        
++        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
++        
++        assertThat(possibleDronTypes).isEmpty();
++    }
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/TestDeliveryTimeAcceptanceStrategy.java b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/TestDeliveryTimeAcceptanceStrategy.java
+new file mode 100644
+index 0000000..c833a70
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/TestDeliveryTimeAcceptanceStrategy.java
+@@ -0,0 +1,42 @@
++package dronelogistic.comandcenter.businessrules;
++
++import javax.enterprise.inject.Alternative;
++
++import lombok.ToString;
++
++import org.joda.time.DateTime;
++import org.joda.time.format.DateTimeFormat;
++
++import dronelogistic.orderinformations.AcceptableDeliveryTime;
++
++@ToString
++@Alternative
++public class TestDeliveryTimeAcceptanceStrategy extends DeliveryTimeAcceptanceStrategy {
++    
++    private DateTime now = DateTime.now();
++    
++    public static Configurator configure(DeliveryTimeAcceptanceStrategy instance) {
++        return ((TestDeliveryTimeAcceptanceStrategy) instance).new Configurator();
++    }
++    
++    public class Configurator {
++        public Configurator withFixedCurrentTime(DateTime now) {
++            TestDeliveryTimeAcceptanceStrategy.this.now = now;
++            return this;
++        }
++        
++        public Configurator withFixedCurrentTime(String HHmm) {
++            TestDeliveryTimeAcceptanceStrategy.this.now = DateTime.parse(HHmm, DateTimeFormat.forPattern("HH:mm"));
++            return this;
++        }
++    }
++    
++    public boolean isPositive(AcceptableDeliveryTime acceptableDeliveryTime) {
++        return acceptableDeliveryTime.isInAcceptableTime(now);
++    }
++    
++    public DateTime getCurrentTime() {
++        return now;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/WeatherSpecyficationTest.java b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/WeatherSpecyficationTest.java
+new file mode 100644
+index 0000000..ed3c4a6
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/comandcenter/businessrules/WeatherSpecyficationTest.java
+@@ -0,0 +1,163 @@
++package dronelogistic.comandcenter.businessrules;
++
++import static org.fest.assertions.api.Assertions.assertThat;
++
++import javax.inject.Inject;
++
++import org.junit.Before;
++import org.junit.Test;
++
++import testing.Testing;
++import dronelogistic.weather.Weather;
++import dronelogistic.weather.WeatherBuilder;
++
++public class WeatherSpecyficationTest {
++    
++    @Inject WeatherSpecyfication weatherSpecyfication;
++    
++    @Before
++    public void setUp() throws Exception {
++        Testing.inject(this);
++    }
++    
++    @Test
++    public void shouldAcceptWeakWind() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withWindInMetersPerSecond(3.0).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldAcceptMaximalWindStrength() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withWindInMetersPerSecond(5.56).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldAcceptStrongWind() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withWindInMetersPerSecond(6.0).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isFalse();
++    }
++    
++    @Test
++    public void shouldAcceptWeatherWhennLightningsArePossible() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withLightningsPossible(true).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isFalse();
++    }
++    
++    @Test
++    public void shouldNotAcceptPrecipitation() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withPrecipitationPossible(true).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isFalse();
++    }
++    
++    @Test
++    public void shouldAcceptWeatherWihtNoLightningsAndPrecipitation() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withLightningsPossible(false).withPrecipitationPossible(false).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldAcceptTemperatureInAcceptableRange() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withTemperatureInCelsius(15).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldAcceptTemperatureOnLowerBoundry() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withTemperatureInCelsius(10).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldAcceptTemperatureOnUpperBoundry() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withTemperatureInCelsius(30).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldNotAcceptTemperatureUnderLowerBoundry() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withTemperatureInCelsius(9).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isFalse();
++    }
++    
++    @Test
++    public void shouldNotAcceptTemperatureOverUpperBoundry() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withTemperatureInCelsius(31).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isFalse();
++    }
++    
++    @Test
++    public void shouldAcceptWeatherWithLowHumidity() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withHumidityInPercent(30).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldAcceptWeatherWithMaximalHumidity() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withHumidityInPercent(55).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isTrue();
++    }
++    
++    @Test
++    public void shouldNotAcceptWeatherWithHighHumidity() {
++        Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
++                .but().withHumidityInPercent(60).build();
++        
++        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
++        
++        assertThat(weatherAcceptable).isFalse();
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/dronflightcontrol/AvaliableDronesBuilder.java b/dronelogistic-domain/src/test/java/dronelogistic/dronflightcontrol/AvaliableDronesBuilder.java
+new file mode 100644
+index 0000000..4254f75
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/dronflightcontrol/AvaliableDronesBuilder.java
+@@ -0,0 +1,83 @@
++package dronelogistic.dronflightcontrol;
++
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++import java.util.concurrent.atomic.AtomicInteger;
++
++public class AvaliableDronesBuilder {
++    
++    private static AtomicInteger nextDroneID = new AtomicInteger(0);
++    
++    private AvaliableDrones underConstruction = null;
++    private List<String> typicalDroneTypes = Arrays.asList("T4 v1", "T8 v1");
++    
++    private AvaliableDronesBuilder() {
++    }
++    
++    public static Drone newDrone(int droneID, String droneType) {
++        return new Drone(droneID, droneType);
++    }
++    
++    public static Drone newDrone(String droneType) {
++        return new Drone(nextDroneID.incrementAndGet(), droneType);
++    }
++    
++    public static Drone newDrone() {
++        return new Drone(nextDroneID.incrementAndGet(), "T4 v1");
++    }
++    
++    public static AvaliableDronesBuilder anAvaliableDrones() {
++        AvaliableDronesBuilder builder = new AvaliableDronesBuilder();
++        builder.underConstruction = new AvaliableDrones(new ArrayList<String>(), new HashMap<String, Integer>());
++        return builder;
++    }
++    
++    public AvaliableDronesBuilder likeNoDronesAvaliable() {
++        withDroneTypes(typicalDroneTypes);
++        withNoDroneAvaliable();
++        return this;
++    }
++    
++    public AvaliableDronesBuilder but() {
++        return this;
++    }
++    
++    public AvaliableDronesBuilder withDroneTypes(List<String> droneTypes) {
++        underConstruction.droneTypes = droneTypes;
++        return this;
++    }
++    
++    public AvaliableDronesBuilder withDroneCounts(Map<String, Integer> counts) {
++        underConstruction.droneCounts = counts;
++        return this;
++    }
++    
++    public AvaliableDronesBuilder withDroneCount(String droneTypes, int count) {
++        underConstruction.droneCounts.put(droneTypes, count);
++        return this;
++    }
++    
++    public AvaliableDronesBuilder withDrone(Drone drone) {
++        int count = underConstruction.droneCounts.get(drone.getDroneType());
++        underConstruction.droneCounts.put(drone.getDroneType(), ++count);
++        return this;
++    }
++    
++    public AvaliableDronesBuilder withNoDroneAvaliable() {
++        withDroneCounts(new HashMap<String, Integer>());
++        for (String droneType : underConstruction.droneTypes) {
++            withDroneCount(droneType, 0);
++        }
++        return this;
++    }
++    
++    public AvaliableDrones build() {
++        AvaliableDrones builded = underConstruction;
++        underConstruction = new AvaliableDrones(Arrays.asList("T4 v1", "T8 v1"), new HashMap<String, Integer>());
++        return builded;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/infrastructure/BoxRepositoryInMem.java b/dronelogistic-domain/src/test/java/dronelogistic/infrastructure/BoxRepositoryInMem.java
+new file mode 100644
+index 0000000..a87db8d
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/infrastructure/BoxRepositoryInMem.java
+@@ -0,0 +1,100 @@
++package dronelogistic.infrastructure;
++
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.Iterator;
++import java.util.List;
++import java.util.Map;
++import java.util.concurrent.atomic.AtomicInteger;
++
++import lombok.Getter;
++import dronelogistic.orderinformations.Size;
++import dronelogistic.warehaus.Box;
++import dronelogistic.warehaus.BoxRepository;
++import dronelogistic.warehaus.BoxSpecification;
++import dronelogistic.warehaus.BoxType;
++
++public class BoxRepositoryInMem implements BoxRepository {
++    
++    private Map<Integer, Box> boxDB;
++    private AtomicInteger boxID = new AtomicInteger(1000);
++    
++    public BoxRepositoryInMem() {
++        boxDB = new HashMap<Integer, Box>();
++    }
++    
++    @Override
++    public Box findBox(Integer boxID) {
++        return boxDB.get(boxID);
++    }
++    
++    @Override
++    public Box findAppropriateBox(BoxSpecification boxSpecification) {
++        List<Box> allBoxes = new ArrayList<Box>(boxDB.values());
++        Box appropiateBox = null;
++        
++        for (Iterator<Box> iterator = allBoxes.iterator(); iterator.hasNext();) {
++            Box box = (Box) iterator.next();
++            
++            if (boxSpecification.getBoxType().equals(box.getBoxType())){
++                appropiateBox = box;
++                break;
++            }
++        }
++        return appropiateBox;
++    }
++    
++    @Override
++    public List<Box> findAll() {
++        return new ArrayList<Box>(boxDB.values());
++    }
++    
++    @Override
++    public void init() {
++        
++        //the first small box
++        Integer box1ID = nextBoxID();
++        Size size = Size.newSizeInMilimeters(100, 100, 100);
++        int weightInGrams = 2000;
++        BoxType boxtype = BoxType.SMALL;
++        
++        Box box1 = new Box(box1ID, size, weightInGrams, boxtype);
++        boxDB.put(box1ID, box1);
++        
++        // TODO Auto-generated method stub
++        /**
++        @Getter protected int boxID;
++        @Getter protected Size size;
++        @Getter protected int weightInGrams;
++        @Getter protected BoxType boxType;
++        */
++        
++    }
++    
++    /**public void init() throws Exception {
++        final TrackingId xyz = new TrackingId("XYZ");
++        final Cargo cargoXYZ = createCargoWithDeliveryHistory(
++          xyz, STOCKHOLM, MELBOURNE, handlingEventRepository.lookupHandlingHistoryOfCargo(xyz));
++        cargoDb.put(xyz.idString(), cargoXYZ);
++
++        final TrackingId zyx = new TrackingId("ZYX");
++        final Cargo cargoZYX = createCargoWithDeliveryHistory(
++          zyx, MELBOURNE, STOCKHOLM, handlingEventRepository.lookupHandlingHistoryOfCargo(zyx));
++        cargoDb.put(zyx.idString(), cargoZYX);
++
++        final TrackingId abc = new TrackingId("ABC");
++        final Cargo cargoABC = createCargoWithDeliveryHistory(
++          abc, STOCKHOLM, HELSINKI, handlingEventRepository.lookupHandlingHistoryOfCargo(abc));
++        cargoDb.put(abc.idString(), cargoABC);
++
++        final TrackingId cba = new TrackingId("CBA");
++        final Cargo cargoCBA = createCargoWithDeliveryHistory(
++          cba, HELSINKI, STOCKHOLM, handlingEventRepository.lookupHandlingHistoryOfCargo(cba));
++        cargoDb.put(cba.idString(), cargoCBA);
++      }*/
++    
++    private int nextBoxID(){
++        return boxID.incrementAndGet();
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/AcceptableDeliveryTimeTest.java b/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/AcceptableDeliveryTimeTest.java
+old mode 100755
+new mode 100644
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/ConsignmentInformationBuilder.java b/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/ConsignmentInformationBuilder.java
+new file mode 100644
+index 0000000..a334c83
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/ConsignmentInformationBuilder.java
+@@ -0,0 +1,56 @@
++package dronelogistic.orderinformations;
++
++import java.util.LinkedList;
++import java.util.concurrent.atomic.AtomicInteger;
++
++public class ConsignmentInformationBuilder {
++    
++    private static AtomicInteger nextConsignmentID = new AtomicInteger(666);
++    
++    private ConsignmentInformation underConstruction;
++    
++    private ConsignmentInformationBuilder() {
++    }
++    
++    public static ConsignmentInformationBuilder aConsignment() {
++        ConsignmentInformationBuilder builder = new ConsignmentInformationBuilder();
++        builder.underConstruction = new ConsignmentInformation();
++        return builder;
++    }
++    
++    public ConsignmentInformationBuilder likeEmptyConsignment() {
++        withConsignmentID(nextConsignmentID.incrementAndGet());
++        withNoCargoIn();
++        return this;
++    }
++    
++    public ConsignmentInformationBuilder but() {
++        return this;
++    }
++    
++    public ConsignmentInformationBuilder withConsignmentID(int consignmentID) {
++        underConstruction.consignmentID = consignmentID;
++        return this;
++    }
++    
++    public ConsignmentInformationBuilder withCargo(OrderAndCargoInformation cargo) {
++        underConstruction.cargosInConsignment.add(cargo);
++        return this;
++    }
++    
++    public ConsignmentInformationBuilder withNoCargoIn() {
++        underConstruction.cargosInConsignment = new LinkedList<>();
++        return this;
++    }
++    
++    public ConsignmentInformation build() {
++        ConsignmentInformation builded = underConstruction;
++        underConstruction = new ConsignmentInformation();
++        return builded;
++    }
++    
++    public static int nextConsignmentID() {
++        return nextConsignmentID.incrementAndGet();
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/OrderAndCargoInformationBuilder.java b/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/OrderAndCargoInformationBuilder.java
+index a4abf48..a18da6e 100644
+--- a/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/OrderAndCargoInformationBuilder.java
++++ b/dronelogistic-domain/src/test/java/dronelogistic/orderinformations/OrderAndCargoInformationBuilder.java
+@@ -1,102 +1,102 @@
+-package dronelogistic.orderinformations;
+-
+-import java.util.concurrent.atomic.AtomicInteger;
+-
+-public class OrderAndCargoInformationBuilder {
+-    
+-    private static AtomicInteger nextCargoID = new AtomicInteger(1313);
+-    
+-    private OrderAndCargoInformation underConstruction;
+-    
+-    private OrderAndCargoInformationBuilder() {
+-    }
+-    
+-    public static OrderAndCargoInformationBuilder aCargo() {
+-        OrderAndCargoInformationBuilder builder = new OrderAndCargoInformationBuilder();
+-        builder.underConstruction = new OrderAndCargoInformation();
+-        return builder;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder likeSmallGift() {
+-        withCargoID(nextCargoID.incrementAndGet());
+-        withWeightInGrams(850);
+-        withSizeInMilimeters(250, 100, 10);
+-        withFixedOrientation(false);
+-        withFragileCommodity(false);
+-        withDangerousGoods(false);
+-        withUnimitedDeliveryTime();
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withCargoID(int cargoID) {
+-        underConstruction.cargoID = cargoID;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder but() {
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withWeightInGrams(int weightInGrams) {
+-        underConstruction.weightInGrams = weightInGrams;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withWeightInKilos(int weightInKilos) {
+-        underConstruction.weightInGrams = 1000 * weightInKilos;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withSize(Size size) {
+-        underConstruction.size = size;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withSizeInMilimeters(int length, int width, int height) {
+-        underConstruction.size = Size.newSizeInMilimeters(length, width, height);
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withFixedOrientation(boolean fixedOrientation) {
+-        underConstruction.fixedOrientation = fixedOrientation;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withFragileCommodity(boolean fragileCommodity) {
+-        underConstruction.fragileCommodity = fragileCommodity;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withDangerousGoods(boolean dangerousGoods) {
+-        underConstruction.dangerousGoods = dangerousGoods;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(AcceptableDeliveryTime acceptableDeliveryTime) {
+-        underConstruction.acceptableDeliveryTime = acceptableDeliveryTime;
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(
+-            AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder) {
+-        underConstruction.acceptableDeliveryTime = acceptableDeliveryTimeBuilder.build();
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformationBuilder withUnimitedDeliveryTime() {
+-        underConstruction.acceptableDeliveryTime = AcceptableDeliveryTimeBuilder.aTime()
+-                .addInterval("00:00-24:00").build();
+-        return this;
+-    }
+-    
+-    public OrderAndCargoInformation build() {
+-        OrderAndCargoInformation builded = underConstruction;
+-        underConstruction = new OrderAndCargoInformation();
+-        return builded;
+-    }
+-    
+-    public static int nextCargoID() {
+-        return nextCargoID.incrementAndGet();
+-    }
+-    
+-}
++package dronelogistic.orderinformations;
++
++import java.util.concurrent.atomic.AtomicInteger;
++
++public class OrderAndCargoInformationBuilder {
++    
++    private static AtomicInteger nextCargoID = new AtomicInteger(1313);
++    
++    private OrderAndCargoInformation underConstruction;
++    
++    private OrderAndCargoInformationBuilder() {
++    }
++    
++    public static OrderAndCargoInformationBuilder aCargo() {
++        OrderAndCargoInformationBuilder builder = new OrderAndCargoInformationBuilder();
++        builder.underConstruction = new OrderAndCargoInformation();
++        return builder;
++    }
++    
++    public OrderAndCargoInformationBuilder likeSmallGift() {
++        withCargoID(nextCargoID.incrementAndGet());
++        withWeightInGrams(850);
++        withSizeInMilimeters(250, 100, 10);
++        withFixedOrientation(false);
++        withFragileCommodity(false);
++        withDangerousGoods(false);
++        withUnimitedDeliveryTime();
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withCargoID(int cargoID) {
++        underConstruction.cargoID = cargoID;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder but() {
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withWeightInGrams(int weightInGrams) {
++        underConstruction.weightInGrams = weightInGrams;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withWeightInKilos(int weightInKilos) {
++        underConstruction.weightInGrams = 1000 * weightInKilos;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withSize(Size size) {
++        underConstruction.size = size;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withSizeInMilimeters(int length, int width, int height) {
++        underConstruction.size = Size.newSizeInMilimeters(length, width, height);
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withFixedOrientation(boolean fixedOrientation) {
++        underConstruction.fixedOrientation = fixedOrientation;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withFragileCommodity(boolean fragileCommodity) {
++        underConstruction.fragileCommodity = fragileCommodity;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withDangerousGoods(boolean dangerousGoods) {
++        underConstruction.dangerousGoods = dangerousGoods;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(AcceptableDeliveryTime acceptableDeliveryTime) {
++        underConstruction.acceptableDeliveryTime = acceptableDeliveryTime;
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(
++            AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder) {
++        underConstruction.acceptableDeliveryTime = acceptableDeliveryTimeBuilder.build();
++        return this;
++    }
++    
++    public OrderAndCargoInformationBuilder withUnimitedDeliveryTime() {
++        underConstruction.acceptableDeliveryTime = AcceptableDeliveryTimeBuilder.aTime()
++                .addInterval("00:00-24:00").build();
++        return this;
++    }
++    
++    public OrderAndCargoInformation build() {
++        OrderAndCargoInformation builded = underConstruction;
++        underConstruction = new OrderAndCargoInformation();
++        return builded;
++    }
++    
++    public static int nextCargoID() {
++        return nextCargoID.incrementAndGet();
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/warehouse/CargoLoadServiceTest.java b/dronelogistic-domain/src/test/java/dronelogistic/warehouse/CargoLoadServiceTest.java
+new file mode 100644
+index 0000000..5eda4a4
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/dronelogistic/warehouse/CargoLoadServiceTest.java
+@@ -0,0 +1,150 @@
++package dronelogistic.warehouse;
++
++import static dronelogistic.orderinformations.AcceptableDeliveryTimeBuilder.aTime;
++import static dronelogistic.orderinformations.OrderAndCargoInformationBuilder.aCargo;
++import static org.fest.assertions.api.Assertions.assertThat;
++import static org.junit.Assert.assertNotNull;
++
++import java.util.concurrent.atomic.AtomicInteger;
++
++import javax.inject.Inject;
++
++import org.junit.Before;
++import org.junit.Test;
++import org.mockito.Mock;
++import org.mockito.Mockito;
++
++import testing.TestEvent;
++import testing.Testing;
++import dronelogistic.comandcenter.DroneTakeOffDecision;
++import dronelogistic.dronflightcontrol.Drone;
++import dronelogistic.dronflightcontrol.DroneLoaded;
++import dronelogistic.dronflightcontrol.DroneRepository;
++import dronelogistic.orderinformations.OrderAndCargoInformation;
++import dronelogistic.orderinformations.OrderAndCargoInformationBuilder;
++import dronelogistic.orderinformations.OrdersInformationService;
++import dronelogistic.orderinformations.Size;
++import dronelogistic.warehaus.Box;
++import dronelogistic.warehaus.BoxRepository;
++import dronelogistic.warehaus.BoxSpecification;
++import dronelogistic.warehaus.Terminal;
++import dronelogistic.warehaus.WarehouseEmployeeService;
++import dronelogistic.warehaus.imlp.CargoLoadServiceImpl;
++
++public class CargoLoadServiceTest {
++    
++    @Inject CargoLoadServiceImpl serviceundertest;
++    
++    @Mock OrdersInformationService ordersInformationService;
++    @Mock WarehouseEmployeeService warehouseEmployeeService;
++    
++    public OrderAndCargoInformation orderAndCargoInformation;
++    
++    @Mock BoxRepository boxRepository;
++    @Mock DroneRepository droneRepository;
++    
++    private Drone drone;
++    private Terminal terminal;
++    private AtomicInteger droneId = new AtomicInteger(1000);
++    private AtomicInteger cargoId = new AtomicInteger(1000);
++    private AtomicInteger terminalId = new AtomicInteger(1000);
++    private AtomicInteger taskID = new AtomicInteger(1000);
++    private AtomicInteger boxID = new AtomicInteger(1000);
++    private String droneType = "T4 v1";
++    
++    @Inject TestEvent<DroneLoaded> droneLoadedEvents = new TestEvent<>();
++    
++    @Before
++    public void setUp() throws Exception {
++        Testing.inject(this);
++    }
++    
++    @Test
++    public void testChooseBox() {
++        
++        //create drone
++        drone = new Drone(nextDroneID(), droneType);
++        terminal = new Terminal(nextTerminaID());
++        drone.dockInTerminal(terminal);
++        
++        // create Cargo deliverable with Drone
++        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
++        orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
++                .withAcceptableDeliveryTime(aTime().addInterval("17:00 - 21:00")).build();
++        prepareCargoDeliverableWithDrone(orderAndCargoInformation);
++        // drone can take off
++        DroneTakeOffDecision droneTakeOffDecisionEvent = new DroneTakeOffDecision(drone, cargoID);
++        
++        // find an appropiate box
++        Box boxInMem = boxInMem(orderAndCargoInformation.getSize(), orderAndCargoInformation.getWeightInGrams());
++        prepareBoxRepositoryfindAppropriateBox(boxInMem);
++        
++        //test the cargo load service, business method choose a Box
++        Box box = serviceundertest.chooseBox(droneTakeOffDecisionEvent);
++        assertNotNull(box);
++    }
++    
++    @Test
++    public void  testConfirmLoad() {
++        
++        Integer droneID = nextDroneID();
++        Integer boxID = nextBoxID();
++        prepareDroneRepositoryFindDrone(droneID);
++        prepareBoxRepositoryfindBox(boxID);
++        
++        serviceundertest.confirmLoad(droneID, nextCargoID(), nextTaskID(), boxID);
++        assertThat(droneLoadedEvents.getEvents()).isNotEmpty();
++             
++    }
++    
++    private void prepareCargoDeliverableWithDrone(OrderAndCargoInformation orderAndCargoInformation) {
++        Mockito.when(ordersInformationService.getOrderAndCargoInformation(orderAndCargoInformation.getCargoID()))
++                .thenReturn(orderAndCargoInformation);
++    }
++    
++    private void prepareBoxRepositoryfindAppropriateBox(Box box){  
++        Mockito.when(boxRepository.findAppropriateBox(Mockito.<BoxSpecification>any())).thenReturn(box);   
++    }
++    
++    private void prepareBoxRepositoryfindBox(int boxID){
++        Size size = Size.newSizeInMilimeters(1000, 1000, 1000);
++        int weightInGrams = 1000;
++        
++        Mockito.when(boxRepository.findBox(boxID)).thenReturn(boxInMem(size, weightInGrams));   
++    }
++    
++    private void prepareDroneRepositoryFindDrone(Integer droneID){
++        drone = new Drone(droneID, droneType);
++        Mockito.when(droneRepository.findDrone(droneID)).thenReturn(drone);
++    }
++    
++    private Box boxInMem(Size size, int weightInGrams){
++        
++        //create a box specification
++        BoxSpecification boxSpecification = new BoxSpecification(size, weightInGrams);
++        
++        //create a box for test according to the specification 
++        return new Box(nextBoxID(), boxSpecification.getSize(), boxSpecification.getWeightInGrams(), boxSpecification.getBoxType());
++    }
++    
++    private int nextDroneID(){
++        return droneId.incrementAndGet();
++    }
++    
++    private int nextCargoID(){
++        return cargoId.incrementAndGet();
++    }
++    
++    private int nextTerminaID(){
++        return terminalId.incrementAndGet();
++    }
++    
++    private int nextTaskID(){
++        return taskID.incrementAndGet();
++    }
++    
++    private int nextBoxID(){
++        return boxID.incrementAndGet();
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/dronelogistic/weather/WeatherBuilder.java b/dronelogistic-domain/src/test/java/dronelogistic/weather/WeatherBuilder.java
+index 4cb4af8..507936e 100644
+--- a/dronelogistic-domain/src/test/java/dronelogistic/weather/WeatherBuilder.java
++++ b/dronelogistic-domain/src/test/java/dronelogistic/weather/WeatherBuilder.java
+@@ -1,60 +1,60 @@
+-package dronelogistic.weather;
+-
+-public class WeatherBuilder {
+-    
+-    private Weather underConstruction = null;
+-    
+-    private WeatherBuilder() {
+-    }
+-    
+-    public static WeatherBuilder aWeather() {
+-        WeatherBuilder builder = new WeatherBuilder();
+-        builder.underConstruction = new Weather();
+-        return builder;
+-    }
+-    
+-    public WeatherBuilder likeNiceWeather() {
+-        withWindInMetersPerSecond(0.8);
+-        withLightningsPossible(false);
+-        withPrecipitationPossible(false);
+-        withTemperatureInCelsius(20);
+-        withHumidityInPercent(40);
+-        return this;
+-    }
+-    
+-    public WeatherBuilder but() {
+-        return this;
+-    }
+-    
+-    public WeatherBuilder withWindInMetersPerSecond(double windInMPS) {
+-        underConstruction.windInPMS = windInMPS;
+-        return this;
+-    }
+-    
+-    public WeatherBuilder withLightningsPossible(boolean lightningsPossible) {
+-        underConstruction.lightningsPossible = lightningsPossible;
+-        return this;
+-    }
+-    
+-    public WeatherBuilder withPrecipitationPossible(boolean precipitationPossible) {
+-        underConstruction.precipitationPossible = precipitationPossible;
+-        return this;
+-    }
+-    
+-    public WeatherBuilder withTemperatureInCelsius(int temperatureInCelsius) {
+-        underConstruction.temperatureInCelsius = temperatureInCelsius;
+-        return this;
+-    }
+-    
+-    public WeatherBuilder withHumidityInPercent(int humidityInPercent) {
+-        underConstruction.humidityInPercent = humidityInPercent;
+-        return this;
+-    }
+-    
+-    public Weather build() {
+-        Weather builded = underConstruction;
+-        underConstruction = new Weather();
+-        return builded;
+-    }
+-    
+-}
++package dronelogistic.weather;
++
++public class WeatherBuilder {
++    
++    private Weather underConstruction = null;
++    
++    private WeatherBuilder() {
++    }
++    
++    public static WeatherBuilder aWeather() {
++        WeatherBuilder builder = new WeatherBuilder();
++        builder.underConstruction = new Weather();
++        return builder;
++    }
++    
++    public WeatherBuilder likeNiceWeather() {
++        withWindInMetersPerSecond(0.8);
++        withLightningsPossible(false);
++        withPrecipitationPossible(false);
++        withTemperatureInCelsius(20);
++        withHumidityInPercent(40);
++        return this;
++    }
++    
++    public WeatherBuilder but() {
++        return this;
++    }
++    
++    public WeatherBuilder withWindInMetersPerSecond(double windInMPS) {
++        underConstruction.windInPMS = windInMPS;
++        return this;
++    }
++    
++    public WeatherBuilder withLightningsPossible(boolean lightningsPossible) {
++        underConstruction.lightningsPossible = lightningsPossible;
++        return this;
++    }
++    
++    public WeatherBuilder withPrecipitationPossible(boolean precipitationPossible) {
++        underConstruction.precipitationPossible = precipitationPossible;
++        return this;
++    }
++    
++    public WeatherBuilder withTemperatureInCelsius(int temperatureInCelsius) {
++        underConstruction.temperatureInCelsius = temperatureInCelsius;
++        return this;
++    }
++    
++    public WeatherBuilder withHumidityInPercent(int humidityInPercent) {
++        underConstruction.humidityInPercent = humidityInPercent;
++        return this;
++    }
++    
++    public Weather build() {
++        Weather builded = underConstruction;
++        underConstruction = new Weather();
++        return builded;
++    }
++    
++}
+diff --git a/dronelogistic-domain/src/test/java/testing/TestEvent.java b/dronelogistic-domain/src/test/java/testing/TestEvent.java
+new file mode 100644
+index 0000000..c581001
+--- /dev/null
++++ b/dronelogistic-domain/src/test/java/testing/TestEvent.java
+@@ -0,0 +1,57 @@
++package testing;
++
++import java.lang.annotation.Annotation;
++import java.util.LinkedList;
++import java.util.List;
++
++import javax.enterprise.event.Event;
++import javax.enterprise.util.TypeLiteral;
++
++import lombok.ToString;
++
++import org.fest.assertions.api.Assertions;
++
++@ToString
++public class TestEvent<T> implements Event<T> {
++    
++    private List<T> events = new LinkedList<>();
++    
++    public List<T> getEvents() {
++        return events;
++    }
++    
++    public T getFirstEvent() {
++        Assertions.assertThat(events).hasSize(1);
++        return events.get(0);
++    }
++    
++    @Override
++    public void fire(T event) {
++        this.getEvents().add(event);
++    }
++    
++    @Override
++    public Event<T> select(Annotation... arg0) {
++        return this;
++    }
++    
++    @Override
++    public <U extends T> Event<U> select(Class<U> eventSubtype, Annotation... annotations) {
++        return safeCastToSubtype(eventSubtype);
++    }
++    
++    @Override
++    public <U extends T> Event<U> select(TypeLiteral<U> eventSubtype, Annotation... annotations) {
++        return safeCastToSubtype(eventSubtype.getRawType());
++    }
++    
++    @SuppressWarnings("unchecked")
++    private <U extends T> Event<U> safeCastToSubtype(Class<U> eventSubtype) {
++        if (eventSubtype.isInstance(this)) {
++            return (Event<U>) this;
++        } else {
++            throw new IllegalArgumentException();
++        }
++    }
++    
++}

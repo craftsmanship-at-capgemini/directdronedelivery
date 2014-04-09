@@ -1,17 +1,16 @@
-package dronelogistic.comandcenter;
+package dronelogistic.dronflightcontrol;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import dronelogistic.dronflightcontrol.Drone;
 
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
-public class DroneTakeOffDecision {
+public class DroneLoadedEvent {
     
-    @Getter private Drone drone;
+    @Getter private Integer droneID;
     @Getter private Integer cargoID;
     
 }

@@ -265,8 +265,7 @@ public class VesselChooseProcessExampleScenariosTest {
         
         // create Cargo deliverable with Drone
         Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
-        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID)
-                .withAcceptableDeliveryTime(aTime().addInterval("17:00 - 21:00")).build();
+        OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID).build();
         prepareCargoDeliverableWithDrone(orderAndCargoInformation);
         
         // STEP 1. Cargo is scanned in Warehouse:
