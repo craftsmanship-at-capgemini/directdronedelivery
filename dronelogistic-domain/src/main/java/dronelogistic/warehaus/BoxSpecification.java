@@ -1,6 +1,7 @@
 package dronelogistic.warehaus;
 
 import lombok.Getter;
+import dronelogistic.orderinformations.OrderAndCargoInformation;
 import dronelogistic.orderinformations.Size;
 import static dronelogistic.warehaus.BoxType.*;
 
@@ -15,13 +16,13 @@ public class BoxSpecification {
     public static final int SMALL_MAX_LENGTH = 300;
     public static final int SMALL_MAX_WIDTH = 300;  
     
-    @Getter protected Size size;
-    @Getter protected int weightInGrams;
+    protected Size size;
+    protected int weightInGrams;
     @Getter protected BoxType boxType;
     
-    public BoxSpecification(Size size, int weightInGrams) {
-        this.size = size;
-        this.weightInGrams = weightInGrams;
+    public BoxSpecification(OrderAndCargoInformation orderAndCargoInformation) {
+        this.size = orderAndCargoInformation.getSize();
+        this.weightInGrams = orderAndCargoInformation.getWeightInGrams();
         this.boxType = defineBoxType();
     }
     

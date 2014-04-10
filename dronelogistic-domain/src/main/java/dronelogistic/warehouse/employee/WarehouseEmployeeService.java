@@ -1,9 +1,13 @@
 package dronelogistic.warehouse.employee;
 
+import dronelogistic.dronflightcontrol.Drone;
+import dronelogistic.orderinformations.OrderAndCargoInformation;
+import dronelogistic.warehaus.BoxType;
+
 
 public interface WarehouseEmployeeService {
     
-    public Integer addNewTask(Integer cargoID, Integer terminalID, Integer boxID);
+    public void addCargoLoadTask(OrderAndCargoInformation orderAndCargoInformation, Drone drone, BoxType boxType);
     
     public void closeTask(Integer taskID);
     

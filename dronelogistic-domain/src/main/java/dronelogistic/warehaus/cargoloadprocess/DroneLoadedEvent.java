@@ -8,10 +8,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
-public class CargoLoadProcessAbortEvent {
+public class DroneLoadedEvent {
     
-    @Getter Integer droneID;
-    @Getter Integer cargoID;
-    @Getter Integer boxID;
+    @Getter private Integer droneID;
+    @Getter private Integer cargoID;
     
 }

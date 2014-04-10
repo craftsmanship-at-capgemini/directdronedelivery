@@ -20,9 +20,6 @@ class TestInMemoryTakeOffDecisionRepository implements TakeOffDecisionRepository
     }
     
     public class Configurator {
-        public Configurator configureTestRepository() {
-            return this;
-        }
         
         public Configurator withCargoIndependentSubDecisions(
                 CargoIndependentSubDecisions cargoIndependentSubDecisions) {

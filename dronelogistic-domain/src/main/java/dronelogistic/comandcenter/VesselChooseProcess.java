@@ -22,6 +22,7 @@ import dronelogistic.dronflightcontrol.DronFlightControlService;
 import dronelogistic.dronflightcontrol.Drone;
 import dronelogistic.dronflightcontrol.DroneAvaliableEvent;
 import dronelogistic.dronflightcontrol.DroneNotAvaliableException;
+import dronelogistic.dronflightcontrol.DroneProblem;
 import dronelogistic.orderinformations.ConsignmentChangedEvent;
 import dronelogistic.orderinformations.ConsignmentInformation;
 import dronelogistic.orderinformations.OrderAndCargoInformation;
@@ -184,5 +185,10 @@ public class VesselChooseProcess {
                 continue;
             }
         }
+    }
+
+    public void handleCargoProblems(int cargoID, List<DroneProblem> problems) {
+        // TODO MM: VesselChooseProcess.handleCargoProblems
+        
     }
 }

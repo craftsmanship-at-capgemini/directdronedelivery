@@ -1,12 +1,13 @@
 package dronelogistic.dronflightcontrol;
 
+import java.util.List;
+
 public interface DronFlightControlService {
     
     AvaliableDrones getAvaliableDrones();
     
     Drone reserveDrone(String droneTyp) throws DroneNotAvaliableException;
     
-    // TODO MM: simplify with DroneProblem
-    void notifyDroneProblem(Integer droneID, DroneProblemType droneProblemType, String log);
+    void handleDroneProblems(Integer droneID, List<DroneProblem> problems);
     
 }

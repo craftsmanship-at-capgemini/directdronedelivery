@@ -1,6 +1,5 @@
 package dronelogistic.dronflightcontrol;
 
-import dronelogistic.warehaus.Box;
 import dronelogistic.warehaus.Terminal;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -12,22 +11,22 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Drone {
     
-    @Getter int droneID;
+    @Getter Integer droneID;
     @Getter String droneType;
-    @Getter Terminal terminal;
-    @Getter Box box;
+    Terminal terminal;
+    Integer cargoID;
     
-    public Drone(int droneID, String droneType) {
+    Drone(Integer droneID, String droneType) {
         this.droneID = droneID;
         this.droneType = droneType;
     }
     
-    public void atachBox(Box box) {
-        this.box = box;
+    public void attachCargo(Integer cargoID) {
+        this.cargoID = cargoID;
     }
     
-    public void deattachkBox() {
-        this.box = null;
+    public void detachCargo() {
+        this.cargoID = null;
     }
     
     public void dockInTerminal(Terminal terminal) {
