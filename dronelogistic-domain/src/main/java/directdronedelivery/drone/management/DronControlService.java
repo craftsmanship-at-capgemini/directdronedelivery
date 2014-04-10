@@ -14,9 +14,12 @@ public interface DronControlService {
     
     DroneAggregate reserveDrone(DroneType droneTyp) throws DroneNotAvaliableException;
     
+    DroneAggregate cancelDroneReservation(DroneAggregate drone);
+    
     void handleDroneProblems(Integer droneID, List<Problem> problems);
     
     DroneAggregate findDrone(Integer droneId);
     
     DeliveryRoute calculateDeliveryRoute(DeliveryAddress address);
+    
 }

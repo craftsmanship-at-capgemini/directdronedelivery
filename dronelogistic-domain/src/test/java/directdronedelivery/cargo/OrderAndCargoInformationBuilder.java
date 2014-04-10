@@ -26,6 +26,7 @@ public class OrderAndCargoInformationBuilder {
     
     public OrderAndCargoInformationBuilder likeSmallGift() {
         withCargoID(nextCargoID.incrementAndGet());
+        withOrderID(nextCargoID.get());
         withWeightInGrams(850);
         withSizeInMilimeters(250, 100, 10);
         withFixedOrientation(false);
@@ -35,12 +36,17 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
-    public OrderAndCargoInformationBuilder withCargoID(int cargoID) {
+    public OrderAndCargoInformationBuilder but() {
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withCargoID(Integer cargoID) {
         underConstruction.cargoID = cargoID;
         return this;
     }
     
-    public OrderAndCargoInformationBuilder but() {
+    private OrderAndCargoInformationBuilder withOrderID(Integer orderID) {
+        underConstruction.order.orderID = orderID;
         return this;
     }
     

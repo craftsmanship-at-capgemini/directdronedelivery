@@ -1,4 +1,4 @@
-package directdronedelivery.drone.management;
+package directdronedelivery.warehouse.process;
 
 import static directdronedelivery.cargo.OrderAndCargoInformationBuilder.aCargo;
 
@@ -17,7 +17,7 @@ import testing.Testing;
 import directdronedelivery.cargo.CargoAggregate;
 import directdronedelivery.cargo.DeliveryAddress;
 import directdronedelivery.cargo.OrderAndCargoInformationBuilder;
-import directdronedelivery.cargo.OrdersInformationService;
+import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
 import directdronedelivery.drone.DroneBuilder;
 import directdronedelivery.drone.DroneStatus;
@@ -32,13 +32,13 @@ import directdronedelivery.warehouse.process.DroneLoadedEvent;
 import directdronedelivery.warehouse.process.DroneStartProcessService;
 import directdronedelivery.warehouse.process.DroneStartedEvent;
 
-public class VesselStartProcesTest {
+public class DroneStartProcessServiceTest {
     
-    @Inject DroneStartProcessService vesselStartProcesTest;
-    @Mock OrdersInformationService ordersInformationService;
+    @Inject DroneStartProcessService droneStartProcessService;
+    @Mock CargoRepository cargoRepository;
     @Mock DronControlService droneControlService;
     @Mock DroneCommunicationService droneCommunicationService;
-    @Inject TestEvent<DroneStartedEvent> vesselStartedEvent = new TestEvent<>();
+    @Inject TestEvent<DroneStartedEvent> droneStartedEvent = new TestEvent<>();
     
     @Before
     public void setUp() throws Exception {
@@ -51,23 +51,24 @@ public class VesselStartProcesTest {
         // route and check start list
         // has been performed without any errors
         // given
-        DroneAggregate drone = DroneBuilder.aDrone().like4RotorsDroneDocked().withDroneStatus(DroneStatus.READY_FOR_TAKE_OFF).build();
+        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+                .withDroneStatus(DroneStatus.READY_FOR_TAKE_OFF).build();
         Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
         // create Cargo and OrderInformation deliverable with Drone
-        CargoAggregate orderAndCargoInformation = prepareCargoDeliverableWithDrone();
+        CargoAggregate cargo = prepareCargoDeliverableWithDrone();
         // create delivery route for upload and answers from drone
-        DeliveryRoute route = prepareDeliveryRoute(orderAndCargoInformation.getOrder().getDeliveryAddress());
+        DeliveryRoute route = prepareDeliveryRoute(cargo.getOrder().getDeliveryAddress());
         prepareAnswerFromDroneWithUploadSucceed(drone, route);
         prepareAnswerFromDroneWithCheckStartListSucceed(drone);
         // when
-        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), orderAndCargoInformation.getCargoID());
-        vesselStartProcesTest.vesselLoaded(loadedEvent);
+        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), cargo.getCargoID());
+        droneStartProcessService.initDroneStartProcess(loadedEvent);
         // then
         Mockito.verify(droneControlService, Mockito.times(0)).handleDroneProblems(Mockito.any(Integer.class),
                 Mockito.anyListOf(Problem.class));
-        Assert.assertFalse(vesselStartedEvent.getEvents().isEmpty());
-        Assert.assertEquals(vesselStartedEvent.getFirstEvent().getDroneID(), drone.getDroneID());
+        Assert.assertFalse(droneStartedEvent.getEvents().isEmpty());
+        Assert.assertEquals(droneStartedEvent.getFirstEvent().getDroneID(), drone.getDroneID());
         
     }
     
@@ -77,20 +78,21 @@ public class VesselStartProcesTest {
         // delivery route failed
         // an error ticket should be created via DroneTechnicalService
         // given
-        DroneAggregate drone = DroneBuilder.aDrone().like4RotorsDroneDocked().withDroneStatus(DroneStatus.UPLOAD_FAILED).build();
+        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+                .withDroneStatus(DroneStatus.UPLOAD_FAILED).build();
         Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
         // create Cargo and OrderInformation deliverable with Drone
-        CargoAggregate orderAndCargoInformation = prepareCargoDeliverableWithDrone();
-        DeliveryRoute route = prepareDeliveryRoute(orderAndCargoInformation.getOrder().getDeliveryAddress());
+        CargoAggregate cargo = prepareCargoDeliverableWithDrone();
+        DeliveryRoute route = prepareDeliveryRoute(cargo.getOrder().getDeliveryAddress());
         prepareAnswerFromDroneWithUploadFailed(drone, route);
         // when
-        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), orderAndCargoInformation.getCargoID());
-        vesselStartProcesTest.vesselLoaded(loadedEvent);
+        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), cargo.getCargoID());
+        droneStartProcessService.initDroneStartProcess(loadedEvent);
         // then
         Mockito.verify(droneControlService, Mockito.times(1)).handleDroneProblems(Mockito.any(Integer.class),
                 Mockito.anyListOf(Problem.class));
-        Assert.assertTrue(vesselStartedEvent.getEvents().isEmpty());
+        Assert.assertTrue(droneStartedEvent.getEvents().isEmpty());
     }
     
     @Test
@@ -99,21 +101,22 @@ public class VesselStartProcesTest {
         // procedure failed
         // an error ticket should be created via DroneTechnicalService
         // given
-        DroneAggregate drone = DroneBuilder.aDrone().like4RotorsDroneDocked().withDroneStatus(DroneStatus.HOUSTON_WE_HAVE_A_PROBLEM).build();
+        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+                .withDroneStatus(DroneStatus.HOUSTON_WE_HAVE_A_PROBLEM).build();
         Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
         // create Cargo and OrderInformation deliverable with Drone
-        CargoAggregate orderAndCargoInformation = prepareCargoDeliverableWithDrone();
-        DeliveryRoute route = prepareDeliveryRoute(orderAndCargoInformation.getOrder().getDeliveryAddress());
+        CargoAggregate cargo = prepareCargoDeliverableWithDrone();
+        DeliveryRoute route = prepareDeliveryRoute(cargo.getOrder().getDeliveryAddress());
         prepareAnswerFromDroneWithUploadSucceed(drone, route);
         prepareAnswerFromDroneWithCheckStartListFailed(drone);
         // when
-        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), orderAndCargoInformation.getCargoID());
-        vesselStartProcesTest.vesselLoaded(loadedEvent);
+        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), cargo.getCargoID());
+        droneStartProcessService.initDroneStartProcess(loadedEvent);
         // then
         Mockito.verify(droneControlService, Mockito.times(1)).handleDroneProblems(Mockito.any(Integer.class),
                 Mockito.anyListOf(Problem.class));
-        Assert.assertTrue(vesselStartedEvent.getEvents().isEmpty());
+        Assert.assertTrue(droneStartedEvent.getEvents().isEmpty());
     }
     
     private void prepareAnswerFromDroneWithUploadFailed(DroneAggregate drone, DeliveryRoute route) {
@@ -148,12 +151,12 @@ public class VesselStartProcesTest {
     
     private CargoAggregate prepareCargoDeliverableWithDrone() {
         Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
-        CargoAggregate orderAndCargoInformation = aCargo().likeSmallGift().withCargoID(cargoID).
+        CargoAggregate cargo = aCargo().likeSmallGift().withCargoID(cargoID).
                 withDeliveryAddress("22", "Strzegomska", "47-300").build();
-        Mockito.when(ordersInformationService.getOrderAndCargoInformation(orderAndCargoInformation.getCargoID()))
-                .thenReturn(orderAndCargoInformation);
+        Mockito.when(cargoRepository.findCargo(cargo.getCargoID()))
+                .thenReturn(cargo);
         
-        return orderAndCargoInformation;
+        return cargo;
     }
     
 }

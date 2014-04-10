@@ -1,35 +1,28 @@
 package directdronedelivery.drone;
 
 import directdronedelivery.drone.management.communication.DeliveryRoute;
-import directdronedelivery.warehouse.Terminal;
+import directdronedelivery.warehouse.TerminalEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "droneID")
 @ToString
 public class DroneAggregate {
     
-    @Getter Integer droneID;
-    @Getter DroneType droneType;
-    @Getter DroneStatus status;
+    @Getter protected Integer droneID;
+    @Getter protected DroneType droneType;
+    @Getter protected DroneStatus status;
     
-    @Getter DeliveryRoute route;
+    @Getter protected DeliveryRoute route;
     // TODO MS: currentPosition
     
-    Terminal terminal;
-    Integer cargoID;
+    protected TerminalEntity terminal;
+    protected Integer cargoID;
     
-    public DroneAggregate(Integer droneID, DroneType droneType) {
-        this.droneID = droneID;
-        this.droneType = droneType;
-        this.status = DroneStatus.LOOKING_FOR_A_JOB;
+    protected DroneAggregate() {
     }
     
-    public DroneAggregate() {
-        // TODO MM: clean
-    }
-
     public void attachCargo(Integer cargoID) {
         this.cargoID = cargoID;
     }
@@ -38,11 +31,15 @@ public class DroneAggregate {
         this.cargoID = null;
     }
     
-    public void dockInTerminal(Terminal terminal) {
+    public void dockInTerminal(TerminalEntity terminal) {
         this.terminal = terminal;
     }
     
     public void undock() {
         this.terminal = null;
+    }
+    
+    public boolean isDocked() {
+        return this.terminal != null;
     }
 }

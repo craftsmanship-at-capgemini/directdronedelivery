@@ -7,17 +7,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "consignmentID")
 @ToString
-public class ConsignmentInformation {
+public class ConsignmentAggregate {
     
     @Getter protected int consignmentID;
     protected List<CargoAggregate> cargosInConsignment;
     
-    public List<CargoAggregate> getCargosInConsignment() {
-        return Collections.unmodifiableList(cargosInConsignment);
+    protected ConsignmentAggregate() {
     }
     
-    ConsignmentInformation() {
+    public List<CargoAggregate> getCargosInConsignment() {
+        return Collections.unmodifiableList(cargosInConsignment);
     }
 }

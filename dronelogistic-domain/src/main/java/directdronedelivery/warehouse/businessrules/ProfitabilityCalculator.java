@@ -1,13 +1,13 @@
 package directdronedelivery.warehouse.businessrules;
 
 import directdronedelivery.cargo.CargoAggregate;
-import directdronedelivery.cargo.ConsignmentInformation;
+import directdronedelivery.cargo.ConsignmentAggregate;
 
 public class ProfitabilityCalculator {
     
     public double evaluateProfitability(CargoAggregate orderAndCargoInformation,
-            ConsignmentInformation consignementInformation) {
-        // TODO Auto-generated method stub
+            ConsignmentAggregate consignementInformation) {
+        // TODO MM: Auto-generated method stub
         return 0.0;
     }
     

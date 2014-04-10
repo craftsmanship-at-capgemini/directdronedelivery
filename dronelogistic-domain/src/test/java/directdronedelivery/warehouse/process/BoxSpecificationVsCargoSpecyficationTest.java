@@ -10,7 +10,7 @@ public class BoxSpecificationVsCargoSpecyficationTest {
     @Test
     @Ignore
     public void shouldFitEachValidCargoSizeInAnyBox() {
-        // TODO GST: test of 
+        // TODO GST: test of
         fail("Not yet implemented");
     }
     

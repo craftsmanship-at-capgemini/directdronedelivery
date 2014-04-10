@@ -17,17 +17,17 @@ import org.mockito.Mockito;
 import testing.TestEvent;
 import testing.Testing;
 import directdronedelivery.cargo.CargoAggregate;
-import directdronedelivery.cargo.OrdersInformationService;
+import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
+import directdronedelivery.drone.DroneBuilder;
 import directdronedelivery.drone.DroneRepository;
-import directdronedelivery.drone.DroneType;
-import directdronedelivery.drone.management.AvailableDronesBuilder;
 import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.warehouse.BoxStockRepository;
 import directdronedelivery.warehouse.BoxType;
 import directdronedelivery.warehouse.Problem;
 import directdronedelivery.warehouse.ProblemType;
-import directdronedelivery.warehouse.Terminal;
+import directdronedelivery.warehouse.TerminalEntity;
+import directdronedelivery.warehouse.WarehouseTopologyFactory;
 import directdronedelivery.warehouse.businessrules.BoxChooseRule;
 import directdronedelivery.warehouse.employee.CargoLoadTask;
 import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
@@ -40,7 +40,7 @@ public class CargoLoadProcessServiceTest {
     
     @Inject CargoLoadProcessService processUnderTest;
     
-    @Mock OrdersInformationService ordersInformationService;
+    @Mock CargoRepository ordersInformationService;
     @Mock WarehouseEmployeeTaskService warehouseEmployeeService;
     @Mock DronControlService dronFlightControlService;
     @Mock VesselChooseProcessService vesselChooseProcess;
@@ -49,7 +49,7 @@ public class CargoLoadProcessServiceTest {
     @Inject TestEvent<DroneLoadedEvent> droneLoadedEvent = new TestEvent<>();
     @Captor ArgumentCaptor<LinkedList<Problem>> problemsCaptor;
     
-    private DroneType droneType = DroneType.SMALL_FOUR_ROTORS;
+    TerminalEntity terminal = WarehouseTopologyFactory.newTerminal(1);
     
     @Before
     public void setUp() throws Exception {
@@ -59,14 +59,12 @@ public class CargoLoadProcessServiceTest {
     @Test
     public void shouldCreateCargoLoadTaskForEmployeeAndDecrementBoxStocks() {
         // given
-        // TODO MM: create DroneBuilder
-        DroneAggregate drone = AvailableDronesBuilder.newDrone(droneType);
-        Terminal terminal = new Terminal(1);
-        drone.dockInTerminal(terminal);
+        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+                .dockedInTerminal(terminal).build();
         Mockito.when(droneRepository.findDrone(drone.getDroneID())).thenReturn(drone);
         
         CargoAggregate orderAndCargoInformation = aCargo().likeSmallGift().build();
-        Mockito.when(ordersInformationService.getOrderAndCargoInformation(orderAndCargoInformation.getCargoID()))
+        Mockito.when(ordersInformationService.findCargo(orderAndCargoInformation.getCargoID()))
                 .thenReturn(orderAndCargoInformation);
         Mockito.when(boxStockRepository.decrementStockOfAppropriateBoxes(Mockito.<BoxChooseRule> any())).thenReturn(
                 BoxType.SMALL);
@@ -84,18 +82,15 @@ public class CargoLoadProcessServiceTest {
     @Test
     public void shouldCloseTaskAttachCargoToDroneAndEmitDroneLoadEventAfterTaskConfirmation() {
         // given
-        int taskID = 1313;
-        int terminalID = 1;
-        int cargoID = 11;
+        Integer taskID = 1313;
+        Integer cargoID = 11;
         Integer droneID = 66;
-        
-        DroneAggregate drone = AvailableDronesBuilder.newDrone(droneID, droneType);
-        Terminal terminal = new Terminal(1);
-        drone.dockInTerminal(terminal);
+        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+                .withDroneID(droneID).dockedInTerminal(terminal).build();
         Mockito.when(droneRepository.findDrone(drone.getDroneID())).thenReturn(drone);
         
         // when
-        CargoLoadTask task = new CargoLoadTask(taskID, cargoID, droneID, terminalID, BoxType.SMALL);
+        CargoLoadTask task = new CargoLoadTask(taskID, cargoID, BoxType.SMALL, terminal.getTerminalID(), droneID);
         processUnderTest.confirmManuallCargoLoadDone(task);
         
         // then
@@ -109,19 +104,16 @@ public class CargoLoadProcessServiceTest {
     @Test
     public void shouldRevertBoxStocksAndStartAbortProcedure() {
         // given
-        int taskID = 1313;
-        int terminalID = 1;
-        int cargoID = 11;
+        Integer taskID = 1313;
+        Integer cargoID = 11;
         Integer droneID = 66;
-        
-        DroneAggregate drone = AvailableDronesBuilder.newDrone(droneID, droneType);
-        Terminal terminal = new Terminal(1);
-        drone.dockInTerminal(terminal);
+        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+                .withDroneID(droneID).dockedInTerminal(terminal).build();
         Mockito.when(droneRepository.findDrone(drone.getDroneID())).thenReturn(drone);
         
         // when
-        CargoLoadTask task = new CargoLoadTask(taskID, cargoID, droneID, terminalID, BoxType.SMALL);
-        task.addProblem(ProblemType.NO_BOXES, "Drone stolen...");
+        CargoLoadTask task = new CargoLoadTask(taskID, cargoID, BoxType.SMALL, terminal.getTerminalID(), droneID);
+        task.addProblem(ProblemType.DRONE_MISSING, "Drone stolen...");
         processUnderTest.abortManuallCargoLoadTask(task);
         
         // then
@@ -130,10 +122,10 @@ public class CargoLoadProcessServiceTest {
         
         Mockito.verify(vesselChooseProcess).handleCargoProblems(Mockito.eq(cargoID), problemsCaptor.capture());
         assertThat(problemsCaptor.getValue()).containsOnly(
-                new Problem(ProblemType.NO_BOXES, "Drone stolen..."));
+                new Problem(ProblemType.DRONE_MISSING, "Drone stolen..."));
         Mockito.verify(dronFlightControlService).handleDroneProblems(Mockito.eq(droneID), problemsCaptor.capture());
         assertThat(problemsCaptor.getValue()).containsOnly(
-                new Problem(ProblemType.NO_BOXES, "Drone stolen..."));
+                new Problem(ProblemType.DRONE_MISSING, "Drone stolen..."));
         
         // TODO MM: create DroneAssert
         assertThat(droneLoadedEvent.getEvents()).isEmpty();

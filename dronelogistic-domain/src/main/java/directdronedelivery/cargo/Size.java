@@ -10,9 +10,9 @@ import lombok.ToString;
 @ToString
 public class Size {
     
-    @Getter int length;
-    @Getter int width;
-    @Getter int height;
+    @Getter protected int length;
+    @Getter protected int width;
+    @Getter protected int height;
     
     private Size() {
     }

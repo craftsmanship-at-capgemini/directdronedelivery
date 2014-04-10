@@ -9,16 +9,16 @@ import static directdronedelivery.warehouse.BoxType.*;
 // TODO GST: match to CargoSpecyfication: orientation
 public class BoxChooseRule {
     
-    public static final int MAX_HEIGHT = 1000;
-    public static final int MAX_LENGTH = 1000;
-    public static final int MAX_WIDTH = 1000;
+    private static final int MAX_HEIGHT = 1000;
+    private static final int MAX_LENGTH = 1000;
+    private static final int MAX_WIDTH = 1000;
     
-    public static final int SMALL_MAX_HEIGHT = 300;
-    public static final int SMALL_MAX_LENGTH = 300;
-    public static final int SMALL_MAX_WIDTH = 300;
+    private static final int SMALL_MAX_HEIGHT = 300;
+    private static final int SMALL_MAX_LENGTH = 300;
+    private static final int SMALL_MAX_WIDTH = 300;
     
-    protected Size size;
-    protected int weightInGrams;
+    private Size size;
+    private int weightInGrams;
     @Getter protected BoxType boxType;
     
     public BoxChooseRule(CargoAggregate orderAndCargoInformation) {

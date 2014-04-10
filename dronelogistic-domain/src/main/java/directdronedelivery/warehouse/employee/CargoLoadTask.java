@@ -22,7 +22,7 @@ public class CargoLoadTask {
     @Getter private BoxType boxType;
     private List<Problem> problems;
     
-    public CargoLoadTask(int taskID, int cargoID, int droneID, int terminalID, BoxType boxType) {
+    public CargoLoadTask(int taskID, int cargoID, BoxType boxType, int terminalID, int droneID) {
         this.taskID = taskID;
         this.cargoID = cargoID;
         this.droneID = droneID;

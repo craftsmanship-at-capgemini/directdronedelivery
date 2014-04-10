@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.ToString;
 
 // TODO PL: check name: checpoint navipiont fixpoint ...
+// TODO PL: it will be nice to have coordinates
 @EqualsAndHashCode
 @ToString
 public class Checkpoint {
     
-    @Getter int length;
-    @Getter int latitude;
+    @Getter protected int length;
+    @Getter protected int latitude;
     
     private Checkpoint() {
     }

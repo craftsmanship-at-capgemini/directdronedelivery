@@ -14,7 +14,7 @@ public class CargoSpecyfication {
     private static final Size MAX_SIZE = Size.newSizeInMilimeters(250, 150, 100);
     private static final List<DroneType> POSSIBLE_DRONE_TYPES = Arrays.asList(DroneType.values());
     
-    public List<DroneType> possibleDronTypes(CargoAggregate orderAndCargoInformation) {
+    public List<DroneType> isSatisfiedForDronTypes(CargoAggregate orderAndCargoInformation) {
         
         if (orderAndCargoInformation.getWeightInGrams() > MAX_WEIGHT) {
             return Collections.emptyList();

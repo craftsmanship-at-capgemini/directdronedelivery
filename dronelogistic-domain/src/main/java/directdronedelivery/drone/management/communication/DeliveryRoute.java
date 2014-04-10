@@ -1,6 +1,6 @@
 package directdronedelivery.drone.management.communication;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
@@ -18,14 +18,14 @@ public class DeliveryRoute {
     
     public static DeliveryRoute newDeliveryRoute(List<Checkpoint> checkpoints) {
         DeliveryRoute route = new DeliveryRoute();
-        route.checkpoints = checkpoints;
+        route.checkpoints = Collections.unmodifiableList(checkpoints);
         
         return route;
     }
     
     public static DeliveryRoute noDeliveryRouteUploaded() {
         DeliveryRoute route = new DeliveryRoute();
-        route.checkpoints = new ArrayList<>();
+        route.checkpoints = Collections.emptyList();
         
         return route;
     }

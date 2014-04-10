@@ -8,7 +8,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import directdronedelivery.cargo.CargoAggregate;
-import directdronedelivery.cargo.OrdersInformationService;
+import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
 import directdronedelivery.drone.DroneStatus;
 import directdronedelivery.drone.management.DronControlService;
@@ -22,35 +22,34 @@ import directdronedelivery.drone.management.communication.DroneCommunicationServ
 @LocalBean
 public class DroneStartProcessService {
     
-    @EJB OrdersInformationService ordersInformationService;
+    @EJB CargoRepository cargoRepository;
     @EJB DronControlService droneControlService;
     @EJB DroneCommunicationService droneCommunicationService;
-    @Inject Event<DroneStartedEvent> vesselStartedEvent;
+    @Inject Event<DroneStartedEvent> droneStartedEvent;
     
     /**
-     * The VesselStartProcess is triggered via the Event VesselLoadedEvent. This
+     * The DroneStartProcess is triggered via the Event DroneLoadedEvent. This
      * Process calculates the delivery route, makes an upload to the Vessel and
      * if upload succeeds starts the start procedure
      * 
      * @param droneLoadedEvent
      *            Event that Vessel is loaded
      */
-    public void vesselLoaded(@Observes DroneLoadedEvent droneLoadedEvent) {
+    public void initDroneStartProcess(@Observes DroneLoadedEvent droneLoadedEvent) {
         Integer cargoId = droneLoadedEvent.getCargoID();
         Integer droneId = droneLoadedEvent.getDroneID();
         
-        CargoAggregate orderAndCargoInformation = ordersInformationService
-                .getOrderAndCargoInformation(cargoId);
+        CargoAggregate cargo = cargoRepository.findCargo(cargoId);
         
         DeliveryRoute route = droneControlService
-                .calculateDeliveryRoute(orderAndCargoInformation.getOrder().getDeliveryAddress());
+                .calculateDeliveryRoute(cargo.getOrder().getDeliveryAddress());
         
         DroneAggregate drone = droneControlService.findDrone(droneId);
         
         AnswerFromDrone answer = droneCommunicationService.uploadDeliveryRoute(drone, route);
         
         if (answer.getDrone().getStatus() == DroneStatus.UPLOAD_FAILED) {
-            droneControlService.handleDroneProblems(answer.getDrone().getDroneID(), answer.getErrors());
+            droneControlService.handleDroneProblems(answer.getDrone().getDroneID(), answer.getProblems());
         } else {
             performStartProcedure(drone);
         }
@@ -67,10 +66,9 @@ public class DroneStartProcessService {
         AnswerFromDrone answer = droneCommunicationService.performStartCheckList(drone, createCheckStartList(drone));
         
         if (answer.getDrone().getStatus() == DroneStatus.HOUSTON_WE_HAVE_A_PROBLEM) {
-            droneControlService.handleDroneProblems(answer.getDrone().getDroneID(), answer.getErrors());
+            droneControlService.handleDroneProblems(answer.getDrone().getDroneID(), answer.getProblems());
         } else if (answer.getDrone().getStatus() == DroneStatus.READY_FOR_TAKE_OFF) {
-            vesselStartedEvent.fire(new DroneStartedEvent(drone.getDroneID()));
-            
+            droneStartedEvent.fire(new DroneStartedEvent(drone.getDroneID()));
         }
     }
     

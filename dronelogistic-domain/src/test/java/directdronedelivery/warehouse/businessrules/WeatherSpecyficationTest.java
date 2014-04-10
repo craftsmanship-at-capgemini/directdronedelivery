@@ -26,7 +26,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(3.0).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -36,7 +36,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(5.56).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -46,7 +46,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(6.0).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isFalse();
     }
@@ -56,7 +56,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withLightningsPossible(true).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isFalse();
     }
@@ -66,7 +66,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withPrecipitationPossible(true).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isFalse();
     }
@@ -76,7 +76,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withLightningsPossible(false).withPrecipitationPossible(false).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -86,7 +86,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withTemperatureInCelsius(15).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -96,7 +96,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withTemperatureInCelsius(10).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -106,7 +106,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withTemperatureInCelsius(30).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -116,7 +116,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withTemperatureInCelsius(9).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isFalse();
     }
@@ -126,7 +126,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withTemperatureInCelsius(31).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isFalse();
     }
@@ -136,7 +136,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withHumidityInPercent(30).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -146,7 +146,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withHumidityInPercent(55).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
@@ -156,7 +156,7 @@ public class WeatherSpecyficationTest {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withHumidityInPercent(60).build();
         
-        boolean weatherAcceptable = weatherSpecyfication.isAcceptable(weather);
+        boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isFalse();
     }

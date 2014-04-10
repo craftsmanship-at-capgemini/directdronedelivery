@@ -4,10 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "cargoID")
 @ToString
 public class CargoAggregate {
-    // TODO MM: split to Cargo with reference to Order
+    
     @Getter protected Integer cargoID;
     @Getter protected int weightInGrams;
     @Getter protected Size size;
@@ -17,7 +17,7 @@ public class CargoAggregate {
     
     @Getter protected OrderAggregate order;
     
-    CargoAggregate() {
+    protected CargoAggregate() {
     }
     
 }

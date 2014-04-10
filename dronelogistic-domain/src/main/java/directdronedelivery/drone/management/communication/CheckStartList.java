@@ -29,10 +29,12 @@ public class CheckStartList {
     }
     
     public CheckStartList checkConditons() {
-        if (batteryCheck)
+        if (batteryCheck) {
             checkBattery();
-        if (windCheck)
+        }
+        if (windCheck) {
             checkWind();
+        }
         return this;
     }
     

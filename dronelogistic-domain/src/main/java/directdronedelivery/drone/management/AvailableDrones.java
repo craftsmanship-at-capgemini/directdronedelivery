@@ -12,8 +12,8 @@ import lombok.ToString;
 @ToString
 public class AvailableDrones {
     
-    public List<DroneType> droneTypes;
-    public Map<DroneType, Integer> droneCounts;
+    protected List<DroneType> droneTypes;
+    protected Map<DroneType, Integer> droneCounts;
     
     protected AvailableDrones(List<DroneType> droneTypesInAscSizeOrder, Map<DroneType, Integer> droneCounts) {
         this.droneTypes = droneTypesInAscSizeOrder;

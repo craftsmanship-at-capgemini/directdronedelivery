@@ -11,10 +11,10 @@ import org.joda.time.DateTime;
 @ToString
 public class AcceptableDeliveryTime {
     
-    BitSet hours;
-    BitSet halves;
+    protected BitSet hours;
+    protected BitSet halves;
     
-    AcceptableDeliveryTime() {
+    protected AcceptableDeliveryTime() {
         hours = new BitSet(24);
         halves = new BitSet(24);
     }

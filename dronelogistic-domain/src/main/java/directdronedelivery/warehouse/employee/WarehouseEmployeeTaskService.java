@@ -6,8 +6,8 @@ import directdronedelivery.warehouse.BoxType;
 
 public interface WarehouseEmployeeTaskService {
     
-    public void addCargoLoadTask(CargoAggregate orderAndCargoInformation, DroneAggregate drone, BoxType boxType);
+    void addCargoLoadTask(CargoAggregate cargo, DroneAggregate drone, BoxType boxType);
     
-    public void closeTask(Integer taskID);
+    void closeTask(Integer taskID);
     
 }

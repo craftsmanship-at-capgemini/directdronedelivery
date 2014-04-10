@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import directdronedelivery.drone.DroneAggregate;
 import directdronedelivery.drone.DroneType;
@@ -13,25 +12,11 @@ import directdronedelivery.drone.management.AvailableDrones;
 
 public class AvailableDronesBuilder {
     
-    private static AtomicInteger nextDroneID = new AtomicInteger(0);
-    
     private AvailableDrones underConstruction = null;
     
     private List<DroneType> typicalDroneTypes = Arrays.asList(DroneType.values());
     
     private AvailableDronesBuilder() {
-    }
-    
-    public static DroneAggregate newDrone(int droneID, DroneType droneType) {
-        return new DroneAggregate(droneID, droneType);
-    }
-    
-    public static DroneAggregate newDrone(DroneType droneType) {
-        return new DroneAggregate(nextDroneID.incrementAndGet(), droneType);
-    }
-    
-    public static DroneAggregate newDrone() {
-        return new DroneAggregate(nextDroneID.incrementAndGet(), DroneType.SMALL_FOUR_ROTORS);
     }
     
     public static AvailableDronesBuilder anAvaliableDrones() {

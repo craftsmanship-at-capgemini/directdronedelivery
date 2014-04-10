@@ -4,19 +4,21 @@ import java.util.List;
 
 import directdronedelivery.cargo.AcceptableDeliveryTime;
 import directdronedelivery.drone.DroneType;
+import directdronedelivery.warehouse.Problem;
 import directdronedelivery.warehouse.businessrules.DeliveryTimeAcceptanceStrategy;
 
 public interface VesselChooseProcessCargoStateRepository {
     
-    VesselChooseProcessCargoState newDecision(Integer warehausId, Integer cargoID, AcceptableDeliveryTime acceptableDeliveryTime);
+    VesselChooseProcessCargoState newProcessState(Integer warehausId, Integer cargoID,
+            AcceptableDeliveryTime acceptableDeliveryTime);
     
-    void save(VesselChooseProcessCargoState takeOffDecision);
+    VesselChooseProcessCargoState findProcessState(Integer cargoID);
     
-    VesselChooseProcessCargoState get(Integer cargoID);
-    
-    List<VesselChooseProcessCargoState> getPositiveDecisions(DroneType droneTyp,
+    List<VesselChooseProcessCargoState> findPositiveDecisions(DroneType droneTyp,
             DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit);
     
     VesselChooseProcessCargoIndependentState getCargoIndependentSubDecisions();
+    
+    void saveCargoProblems(Integer cargoID, List<Problem> cargoProblems);
     
 }

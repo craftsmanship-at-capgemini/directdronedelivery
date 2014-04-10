@@ -8,11 +8,11 @@ import lombok.ToString;
 @ToString
 public class DeliveryAddress {
     
-    @Getter String houseNumber;
-    @Getter String streetName;
-    @Getter String postalCode;
+    @Getter protected String houseNumber;
+    @Getter protected String streetName;
+    @Getter protected String postalCode;
     
-    private DeliveryAddress() {
+    protected DeliveryAddress() {
     }
     
     public static DeliveryAddress newAddress(String houseNumber, String streetName, String postalCode) {

@@ -13,15 +13,15 @@ import lombok.ToString;
 public class AnswerFromDrone {
     
     @Getter protected DroneAggregate drone;
-    @Getter protected List<Problem> errors;
+    @Getter protected List<Problem> problems;
     
     private AnswerFromDrone() {
     }
     
-    public static AnswerFromDrone newAnswer(DroneAggregate drone, List<Problem> errors) {
+    public static AnswerFromDrone newAnswer(DroneAggregate drone, List<Problem> problems) {
         AnswerFromDrone answerFromDrone = new AnswerFromDrone();
         answerFromDrone.drone = drone;
-        answerFromDrone.errors = errors;
+        answerFromDrone.problems = problems;
         
         return answerFromDrone;
     }

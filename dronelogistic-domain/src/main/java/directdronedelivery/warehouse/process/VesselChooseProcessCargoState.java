@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import directdronedelivery.cargo.AcceptableDeliveryTime;
 import directdronedelivery.drone.DroneType;
@@ -13,15 +15,18 @@ import directdronedelivery.warehouse.businessrules.DeliveryTimeAcceptanceStrateg
 @ToString
 public class VesselChooseProcessCargoState {
     
-    private Integer cargoID;
-    private Integer warehausID;
-    private List<DroneType> possibleDronTypes;
-    private boolean placeOfDeliveryAccepted;
-    private boolean profitabilityAndPriorityAcceptance;
+    @Getter private Integer cargoID;
+    @Getter private Integer warehausID;
+    @Getter private List<DroneType> possibleDronTypes;
+    @Setter private boolean placeOfDeliveryAccepted;
+    @Setter private boolean profitabilityAndPriorityAcceptance;
+    @Setter private boolean alreadyDeliveredWithTruck;
+    private boolean droneDeliveryDenied;
     private AcceptableDeliveryTime acceptableDeliveryTime;
     private transient VesselChooseProcessCargoIndependentState cargoIndependentSubDecisions;
     
-    VesselChooseProcessCargoState(Integer cargoID, Integer warehausID, AcceptableDeliveryTime acceptableDeliveryTime,
+    protected VesselChooseProcessCargoState(Integer cargoID, Integer warehausID,
+            AcceptableDeliveryTime acceptableDeliveryTime,
             VesselChooseProcessCargoIndependentState cargoIndependentSubDecisions) {
         this.cargoID = cargoID;
         this.warehausID = warehausID;
@@ -30,42 +35,28 @@ public class VesselChooseProcessCargoState {
         this.possibleDronTypes = Collections.emptyList();
         this.placeOfDeliveryAccepted = false;
         this.profitabilityAndPriorityAcceptance = false;
+        this.alreadyDeliveredWithTruck = false;
+        this.droneDeliveryDenied = false;
         this.acceptableDeliveryTime = acceptableDeliveryTime;
     }
     
-    public boolean isCargoAndOrderAcceptable() {
+    public boolean isDroneDeliveryPossible() {
         return !possibleDronTypes.isEmpty() && placeOfDeliveryAccepted;
     }
     
     public boolean isPositive(DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy) {
-        return isCargoAndOrderAcceptable()
+        return !alreadyDeliveredWithTruck && !droneDeliveryDenied
+                && isDroneDeliveryPossible()
                 && profitabilityAndPriorityAcceptance
                 && cargoIndependentSubDecisions.arePositive()
                 && deliveryTimeAcceptanceStrategy.isPositive(acceptableDeliveryTime);
     }
     
-    public Integer getCargoID() {
-        return cargoID;
-    }
-    
-    public Integer getWarehausID() {
-        return warehausID;
-    }
-    
-    public List<DroneType> getPossibleDronTypes() {
-        return possibleDronTypes;
-    }
-    
     public void setPossibleDronTypes(List<DroneType> possibleDronTypes) {
-        this.possibleDronTypes = possibleDronTypes;
+        this.possibleDronTypes = Collections.unmodifiableList(possibleDronTypes);
     }
     
-    public void setPlaceOfDeliveryAccepted(boolean placeOfDeliveryAccepted) {
-        this.placeOfDeliveryAccepted = placeOfDeliveryAccepted;
-        
-    }
-    
-    public void setProfitabilityAndPriorityAcceptance(boolean profitabilityAndPriorityAcceptance) {
-        this.profitabilityAndPriorityAcceptance = profitabilityAndPriorityAcceptance;
+    public void denyDroneDelivery() {
+        this.droneDeliveryDenied = true;
     }
 }

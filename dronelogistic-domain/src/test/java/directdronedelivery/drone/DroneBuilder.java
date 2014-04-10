@@ -5,14 +5,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import directdronedelivery.drone.DroneAggregate;
 import directdronedelivery.drone.DroneStatus;
 import directdronedelivery.drone.DroneType;
-import directdronedelivery.warehouse.Terminal;
+import directdronedelivery.warehouse.TerminalEntity;
+import directdronedelivery.warehouse.WarehouseTopologyFactory;
 
 public class DroneBuilder {
     
     private static AtomicInteger nextDroneID = new AtomicInteger(0);
     
     private DroneAggregate drone;
-    private Terminal terminal = new Terminal(13);
+    private TerminalEntity terminal = WarehouseTopologyFactory.newTerminal(1);
     
     public static DroneBuilder aDrone() {
         DroneBuilder builder = new DroneBuilder();
@@ -20,9 +21,10 @@ public class DroneBuilder {
         return builder;
     }
     
-    public DroneBuilder like4RotorsDroneDocked() {
+    public DroneBuilder likeDocked4RotorsDrone() {
+        withDroneType(DroneType.SMALL_FOUR_ROTORS);
         withDroneID(nextDroneID.incrementAndGet());
-        withDroneStatus(DroneStatus.LOOKING_FOR_A_JOB);
+        withDroneStatus(DroneStatus.DOCKED);
         dockedInTerminal(terminal);
         return this;
     }
@@ -42,8 +44,8 @@ public class DroneBuilder {
         return this;
     }
     
-    public DroneBuilder dockedInTerminal(Terminal terminal) {
-        this.drone.terminal = terminal;
+    public DroneBuilder dockedInTerminal(TerminalEntity terminal) {
+        this.drone.dockInTerminal(terminal);
         return this;
     }
     

@@ -9,7 +9,7 @@ public class WeatherSpecyfication {
     private static final int MINIMAL_TEMPERATURE_C = 10;
     private static final int MAXIMAL_HUMIDITY = 55;
     
-    public boolean isAcceptable(Weather weather) {
+    public boolean isSatisfiedBy(Weather weather) {
         
         if (weather.getWindInPMS() > MAXIMAL_WIND_IN_MPS) {
             return false;

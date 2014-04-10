@@ -1,12 +1,14 @@
 package directdronedelivery.warehouse.process;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateful;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import directdronedelivery.cargo.CargoAggregate;
-import directdronedelivery.cargo.OrdersInformationService;
+import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
 import directdronedelivery.drone.DroneRepository;
 import directdronedelivery.drone.management.DronControlService;
@@ -44,28 +46,30 @@ import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
  * @author Grzesiek
  * 
  */
+@Stateful
+@LocalBean
 public class CargoLoadProcessService {
     
-    @EJB DronControlService dronFlightControlService;
-    @EJB VesselChooseProcessService vesselChooseProcess;
-    @EJB OrdersInformationService ordersInformationService;
-    @EJB WarehouseEmployeeTaskService warehouseEmployeeService;
+    @EJB DronControlService dronControlService;
+    @EJB VesselChooseProcessService vesselChooseProcessService;
+    @EJB CargoRepository cargoRepository;
+    @EJB WarehouseEmployeeTaskService warehouseEmployeeTaskService;
     
     @Inject BoxStockRepository boxStockRepository;
     @Inject DroneRepository droneRepository;
     @Inject Event<DroneLoadedEvent> droneLoadedEvent;
     
-    public void startCargoLoadProcess(@Observes DroneDeliveryDecisionEvent droneTakeOffDecision) {
-        Integer droneID = droneTakeOffDecision.getDroneID();
+    public void startCargoLoadProcess(@Observes DroneDeliveryDecisionEvent droneDeliveryDecisionEvent) {
+        Integer droneID = droneDeliveryDecisionEvent.getDroneID();
         DroneAggregate drone = droneRepository.findDrone(droneID);
         
-        CargoAggregate orderAndCargoInformation = ordersInformationService
-                .getOrderAndCargoInformation(droneTakeOffDecision.getCargoID());
+        CargoAggregate cargo = cargoRepository
+                .findCargo(droneDeliveryDecisionEvent.getCargoID());
         
-        BoxChooseRule boxSpecification = new BoxChooseRule(orderAndCargoInformation);
-        BoxType boxType = boxStockRepository.decrementStockOfAppropriateBoxes(boxSpecification);
+        BoxChooseRule boxChooseRule = new BoxChooseRule(cargo);
+        BoxType boxType = boxStockRepository.decrementStockOfAppropriateBoxes(boxChooseRule);
         
-        warehouseEmployeeService.addCargoLoadTask(orderAndCargoInformation, drone, boxType);
+        warehouseEmployeeTaskService.addCargoLoadTask(cargo, drone, boxType);
     }
     
     public void confirmManuallCargoLoadDone(@Observes @TaskDone CargoLoadTask task) {
@@ -74,7 +78,7 @@ public class CargoLoadProcessService {
         
         droneLoadedEvent.fire(new DroneLoadedEvent(task.getDroneID(), task.getCargoID()));
         
-        warehouseEmployeeService.closeTask(task.getTaskID());
+        warehouseEmployeeTaskService.closeTask(task.getTaskID());
     }
     
     public void abortManuallCargoLoadTask(@Observes @TaskAbort CargoLoadTask task) {
@@ -83,13 +87,13 @@ public class CargoLoadProcessService {
             // - cargo can't be delivered with drone for some reasons
             // (temporary/permanent)
             // - drone can't fly for some reasons
-            //
-            vesselChooseProcess.handleCargoProblems(task.getCargoID(), task.getProblems());
-            dronFlightControlService.handleDroneProblems(task.getDroneID(), task.getProblems());
+            // - no more boxes
+            // ..
+            vesselChooseProcessService.handleCargoProblems(task.getCargoID(), task.getProblems());
+            dronControlService.handleDroneProblems(task.getDroneID(), task.getProblems());
         }
         boxStockRepository.revertStockOfBoxes(task.getBoxType());
-        warehouseEmployeeService.closeTask(task.getTaskID());
-        
+        warehouseEmployeeTaskService.closeTask(task.getTaskID());
     }
     
 }
