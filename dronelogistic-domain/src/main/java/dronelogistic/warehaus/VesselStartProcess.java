@@ -18,6 +18,7 @@ import dronelogistic.dronflightcontrol.DroneStatus;
 import dronelogistic.dronflightcontrol.DroneTechnicalService;
 import dronelogistic.orderinformations.OrderAndCargoInformation;
 import dronelogistic.orderinformations.OrdersInformationService;
+import dronelogistic.warehaus.cargoloadprocess.DroneLoadedEvent;
 
 @Stateful
 @LocalBean
@@ -34,13 +35,13 @@ public class VesselStartProcess {
      * Process calculates the delivery route, makes an upload to the Vessel and
      * if upload succeeds starts the start procedure
      * 
-     * @param vesselLoadedEvent
+     * @param droneLoadedEvent
      *            Event that Vessel is loaded
      * @throws DroneNotFoundException
      */
-    public void vesselLoaded(@Observes VesselLoadedEvent vesselLoadedEvent) throws DroneNotFoundException {
-        Integer cargoId = vesselLoadedEvent.getCargoID();
-        Integer droneId = vesselLoadedEvent.getDroneID();
+    public void vesselLoaded(@Observes DroneLoadedEvent droneLoadedEvent) throws DroneNotFoundException {
+        Integer cargoId = droneLoadedEvent.getCargoID();
+        Integer droneId = droneLoadedEvent.getDroneID();
         
         OrderAndCargoInformation orderAndCargoInformation = ordersInformationService
                 .getOrderAndCargoInformation(cargoId);

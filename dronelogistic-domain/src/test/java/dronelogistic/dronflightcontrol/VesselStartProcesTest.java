@@ -18,9 +18,9 @@ import dronelogistic.orderinformations.DeliveryAddress;
 import dronelogistic.orderinformations.OrderAndCargoInformation;
 import dronelogistic.orderinformations.OrderAndCargoInformationBuilder;
 import dronelogistic.orderinformations.OrdersInformationService;
-import dronelogistic.warehaus.VesselLoadedEvent;
 import dronelogistic.warehaus.VesselStartProcess;
 import dronelogistic.warehaus.VesselStartedEvent;
+import dronelogistic.warehaus.cargoloadprocess.DroneLoadedEvent;
 
 public class VesselStartProcesTest {
     
@@ -50,7 +50,7 @@ public class VesselStartProcesTest {
         prepareAnswerFromDroneWithUploadSucceed(drone, route);
         prepareAnswerFromDroneWithCheckStartListSucceed(drone);
         // when
-        VesselLoadedEvent loadedEvent = new VesselLoadedEvent(orderAndCargoInformation.getCargoID(), drone.getDroneID());
+        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), orderAndCargoInformation.getCargoID());
         vesselStartProcesTest.vesselLoaded(loadedEvent);
         // then
         Mockito.verify(droneTechnicalService, Mockito.times(0)).createErrorTicket(Mockito.any(Drone.class),
@@ -72,7 +72,7 @@ public class VesselStartProcesTest {
         DeliveryRoute route = prepareDeliveryRoute(orderAndCargoInformation.getDeliveryAddress());
         prepareAnswerFromDroneWithUploadFailed(drone, route);
         // when
-        VesselLoadedEvent loadedEvent = new VesselLoadedEvent(orderAndCargoInformation.getCargoID(), drone.getDroneID());
+        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), orderAndCargoInformation.getCargoID());
         vesselStartProcesTest.vesselLoaded(loadedEvent);
         // then
         Mockito.verify(droneTechnicalService, Mockito.times(1)).createErrorTicket(Mockito.any(Drone.class),
@@ -93,7 +93,7 @@ public class VesselStartProcesTest {
         prepareAnswerFromDroneWithUploadSucceed(drone, route);
         prepareAnswerFromDroneWithCheckStartListFailed(drone);
         // when
-        VesselLoadedEvent loadedEvent = new VesselLoadedEvent(orderAndCargoInformation.getCargoID(), drone.getDroneID());
+        DroneLoadedEvent loadedEvent = new DroneLoadedEvent(drone.getDroneID(), orderAndCargoInformation.getCargoID());
         vesselStartProcesTest.vesselLoaded(loadedEvent);
         // then
         Mockito.verify(droneTechnicalService, Mockito.times(1)).createErrorTicket(Mockito.any(Drone.class),
