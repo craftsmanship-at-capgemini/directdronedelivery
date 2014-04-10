@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 	<name>Unmanned aerial vehicle spedition software</name>
 	<modules>
-		<module>dronelogistic-domain</module>
+		<module>directdronedelivery-model</module>
 		<module>dronelogistic-ear</module>
 	</modules>
 	<url>https://github.com/craftsmanship-at-capgemini/dronelogistic</url>

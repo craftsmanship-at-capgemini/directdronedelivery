@@ -6,7 +6,7 @@
         <artifactId>dronelogistic</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>dronelogistic-domain</artifactId>
+    <artifactId>directdronedelivery-model</artifactId>
     <name> domain module</name>
     <packaging>ejb</packaging>
     <dependencies>
