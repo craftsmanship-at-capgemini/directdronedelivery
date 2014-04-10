@@ -15,7 +15,9 @@ public class OrderAndCargoInformation {
     @Getter protected boolean fragileCommodity;
     @Getter protected boolean dangerousGoods;
     @Getter protected AcceptableDeliveryTime acceptableDeliveryTime;
+    @Getter protected DeliveryAddress deliveryAddress;
     
     OrderAndCargoInformation() {
     }
+    
 }

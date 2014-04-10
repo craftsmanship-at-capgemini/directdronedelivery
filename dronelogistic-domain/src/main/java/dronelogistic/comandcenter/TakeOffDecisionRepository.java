@@ -3,17 +3,18 @@ package dronelogistic.comandcenter;
 import java.util.List;
 
 import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
+import dronelogistic.dronflightcontrol.DroneType;
 import dronelogistic.orderinformations.AcceptableDeliveryTime;
 
 public interface TakeOffDecisionRepository {
     
-    TakeOffDecision newDecision(Integer warehausID, Integer cargoID, AcceptableDeliveryTime acceptableDeliveryTime);
+    TakeOffDecision newDecision(Integer warehausId, Integer cargoID, AcceptableDeliveryTime acceptableDeliveryTime);
     
     void save(TakeOffDecision takeOffDecision);
     
     TakeOffDecision get(Integer cargoID);
     
-    List<TakeOffDecision> getPositiveDecisions(String droneTyp,
+    List<TakeOffDecision> getPositiveDecisions(DroneType droneTyp,
             DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit);
     
     CargoIndependentSubDecisions getCargoIndependentSubDecisions();

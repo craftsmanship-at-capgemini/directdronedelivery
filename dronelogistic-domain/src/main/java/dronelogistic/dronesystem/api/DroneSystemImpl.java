@@ -4,7 +4,6 @@ import dronelogistic.comandcenter.Route;
 
 public class DroneSystemImpl implements DroneSytem {
     
-    
     @Override
     public boolean uploadRoute(Integer droneId, Route route) {
         // TODO Auto-generated method stub

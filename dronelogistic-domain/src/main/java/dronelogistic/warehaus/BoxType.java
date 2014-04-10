@@ -1,5 +1,5 @@
 package dronelogistic.warehaus;
 
 public enum BoxType {
-    SMALL, BIG, UNKOWN;    
+    SMALL, BIG, UNKOWN;
 }

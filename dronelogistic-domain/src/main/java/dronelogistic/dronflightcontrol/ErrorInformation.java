@@ -1,15 +1,14 @@
 package dronelogistic.dronflightcontrol;
 
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-@AllArgsConstructor
-public class DroneAvaliableEvent {
+public class ErrorInformation {
     
-    @Getter private DroneType droneTyp;
+    @Getter protected Integer errorId;
+    @Getter protected String errorDescription;
     
 }

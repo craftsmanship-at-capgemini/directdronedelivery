@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import testing.Testing;
+import dronelogistic.dronflightcontrol.DroneType;
 import dronelogistic.orderinformations.OrderAndCargoInformation;
 
 public class CargoSpecyficationTest {
@@ -29,7 +30,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withWeightInKilos(6).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).isEmpty();
     }
@@ -39,7 +40,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withWeightInKilos(5).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
@@ -51,7 +52,7 @@ public class CargoSpecyficationTest {
             OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                     .but().withWeightInGrams(weightInGrams).build();
             
-            List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+            List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
             
             assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
         }
@@ -62,7 +63,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withSizeInMilimeters(10, 1000, 10).withFixedOrientation(false).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).isEmpty();
     }
@@ -72,7 +73,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withSizeInMilimeters(250, 150, 100).withFixedOrientation(false).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
@@ -82,7 +83,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withSizeInMilimeters(250, 100, 150).withFixedOrientation(true).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).isEmpty();
     }
@@ -92,7 +93,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withSizeInMilimeters(100, 150, 250).withFixedOrientation(true).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).isEmpty();
     }
@@ -102,7 +103,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withSizeInMilimeters(250, 100, 150).withFixedOrientation(false).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
@@ -112,7 +113,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withSizeInMilimeters(100, 150, 250).withFixedOrientation(false).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
@@ -122,7 +123,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withFragileCommodity(false).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
@@ -132,7 +133,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withFragileCommodity(true).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).isEmpty();
     }
@@ -142,7 +143,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withDangerousGoods(false).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).hasSize(COUNT_OF_DRONE_TYPES);
     }
@@ -152,7 +153,7 @@ public class CargoSpecyficationTest {
         OrderAndCargoInformation orderAndCargoInformation = aCargo().likeSmallGift()
                 .but().withDangerousGoods(true).build();
         
-        List<String> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
+        List<DroneType> possibleDronTypes = cargoSpecyfication.possibleDronTypes(orderAndCargoInformation);
         
         assertThat(possibleDronTypes).isEmpty();
     }

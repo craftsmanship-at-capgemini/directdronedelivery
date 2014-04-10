@@ -1,7 +1,7 @@
 package dronelogistic.comandcenter;
 
-import static dronelogistic.dronflightcontrol.AvaliableDronesBuilder.anAvaliableDrones;
-import static dronelogistic.dronflightcontrol.AvaliableDronesBuilder.newDrone;
+import static dronelogistic.dronflightcontrol.AvailableDronesBuilder.anAvaliableDrones;
+import static dronelogistic.dronflightcontrol.AvailableDronesBuilder.newDrone;
 import static dronelogistic.orderinformations.AcceptableDeliveryTimeBuilder.aTime;
 import static dronelogistic.orderinformations.ConsignmentInformationBuilder.aConsignment;
 import static dronelogistic.orderinformations.OrderAndCargoInformationBuilder.aCargo;
@@ -29,6 +29,7 @@ import dronelogistic.dronflightcontrol.DronFlightControlService;
 import dronelogistic.dronflightcontrol.Drone;
 import dronelogistic.dronflightcontrol.DroneAvaliableEvent;
 import dronelogistic.dronflightcontrol.DroneNotAvaliableException;
+import dronelogistic.dronflightcontrol.DroneType;
 import dronelogistic.orderinformations.ConsignmentChangedEvent;
 import dronelogistic.orderinformations.ConsignmentInformation;
 import dronelogistic.orderinformations.OrderAndCargoInformation;
@@ -309,7 +310,7 @@ public class VesselChooseProcessExampleScenariosTest {
         AvaliableDrones avaliableDrones = anAvaliableDrones().likeNoDronesAvaliable().build();
         Mockito.reset(dronFlightControlService); // yep, I know...
         Mockito.when(dronFlightControlService.getAvaliableDrones()).thenReturn(avaliableDrones);
-        Mockito.when(dronFlightControlService.reserveDrone(Mockito.<String> any())).thenThrow(
+        Mockito.when(dronFlightControlService.reserveDrone(Mockito.<DroneType> any())).thenThrow(
                 new DroneNotAvaliableException());
     }
     

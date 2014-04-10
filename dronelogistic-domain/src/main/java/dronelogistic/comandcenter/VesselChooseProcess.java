@@ -23,6 +23,7 @@ import dronelogistic.dronflightcontrol.Drone;
 import dronelogistic.dronflightcontrol.DroneAvaliableEvent;
 import dronelogistic.dronflightcontrol.DroneNotAvaliableException;
 import dronelogistic.dronflightcontrol.DroneProblem;
+import dronelogistic.dronflightcontrol.DroneType;
 import dronelogistic.orderinformations.ConsignmentChangedEvent;
 import dronelogistic.orderinformations.ConsignmentInformation;
 import dronelogistic.orderinformations.OrderAndCargoInformation;
@@ -137,7 +138,7 @@ public class VesselChooseProcess {
     
     public void droneAvaliable(@Observes DroneAvaliableEvent droneAvaliableEvent) {
         try {
-            String droneTyp = droneAvaliableEvent.getDroneTyp();
+            DroneType droneTyp = droneAvaliableEvent.getDroneTyp();
             List<TakeOffDecision> takeOffDecisions = takeOffDecisionRepository.getPositiveDecisions(droneTyp,
                     deliveryTimeAcceptanceStrategy, 1);
             
@@ -152,7 +153,7 @@ public class VesselChooseProcess {
     private void takeOffIfDronAvaliable(TakeOffDecision takeOffDecision) {
         AvaliableDrones avaliableDrones = dronFlightControlService.getAvaliableDrones();
         
-        for (String droneTyp : takeOffDecision.getPossibleDronTypes()) {
+        for (DroneType droneTyp : takeOffDecision.getPossibleDronTypes()) {
             Integer countLimit = avaliableDrones.getCount(droneTyp);
             if (countLimit > 0) {
                 try {
@@ -168,7 +169,7 @@ public class VesselChooseProcess {
     
     private void takeOffAllAvaliableDrones() {
         AvaliableDrones avaliableDrones = dronFlightControlService.getAvaliableDrones();
-        for (String droneTyp : avaliableDrones.getDroneTypesInAscSizeOrder()) {
+        for (DroneType droneTyp : avaliableDrones.getDroneTypesInAscSizeOrder()) {
             Integer droneCount = avaliableDrones.getCount(droneTyp);
             if (droneCount == 0) {
                 continue;
@@ -186,7 +187,7 @@ public class VesselChooseProcess {
             }
         }
     }
-
+    
     public void handleCargoProblems(int cargoID, List<DroneProblem> problems) {
         // TODO MM: VesselChooseProcess.handleCargoProblems
         

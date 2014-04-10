@@ -81,9 +81,10 @@ public class CargoLoadProcessService {
     public void abortManuallCargoLoadTask(@Observes @TaskAbort CargoLoadTask task) {
         if (task.hasProblems()) {
             // handle possible problem types, maybe:
-            // - cargo can't be delivered with drone for some reasons (temporary/permanent)
+            // - cargo can't be delivered with drone for some reasons
+            // (temporary/permanent)
             // - drone can't fly for some reasons
-            // 
+            //
             vesselChooseProcess.handleCargoProblems(task.getCargoID(), task.getProblems());
             dronFlightControlService.handleDroneProblems(task.getDroneID(), task.getProblems());
         }

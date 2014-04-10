@@ -6,7 +6,7 @@ public class Terminal {
     
     @Getter int terminalID;
     
-    public Terminal (int terminaID){
+    public Terminal(int terminaID) {
         this.terminalID = terminaID;
     }
     

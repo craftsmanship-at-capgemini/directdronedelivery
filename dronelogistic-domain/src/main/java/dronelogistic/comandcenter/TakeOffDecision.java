@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
+import dronelogistic.dronflightcontrol.DroneType;
 import dronelogistic.orderinformations.AcceptableDeliveryTime;
 
 @EqualsAndHashCode
@@ -14,7 +15,7 @@ public class TakeOffDecision {
     
     private Integer cargoID;
     private Integer warehausID;
-    private List<String> possibleDronTypes;
+    private List<DroneType> possibleDronTypes;
     private boolean placeOfDeliveryAccepted;
     private boolean profitabilityAndPriorityAcceptance;
     private AcceptableDeliveryTime acceptableDeliveryTime;
@@ -51,11 +52,11 @@ public class TakeOffDecision {
         return warehausID;
     }
     
-    public List<String> getPossibleDronTypes() {
+    public List<DroneType> getPossibleDronTypes() {
         return possibleDronTypes;
     }
     
-    public void setPossibleDronTypes(List<String> possibleDronTypes) {
+    public void setPossibleDronTypes(List<DroneType> possibleDronTypes) {
         this.possibleDronTypes = possibleDronTypes;
     }
     

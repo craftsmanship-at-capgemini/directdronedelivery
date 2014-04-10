@@ -7,6 +7,7 @@ import java.util.Map;
 
 import lombok.ToString;
 import dronelogistic.comandcenter.businessrules.DeliveryTimeAcceptanceStrategy;
+import dronelogistic.dronflightcontrol.DroneType;
 import dronelogistic.orderinformations.AcceptableDeliveryTime;
 
 @ToString
@@ -57,12 +58,16 @@ class TestInMemoryTakeOffDecisionRepository implements TakeOffDecisionRepository
     }
     
     @Override
-    public List<TakeOffDecision> getPositiveDecisions(String droneTyp,
+    public List<TakeOffDecision> getPositiveDecisions(DroneType droneTyp,
             DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy, int countLimit) {
         List<TakeOffDecision> positive = new LinkedList<>();
         for (TakeOffDecision takeOffDecision : inMemoryStore.values()) {
-            if (takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy)) {
+            if (takeOffDecision.isPositive(deliveryTimeAcceptanceStrategy)
+                    && takeOffDecision.getPossibleDronTypes().contains(droneTyp)) {
                 positive.add(takeOffDecision);
+            }
+            if (positive.size() >= countLimit) {
+                break;
             }
         }
         return positive;

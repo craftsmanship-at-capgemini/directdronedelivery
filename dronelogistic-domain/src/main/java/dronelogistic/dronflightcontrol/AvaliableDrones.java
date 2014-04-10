@@ -11,19 +11,19 @@ import lombok.ToString;
 @ToString
 public class AvaliableDrones {
     
-    public List<String> droneTypes;
-    public Map<String, Integer> droneCounts;
+    public List<DroneType> droneTypes;
+    public Map<DroneType, Integer> droneCounts;
     
-    protected AvaliableDrones(List<String> droneTypesInAscSizeOrder, Map<String, Integer> droneCounts) {
+    protected AvaliableDrones(List<DroneType> droneTypesInAscSizeOrder, Map<DroneType, Integer> droneCounts) {
         this.droneTypes = droneTypesInAscSizeOrder;
         this.droneCounts = droneCounts;
     }
     
-    public List<String> getDroneTypesInAscSizeOrder() {
+    public List<DroneType> getDroneTypesInAscSizeOrder() {
         return Collections.unmodifiableList(droneTypes);
     }
     
-    public Integer getCount(String droneTyp) {
+    public Integer getCount(DroneType droneTyp) {
         if (droneCounts.containsKey(droneTyp)) {
             return droneCounts.get(droneTyp);
         } else {

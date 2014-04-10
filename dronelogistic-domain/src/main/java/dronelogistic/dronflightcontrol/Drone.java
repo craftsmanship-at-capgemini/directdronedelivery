@@ -1,24 +1,27 @@
 package dronelogistic.dronflightcontrol;
 
 import dronelogistic.warehaus.Terminal;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-@AllArgsConstructor
 public class Drone {
     
     @Getter Integer droneID;
-    @Getter String droneType;
+    @Getter DroneType droneType;
+    
+    @Getter DeliveryRoute route;
+    @Getter DroneStatus status;
+    
     Terminal terminal;
     Integer cargoID;
     
-    Drone(Integer droneID, String droneType) {
+    Drone(Integer droneID, DroneType droneType) {
         this.droneID = droneID;
         this.droneType = droneType;
+        this.status = DroneStatus.READY_FOR_TAKE_OFF;
     }
     
     public void attachCargo(Integer cargoID) {

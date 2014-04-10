@@ -77,6 +77,11 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
+    public OrderAndCargoInformationBuilder withDeliveryAddress(String houseNumber, String streetName, String postalCode) {
+        underConstruction.deliveryAddress = DeliveryAddress.newAddress(houseNumber, streetName, postalCode);
+        return this;
+    }
+    
     public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(
             AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder) {
         underConstruction.acceptableDeliveryTime = acceptableDeliveryTimeBuilder.build();
