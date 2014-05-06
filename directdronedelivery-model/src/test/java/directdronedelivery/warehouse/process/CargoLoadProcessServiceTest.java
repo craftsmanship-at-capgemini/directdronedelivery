@@ -28,7 +28,7 @@ import directdronedelivery.warehouse.Problem;
 import directdronedelivery.warehouse.ProblemType;
 import directdronedelivery.warehouse.TerminalEntity;
 import directdronedelivery.warehouse.WarehouseTopologyFactory;
-import directdronedelivery.warehouse.businessrules.BoxChooseRule;
+import directdronedelivery.warehouse.businessrules.BoxChooseSpecification;
 import directdronedelivery.warehouse.employee.CargoLoadTask;
 import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
 import directdronedelivery.warehouse.process.CargoLoadProcessService;
@@ -66,7 +66,7 @@ public class CargoLoadProcessServiceTest {
         CargoAggregate orderAndCargoInformation = aCargo().likeSmallGift().build();
         Mockito.when(ordersInformationService.findCargo(orderAndCargoInformation.getCargoID()))
                 .thenReturn(orderAndCargoInformation);
-        Mockito.when(boxStockRepository.decrementStockOfAppropriateBoxes(Mockito.<BoxChooseRule> any())).thenReturn(
+        Mockito.when(boxStockRepository.decrementStockOfAppropriateBoxes(Mockito.<BoxChooseSpecification> any())).thenReturn(
                 BoxType.SMALL);
         
         // when
@@ -76,7 +76,7 @@ public class CargoLoadProcessServiceTest {
         
         // then
         Mockito.verify(warehouseEmployeeService).addCargoLoadTask(orderAndCargoInformation, drone, BoxType.SMALL);
-        Mockito.verify(boxStockRepository).decrementStockOfAppropriateBoxes(Mockito.<BoxChooseRule> any());
+        Mockito.verify(boxStockRepository).decrementStockOfAppropriateBoxes(Mockito.<BoxChooseSpecification> any());
     }
     
     @Test

@@ -1,6 +1,7 @@
 package directdronedelivery.warehouse.process;
 
 import static directdronedelivery.cargo.OrderAndCargoInformationBuilder.aCargo;
+import static directdronedelivery.drone.DroneBuilder.aDrone;
 
 import java.util.ArrayList;
 
@@ -19,14 +20,13 @@ import directdronedelivery.cargo.DeliveryAddress;
 import directdronedelivery.cargo.OrderAndCargoInformationBuilder;
 import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
-import directdronedelivery.drone.DroneBuilder;
 import directdronedelivery.drone.DroneStatus;
 import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.drone.management.communication.AnswerFromDrone;
 import directdronedelivery.drone.management.communication.CheckStartList;
 import directdronedelivery.drone.management.communication.Checkpoint;
 import directdronedelivery.drone.management.communication.DeliveryRoute;
-import directdronedelivery.drone.management.communication.DroneCommunicationService;
+import directdronedelivery.drone.management.communication.DroneCommunicationProtocol;
 import directdronedelivery.warehouse.Problem;
 import directdronedelivery.warehouse.process.DroneLoadedEvent;
 import directdronedelivery.warehouse.process.DroneStartProcessService;
@@ -37,7 +37,7 @@ public class DroneStartProcessServiceTest {
     @Inject DroneStartProcessService droneStartProcessService;
     @Mock CargoRepository cargoRepository;
     @Mock DronControlService droneControlService;
-    @Mock DroneCommunicationService droneCommunicationService;
+    @Mock DroneCommunicationProtocol droneCommunicationService;
     @Inject TestEvent<DroneStartedEvent> droneStartedEvent = new TestEvent<>();
     
     @Before
@@ -51,7 +51,7 @@ public class DroneStartProcessServiceTest {
         // route and check start list
         // has been performed without any errors
         // given
-        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+        DroneAggregate drone = aDrone().likeDocked4RotorsDrone()
                 .withDroneStatus(DroneStatus.READY_FOR_TAKE_OFF).build();
         Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
@@ -78,7 +78,7 @@ public class DroneStartProcessServiceTest {
         // delivery route failed
         // an error ticket should be created via DroneTechnicalService
         // given
-        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+        DroneAggregate drone = aDrone().likeDocked4RotorsDrone()
                 .withDroneStatus(DroneStatus.UPLOAD_FAILED).build();
         Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
@@ -101,7 +101,7 @@ public class DroneStartProcessServiceTest {
         // procedure failed
         // an error ticket should be created via DroneTechnicalService
         // given
-        DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone()
+        DroneAggregate drone = aDrone().likeDocked4RotorsDrone()
                 .withDroneStatus(DroneStatus.HOUSTON_WE_HAVE_A_PROBLEM).build();
         Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         

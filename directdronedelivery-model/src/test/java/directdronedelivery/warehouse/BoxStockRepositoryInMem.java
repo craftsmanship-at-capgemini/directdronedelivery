@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import directdronedelivery.warehouse.BoxStockRepository;
 import directdronedelivery.warehouse.BoxType;
-import directdronedelivery.warehouse.businessrules.BoxChooseRule;
+import directdronedelivery.warehouse.businessrules.BoxChooseSpecification;
 
 public class BoxStockRepositoryInMem implements BoxStockRepository {
     
@@ -38,7 +38,7 @@ public class BoxStockRepositoryInMem implements BoxStockRepository {
     }
     
     @Override
-    public BoxType decrementStockOfAppropriateBoxes(BoxChooseRule boxSpecification) {
+    public BoxType decrementStockOfAppropriateBoxes(BoxChooseSpecification boxSpecification) {
         BoxType boxType = boxSpecification.getBoxType();
         boxStocksInMemoryStore.get(boxType).decrementAndGet();
         return boxType;

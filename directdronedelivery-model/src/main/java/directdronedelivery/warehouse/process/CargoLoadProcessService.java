@@ -14,7 +14,7 @@ import directdronedelivery.drone.DroneRepository;
 import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.warehouse.BoxStockRepository;
 import directdronedelivery.warehouse.BoxType;
-import directdronedelivery.warehouse.businessrules.BoxChooseRule;
+import directdronedelivery.warehouse.businessrules.BoxChooseSpecification;
 import directdronedelivery.warehouse.employee.CargoLoadTask;
 import directdronedelivery.warehouse.employee.TaskAbort;
 import directdronedelivery.warehouse.employee.TaskDone;
@@ -22,28 +22,24 @@ import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
 
 /**
  * This service supports the load process of the cargo on drones. The process
- * consists mainly of the automatically steps but also of the manually action,
- * which have to be done by a human (warehouse employee).
+ * consists mainly of the automatic steps but contains some manual actions as
+ * well, which have to be done by a warehouse employee.
  * 
- * The service has 3 business methods: choose a Box, confirm load and report
- * problems.
- * 
- * The choose a Box method choose a box for the cargo according to the box
- * specification and delegate the task creation for a warehouse employee via
+ * The Cargo Load Process begins with choosing an appropriate box for the cargo.
+ * The system chooses a box for the cargo according to the box specification and
+ * delegates creation of a task (load the cargo) for a warehouse employee to the
  * Warehouse Employee Service.
  * 
- * After the task "Load the cargo" has been completed, the warehouse employee
- * confirms , that the cargo is loaded on the drone. The box is physically
- * applied to the drone and the the task will be closed (also via Warehouse
- * Employee Service). At the end service fires the event, that the cargo is
- * loaded.
+ * After the task "load the cargo" has been completed, the warehouse employee
+ * confirms that the cargo has been loaded on the drone. The box is physically
+ * attached to the drone and the load task is closed (also via Warehouse
+ * Employee Service).
  * 
- * The warehouse employee has also a possibility to report a problem (technical
- * or logistical). In this case service notify the DronFlightControlService,
- * which is responsible for the processing of the reported problem. The load
- * process is aborted.
- * 
- * @author Grzesiek
+ * At the end the service fires an event that the cargo is loaded. The warehouse
+ * employee has also a possibility to report a problem. In this case service
+ * notifies the Drone Control Service, which is responsible for processing of
+ * the reported problem. The load process is aborted. The Vessel Choose Process
+ * Service handles the problem, if it concerns the cargo.
  * 
  */
 @Stateful
@@ -66,7 +62,7 @@ public class CargoLoadProcessService {
         CargoAggregate cargo = cargoRepository
                 .findCargo(droneDeliveryDecisionEvent.getCargoID());
         
-        BoxChooseRule boxChooseRule = new BoxChooseRule(cargo);
+        BoxChooseSpecification boxChooseRule = new BoxChooseSpecification(cargo);
         BoxType boxType = boxStockRepository.decrementStockOfAppropriateBoxes(boxChooseRule);
         
         warehouseEmployeeTaskService.addCargoLoadTask(cargo, drone, boxType);

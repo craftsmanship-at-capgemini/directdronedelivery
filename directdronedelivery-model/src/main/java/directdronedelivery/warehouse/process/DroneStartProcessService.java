@@ -15,16 +15,30 @@ import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.drone.management.communication.AnswerFromDrone;
 import directdronedelivery.drone.management.communication.CheckStartList;
 import directdronedelivery.drone.management.communication.DeliveryRoute;
-import directdronedelivery.drone.management.communication.DroneCommunicationService;
+import directdronedelivery.drone.management.communication.DroneCommunicationProtocol;
 
-// TODO GST: process description like in DroneLoadProcessService
+/**
+ * The last element of the whole process in the warehouse is the Drone Start
+ * Process. The process is triggered by the event DroneLoadedEvent.
+ * 
+ * The process calculates the route for the delivery in the first step and
+ * uploads it into the drone system. The upload occurs via Drone Communication
+ * Protocol which is responsible for the whole communication between the
+ * warehouse system and the onboard system of the drones.
+ * 
+ * If the upload of the route succeeded, the start procedure begins. Before the
+ * drone takes off, the check list must be completed. The possible problems are
+ * forwarded to the Drone Control Service, which handles it.
+ * 
+ */
 @Stateful
 @LocalBean
 public class DroneStartProcessService {
     
     @EJB CargoRepository cargoRepository;
     @EJB DronControlService droneControlService;
-    @EJB DroneCommunicationService droneCommunicationService;
+    // TODO MM: pack protocol to drone implementation
+    @EJB DroneCommunicationProtocol droneCommunicationProtocol;
     @Inject Event<DroneStartedEvent> droneStartedEvent;
     
     /**
@@ -46,14 +60,13 @@ public class DroneStartProcessService {
         
         DroneAggregate drone = droneControlService.findDrone(droneId);
         
-        AnswerFromDrone answer = droneCommunicationService.uploadDeliveryRoute(drone, route);
+        AnswerFromDrone answer = droneCommunicationProtocol.uploadDeliveryRoute(drone, route);
         
         if (answer.getDrone().getStatus() == DroneStatus.UPLOAD_FAILED) {
             droneControlService.handleDroneProblems(answer.getDrone().getDroneID(), answer.getProblems());
         } else {
             performStartProcedure(drone);
         }
-        
     }
     
     /**
@@ -63,7 +76,7 @@ public class DroneStartProcessService {
      * @param drone
      */
     private void performStartProcedure(DroneAggregate drone) {
-        AnswerFromDrone answer = droneCommunicationService.performStartCheckList(drone, createCheckStartList(drone));
+        AnswerFromDrone answer = droneCommunicationProtocol.performStartCheckList(drone, createCheckStartList(drone));
         
         if (answer.getDrone().getStatus() == DroneStatus.HOUSTON_WE_HAVE_A_PROBLEM) {
             droneControlService.handleDroneProblems(answer.getDrone().getDroneID(), answer.getProblems());

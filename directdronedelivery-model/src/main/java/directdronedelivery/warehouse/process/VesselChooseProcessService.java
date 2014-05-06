@@ -33,8 +33,25 @@ import directdronedelivery.warehouse.businessrules.WeatherSpecyfication;
 import directdronedelivery.weather.Weather;
 import directdronedelivery.weather.WeatherService;
 
-//TODO GST: process description like in DroneLoadProcessService
-
+/**
+ * The Vessel Choose Process Service is the first one in the whole warehouse
+ * processes chain.
+ * 
+ * The process checks and defines if delivery of a cargo with a
+ * drone is possible and profitable. If it is not, then the cargo is assigned to
+ * a consignment and delivered with conventional means of transport (e.g. a
+ * truck).
+ * 
+ * There are some factors which can influence the decision about the way
+ * of delivery. These are the cargo specification (size and weight of the
+ * cargo), weather conditions, the profitability or the drone availability.
+ * 
+ * If a positive decision about delivery with a drone is taken, the Vessel Choose
+ * Process Service broadcasts the event DroneDeliveryDeciosonEvent which can be
+ * received by further processes of the process chain. The cargo is ready for
+ * the load process.
+ * 
+ */
 @Stateful
 @LocalBean
 public class VesselChooseProcessService {

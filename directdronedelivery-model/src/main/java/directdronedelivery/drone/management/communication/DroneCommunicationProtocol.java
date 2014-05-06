@@ -2,7 +2,7 @@ package directdronedelivery.drone.management.communication;
 
 import directdronedelivery.drone.DroneAggregate;
 
-public interface DroneCommunicationService {
+public interface DroneCommunicationProtocol {
     
     AnswerFromDrone uploadDeliveryRoute(DroneAggregate drone, DeliveryRoute route);
     
