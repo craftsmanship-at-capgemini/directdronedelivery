@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>craftsmanship-at-capgemini</groupId>
-        <artifactId>dronelogistic</artifactId>
+        <artifactId>directdronedelivery</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>dronelogistic-ear</artifactId>
+    <artifactId>directdronedelivery-ear</artifactId>
     <packaging>ear</packaging>
-    <name>dronelogistic-ear EAR module</name>
+    <name>directdronedelivery-ear EAR module</name>
     <dependencies>
         <dependency>
             <groupId>craftsmanship-at-capgemini</groupId>
@@ -23,7 +23,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ear-plugin</artifactId>
                 <configuration>
-                    <applicationName>dronelogistic</applicationName>
+                    <applicationName>directdronedelivery</applicationName>
                     <modules>
                         <ejbModule>
                             <groupId>craftsmanship-at-capgemini</groupId>

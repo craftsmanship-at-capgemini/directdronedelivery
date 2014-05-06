@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>craftsmanship-at-capgemini</groupId>
-	<artifactId>dronelogistic</artifactId>
+	<artifactId>directdronedelivery</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Unmanned aerial vehicle spedition software</name>
 	<modules>
 		<module>directdronedelivery-model</module>
-		<module>dronelogistic-ear</module>
+		<module>directdronedelivery-ear</module>
 	</modules>
 	<url>https://github.com/craftsmanship-at-capgemini/dronelogistic</url>
 	<issueManagement>
@@ -35,6 +35,21 @@
 	<developers>
 		<developer>
 			<id>1</id>
+			<name>Patryk Lazar</name>
+			<timezone>2</timezone>
+		</developer>
+		<developer>
+			<id>2</id>
+			<name>Maria Stachowiak</name>
+			<timezone>2</timezone>
+		</developer>
+		<developer>
+			<id>3</id>
+			<name>Grzegorz Stefanek</name>
+			<timezone>2</timezone>
+		</developer>
+		<developer>
+			<id>4</id>
 			<name>Michal Michaluk</name>
 			<timezone>2</timezone>
 		</developer>
@@ -169,39 +184,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<version>2.3</version>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.1</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>dependency-updates-report</report>
-							<report>property-updates-report</report>
-							<report>plugin-updates-report</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>dashboard-maven-plugin</artifactId>
-				<version>1.0.0-beta-1</version>
-			</plugin>
-		</plugins>
-	</reporting>
 	<profiles>
 		<profile>
 			<id>openshift</id>
@@ -279,16 +261,6 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
-		<repository>
-			<id>EclipseLink</id>
-			<url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
-		</repository>
-		<repository>
-			<id>prime-repo</id>
-			<name>PrimeFaces Maven Repository</name>
-			<url>http://repository.primefaces.org</url>
-			<layout>default</layout>
 		</repository>
 		<repository>
 			<id>jboss-thirdparty-releases</id>
