@@ -49,10 +49,10 @@ public class CargoLoadProcessService {
     @EJB DronControlService dronControlService;
     @EJB VesselChooseProcessService vesselChooseProcessService;
     @EJB CargoRepository cargoRepository;
+    @EJB DroneRepository droneRepository;
     @EJB WarehouseEmployeeTaskService warehouseEmployeeTaskService;
     
     @Inject BoxStockRepository boxStockRepository;
-    @Inject DroneRepository droneRepository;
     @Inject Event<DroneLoadedEvent> droneLoadedEvent;
     
     public void startCargoLoadProcess(@Observes DroneDeliveryDecisionEvent droneDeliveryDecisionEvent) {

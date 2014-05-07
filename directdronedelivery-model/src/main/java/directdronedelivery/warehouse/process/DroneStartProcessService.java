@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import directdronedelivery.cargo.CargoAggregate;
 import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
+import directdronedelivery.drone.DroneRepository;
 import directdronedelivery.drone.DroneStatus;
 import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.drone.management.communication.AnswerFromDrone;
@@ -36,6 +37,7 @@ import directdronedelivery.drone.management.communication.DroneCommunicationProt
 public class DroneStartProcessService {
     
     @EJB CargoRepository cargoRepository;
+    @EJB DroneRepository droneRepository;
     @EJB DronControlService droneControlService;
     // TODO MM: pack protocol to drone implementation
     @EJB DroneCommunicationProtocol droneCommunicationProtocol;
@@ -58,7 +60,7 @@ public class DroneStartProcessService {
         DeliveryRoute route = droneControlService
                 .calculateDeliveryRoute(cargo.getOrder().getDeliveryAddress());
         
-        DroneAggregate drone = droneControlService.findDrone(droneId);
+        DroneAggregate drone = droneRepository.findDrone(droneId);
         
         AnswerFromDrone answer = droneCommunicationProtocol.uploadDeliveryRoute(drone, route);
         

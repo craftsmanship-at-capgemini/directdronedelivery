@@ -18,8 +18,6 @@ public interface DronControlService {
     
     void handleDroneProblems(Integer droneID, List<Problem> problems);
     
-    DroneAggregate findDrone(Integer droneId);
-    
     DeliveryRoute calculateDeliveryRoute(DeliveryAddress address);
     
 }

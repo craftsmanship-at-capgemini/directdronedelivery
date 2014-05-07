@@ -20,6 +20,7 @@ import directdronedelivery.cargo.DeliveryAddress;
 import directdronedelivery.cargo.OrderAndCargoInformationBuilder;
 import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
+import directdronedelivery.drone.DroneRepository;
 import directdronedelivery.drone.DroneStatus;
 import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.drone.management.communication.AnswerFromDrone;
@@ -36,6 +37,7 @@ public class DroneStartProcessServiceTest {
     
     @Inject DroneStartProcessService droneStartProcessService;
     @Mock CargoRepository cargoRepository;
+    @Mock DroneRepository droneRepository;
     @Mock DronControlService droneControlService;
     @Mock DroneCommunicationProtocol droneCommunicationService;
     @Inject TestEvent<DroneStartedEvent> droneStartedEvent = new TestEvent<>();
@@ -53,7 +55,7 @@ public class DroneStartProcessServiceTest {
         // given
         DroneAggregate drone = aDrone().likeDocked4RotorsDrone()
                 .withDroneStatus(DroneStatus.READY_FOR_TAKE_OFF).build();
-        Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
+        Mockito.when(droneRepository.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
         // create Cargo and OrderInformation deliverable with Drone
         CargoAggregate cargo = prepareCargoDeliverableWithDrone();
@@ -80,7 +82,7 @@ public class DroneStartProcessServiceTest {
         // given
         DroneAggregate drone = aDrone().likeDocked4RotorsDrone()
                 .withDroneStatus(DroneStatus.UPLOAD_FAILED).build();
-        Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
+        Mockito.when(droneRepository.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
         // create Cargo and OrderInformation deliverable with Drone
         CargoAggregate cargo = prepareCargoDeliverableWithDrone();
@@ -103,7 +105,7 @@ public class DroneStartProcessServiceTest {
         // given
         DroneAggregate drone = aDrone().likeDocked4RotorsDrone()
                 .withDroneStatus(DroneStatus.HOUSTON_WE_HAVE_A_PROBLEM).build();
-        Mockito.when(droneControlService.findDrone(Mockito.<Integer> any())).thenReturn(drone);
+        Mockito.when(droneRepository.findDrone(Mockito.<Integer> any())).thenReturn(drone);
         
         // create Cargo and OrderInformation deliverable with Drone
         CargoAggregate cargo = prepareCargoDeliverableWithDrone();
