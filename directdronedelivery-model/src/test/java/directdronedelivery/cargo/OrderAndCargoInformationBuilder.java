@@ -32,7 +32,7 @@ public class OrderAndCargoInformationBuilder {
         withFixedOrientation(false);
         withFragileCommodity(false);
         withDangerousGoods(false);
-        withUnimitedDeliveryTime();
+        withUnlimitedDeliveryTime();
         return this;
     }
     
@@ -101,7 +101,7 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
-    public OrderAndCargoInformationBuilder withUnimitedDeliveryTime() {
+    public OrderAndCargoInformationBuilder withUnlimitedDeliveryTime() {
         underConstruction.order.acceptableDeliveryTime = AcceptableDeliveryTimeBuilder.aTime()
                 .addInterval("00:00-24:00").build();
         return this;

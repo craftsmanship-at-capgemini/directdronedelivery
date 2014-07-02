@@ -2,7 +2,7 @@ package directdronedelivery.warehouse.process;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
  * Service handles the problem, if it concerns the cargo.
  * 
  */
-@Stateful
+@Stateless
 @LocalBean
 public class CargoLoadProcessService {
     

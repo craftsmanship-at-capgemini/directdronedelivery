@@ -35,14 +35,13 @@ public class WeatherSpecyficationTest {
     public void shouldAcceptMaximalWindStrength() {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(5.56).build();
-        
         boolean weatherAcceptable = weatherSpecyfication.isSatisfiedBy(weather);
         
         assertThat(weatherAcceptable).isTrue();
     }
     
     @Test
-    public void shouldAcceptStrongWind() {
+    public void shouldNotAcceptStrongWind() {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withWindInMetersPerSecond(6.0).build();
         
@@ -52,7 +51,7 @@ public class WeatherSpecyficationTest {
     }
     
     @Test
-    public void shouldAcceptWeatherWhennLightningsArePossible() {
+    public void shouldAcceptWeatherWhenLightningsArePossible() {
         Weather weather = WeatherBuilder.aWeather().likeNiceWeather()
                 .but().withLightningsPossible(true).build();
         

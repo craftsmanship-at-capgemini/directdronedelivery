@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -52,7 +52,7 @@ import directdronedelivery.weather.WeatherService;
  * the load process.
  * 
  */
-@Stateful
+@Stateless
 @LocalBean
 public class VesselChooseProcessService {
     
