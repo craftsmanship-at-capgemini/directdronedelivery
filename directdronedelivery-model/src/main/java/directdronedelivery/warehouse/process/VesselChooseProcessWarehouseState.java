@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @EqualsAndHashCode
 @ToString
-public class VesselChooseProcessCargoIndependentState {
+public class VesselChooseProcessWarehouseState {
     
     private boolean manuallFlightCancellation = false;
     private boolean weatherAcceptable = false;

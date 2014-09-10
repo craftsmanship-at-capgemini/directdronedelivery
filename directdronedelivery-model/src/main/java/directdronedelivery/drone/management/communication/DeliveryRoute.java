@@ -11,21 +11,14 @@ import lombok.ToString;
 @ToString
 public class DeliveryRoute {
     
-    @Getter List<Checkpoint> checkpoints;
+    @Getter List<Waypoint> checkpoints;
     
     private DeliveryRoute() {
     }
     
-    public static DeliveryRoute newDeliveryRoute(List<Checkpoint> checkpoints) {
+    public static DeliveryRoute newDeliveryRoute(List<Waypoint> checkpoints) {
         DeliveryRoute route = new DeliveryRoute();
         route.checkpoints = Collections.unmodifiableList(checkpoints);
-        
-        return route;
-    }
-    
-    public static DeliveryRoute noDeliveryRouteUploaded() {
-        DeliveryRoute route = new DeliveryRoute();
-        route.checkpoints = Collections.emptyList();
         
         return route;
     }

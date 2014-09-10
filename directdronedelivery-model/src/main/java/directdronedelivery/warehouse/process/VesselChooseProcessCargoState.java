@@ -16,21 +16,21 @@ import directdronedelivery.warehouse.businessrules.DeliveryTimeAcceptanceStrateg
 public class VesselChooseProcessCargoState {
     
     @Getter private Integer cargoID;
-    @Getter private Integer warehausID;
+    @Getter private Integer warehouseID;
     @Getter private List<DroneType> possibleDronTypes;
     @Setter private boolean placeOfDeliveryAccepted;
     @Setter private boolean profitabilityAndPriorityAcceptance;
     @Setter private boolean alreadyDeliveredWithTruck;
     private boolean droneDeliveryDenied;
     private AcceptableDeliveryTime acceptableDeliveryTime;
-    private transient VesselChooseProcessCargoIndependentState cargoIndependentSubDecisions;
+    private transient VesselChooseProcessWarehouseState warehouseState;
     
-    protected VesselChooseProcessCargoState(Integer cargoID, Integer warehausID,
+    protected VesselChooseProcessCargoState(Integer cargoID, Integer warehouseID,
             AcceptableDeliveryTime acceptableDeliveryTime,
-            VesselChooseProcessCargoIndependentState cargoIndependentSubDecisions) {
+            VesselChooseProcessWarehouseState warehouseState) {
         this.cargoID = cargoID;
-        this.warehausID = warehausID;
-        this.cargoIndependentSubDecisions = cargoIndependentSubDecisions;
+        this.warehouseID = warehouseID;
+        this.warehouseState = warehouseState;
         
         this.possibleDronTypes = Collections.emptyList();
         this.placeOfDeliveryAccepted = false;
@@ -48,7 +48,7 @@ public class VesselChooseProcessCargoState {
         return !alreadyDeliveredWithTruck && !droneDeliveryDenied
                 && isDroneDeliveryPossible()
                 && profitabilityAndPriorityAcceptance
-                && cargoIndependentSubDecisions.arePositive()
+                && warehouseState.arePositive()
                 && deliveryTimeAcceptanceStrategy.isPositive(acceptableDeliveryTime);
     }
     

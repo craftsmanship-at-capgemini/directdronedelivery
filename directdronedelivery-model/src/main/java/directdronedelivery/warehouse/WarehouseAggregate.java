@@ -12,6 +12,7 @@ public class WarehouseAggregate {
     
     @Getter protected Integer warehouseID;
     @Getter protected List<TerminalEntity> terminals;
+    @Getter protected String location;
     
     protected WarehouseAggregate() {
     }

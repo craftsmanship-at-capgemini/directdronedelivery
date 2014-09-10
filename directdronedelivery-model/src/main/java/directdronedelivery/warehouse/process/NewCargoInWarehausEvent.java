@@ -11,6 +11,6 @@ import lombok.ToString;
 public class NewCargoInWarehausEvent {
     
     @Getter private Integer cargoID;
-    @Getter private Integer warehausID;
+    @Getter private Integer warehouseID;
     
 }

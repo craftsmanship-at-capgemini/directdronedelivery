@@ -14,25 +14,25 @@ public class CargoSpecyfication {
     private static final Size MAX_SIZE = Size.newSizeInMilimeters(250, 150, 100);
     private static final List<DroneType> POSSIBLE_DRONE_TYPES = Arrays.asList(DroneType.values());
     
-    public List<DroneType> isSatisfiedForDronTypes(CargoAggregate orderAndCargoInformation) {
+    public List<DroneType> isSatisfiedForDronTypes(CargoAggregate cargo) {
         
-        if (orderAndCargoInformation.getWeightInGrams() > MAX_WEIGHT) {
+        if (cargo.getWeightInGrams() > MAX_WEIGHT) {
             return Collections.emptyList();
         }
         
-        Size size = orderAndCargoInformation.getSize();
-        if (!orderAndCargoInformation.isFixedOrientation() && !size.fitsIn(MAX_SIZE)) {
+        Size size = cargo.getSize();
+        if (!cargo.isFixedOrientation() && !size.fitsIn(MAX_SIZE)) {
             return Collections.emptyList();
         }
-        if (orderAndCargoInformation.isFixedOrientation() && !size.fitsInWithFixedOrientation(MAX_SIZE)) {
-            return Collections.emptyList();
-        }
-        
-        if (orderAndCargoInformation.isFragileCommodity()) {
+        if (cargo.isFixedOrientation() && !size.fitsInWithFixedOrientation(MAX_SIZE)) {
             return Collections.emptyList();
         }
         
-        if (orderAndCargoInformation.isDangerousGoods()) {
+        if (cargo.isFragileCommodity()) {
+            return Collections.emptyList();
+        }
+        
+        if (cargo.isDangerousGoods()) {
             return Collections.emptyList();
         }
         

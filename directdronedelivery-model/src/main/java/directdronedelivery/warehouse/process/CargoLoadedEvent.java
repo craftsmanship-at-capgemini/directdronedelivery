@@ -8,7 +8,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @AllArgsConstructor
-public class DroneLoadedEvent {
+public class CargoLoadedEvent {
     
     @Getter private Integer droneID;
     @Getter private Integer cargoID;

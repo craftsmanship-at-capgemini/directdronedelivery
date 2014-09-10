@@ -2,22 +2,42 @@ package directdronedelivery.drone.management;
 
 import java.util.List;
 
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+
 import directdronedelivery.cargo.DeliveryAddress;
 import directdronedelivery.drone.DroneAggregate;
+import directdronedelivery.drone.DroneRepository;
 import directdronedelivery.drone.DroneType;
 import directdronedelivery.drone.management.communication.DeliveryRoute;
 import directdronedelivery.warehouse.Problem;
 
-public interface DronControlService {
+@Stateless
+@LocalBean
+public class DronControlService {
     
-    AvailableDrones getAvailableDrones();
+    @EJB DroneRepository droneRepository;
     
-    DroneAggregate reserveDrone(DroneType droneTyp) throws DroneNotAvaliableException;
+    public AvailableDrones getAvailableDrones(Integer warehouseID) {
+        return null;
+    }
     
-    DroneAggregate cancelDroneReservation(DroneAggregate drone);
+    public DroneAggregate reserveDrone(Integer warehouseID, DroneType droneTyp) throws DroneNotAvaliableException {
+        return null;
+    }
     
-    void handleDroneProblems(Integer droneID, List<Problem> problems);
+    public void cancelDroneReservation(DroneAggregate drone) {
+    }
     
-    DeliveryRoute calculateDeliveryRoute(DeliveryAddress address);
+    public DeliveryRoute calculateDeliveryRoute(int point, DeliveryAddress address) {
+        return null;
+    }
+    
+    public void takeOff(DroneAggregate drone) {
+    }
+    
+    public void handleDroneProblems(Integer droneID, List<Problem> problems) {
+    }
     
 }

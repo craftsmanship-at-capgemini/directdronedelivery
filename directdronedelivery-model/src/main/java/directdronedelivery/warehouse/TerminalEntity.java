@@ -9,9 +9,6 @@ import lombok.ToString;
 public class TerminalEntity {
     
     @Getter protected int terminalID;
-    
-    protected TerminalEntity(Integer terminalID) {
-        this.terminalID = terminalID;
-    }
+    @Getter protected int position;
     
 }

@@ -28,18 +28,14 @@ public class BoxStockRepositoryInMem implements BoxStockRepository {
     public BoxStockRepositoryInMem() {
         HashMap<BoxType, AtomicInteger> map = new HashMap<>(BoxType.values().length);
         for (BoxType boxType : BoxType.values()) {
-            if (boxType == BoxType.UNKOWN) {
-                map.put(boxType, new AtomicInteger(0));
-            } else {
-                map.put(boxType, new AtomicInteger(97));
-            }
+            map.put(boxType, new AtomicInteger(97));
         }
         boxStocksInMemoryStore = Collections.unmodifiableMap(map);
     }
     
     @Override
     public BoxType decrementStockOfAppropriateBoxes(BoxChooseSpecification boxSpecification) {
-        BoxType boxType = boxSpecification.getBoxType();
+        BoxType boxType = boxSpecification.preferredBoxTyp();
         boxStocksInMemoryStore.get(boxType).decrementAndGet();
         return boxType;
     }
