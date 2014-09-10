@@ -6,6 +6,8 @@ import static directdronedelivery.cargo.OrderAndCargoInformationBuilder.aCargo;
 import static directdronedelivery.drone.management.AvailableDronesBuilder.anAvaliableDrones;
 import static org.fest.assertions.api.Assertions.assertThat;
 
+import java.util.Collections;
+
 import javax.inject.Inject;
 
 import org.junit.Before;
@@ -28,6 +30,9 @@ import directdronedelivery.drone.management.AvailableDrones;
 import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.drone.management.DroneAvaliableEvent;
 import directdronedelivery.drone.management.DroneNotAvaliableException;
+import directdronedelivery.warehouse.WarehouseAggregate;
+import directdronedelivery.warehouse.WarehouseRepository;
+import directdronedelivery.warehouse.WarehouseTopologyFactory;
 import directdronedelivery.warehouse.businessrules.CargoSpecyfication;
 import directdronedelivery.warehouse.businessrules.DeliveryTimeAcceptanceStrategy;
 import directdronedelivery.warehouse.businessrules.OrderPriorityCalculator;
@@ -38,7 +43,7 @@ import directdronedelivery.warehouse.businessrules.TestDeliveryTimeAcceptanceStr
 import directdronedelivery.warehouse.businessrules.WeatherSpecyfication;
 import directdronedelivery.warehouse.process.DroneDeliveryDecisionEvent;
 import directdronedelivery.warehouse.process.NewCargoInWarehausEvent;
-import directdronedelivery.warehouse.process.VesselChooseProcessCargoStateRepository;
+import directdronedelivery.warehouse.process.VesselChooseProcessStateRepository;
 import directdronedelivery.warehouse.process.VesselChooseProcessService;
 import directdronedelivery.weather.Weather;
 import directdronedelivery.weather.WeatherBuilder;
@@ -51,7 +56,8 @@ public class VesselChooseProcessExampleScenariosTest {
     @Mock CargoRepository cargoRepository;
     @Mock WeatherService weatherService;
     @Mock DronControlService dronControlService;
-    @Inject VesselChooseProcessCargoStateRepository vesselChooseProcessCargoStateRepository = new VesselChooseProcessCargoStateRepositoryInMem();
+    @Mock WarehouseRepository warehouseRepository;
+    @Inject VesselChooseProcessStateRepository vesselChooseProcessStateRepository = new VesselChooseProcessStateRepositoryInMem();
     @Inject TestEvent<DroneDeliveryDecisionEvent> droneDeliveryDecisionEvent = new TestEvent<>();
     
     @Inject CargoSpecyfication cargoSpecyfication;
@@ -62,14 +68,20 @@ public class VesselChooseProcessExampleScenariosTest {
     @Inject DeliveryTimeAcceptanceStrategy deliveryTimeAcceptanceStrategy = new TestDeliveryTimeAcceptanceStrategy();
     @Inject WeatherSpecyfication weatherSpecyfication;
     
-    private Integer warehausID = 1;
+    private Integer warehouseID;
     
     @Before
     public void setUp() throws Exception {
         Testing.inject(this);
         
-        VesselChooseProcessCargoStateRepositoryInMem.configure(vesselChooseProcessCargoStateRepository)
-                .withPositiveCargoIndependentSubDecisions();
+        WarehouseAggregate warehouse = WarehouseTopologyFactory.newWarehouseInBielanyWroclawskie();
+        warehouseID = warehouse.getWarehouseID();
+        
+        Mockito.when(warehouseRepository.findAllWarehouses())
+            .thenReturn(Collections.singletonList(warehouse));
+        
+        VesselChooseProcessStateRepositoryInMem.configure(vesselChooseProcessStateRepository)
+                .withPositiveWarehouseState(warehouseID);
     }
     
     @Test
@@ -92,7 +104,7 @@ public class VesselChooseProcessExampleScenariosTest {
         prepareCargoDeliverableWithDrone(cargo);
         
         // STEP 1. Cargo is scanned in Warehouse:
-        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
+        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehouseID);
         processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
         // Decision can not be taken for now
         assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
@@ -130,7 +142,7 @@ public class VesselChooseProcessExampleScenariosTest {
         prepareCargoDeliverableWithDrone(cargo);
         
         // STEP 1. Cargo is scanned in Warehouse:
-        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
+        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehouseID);
         processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
         // Decision can not be taken for now
         assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
@@ -178,7 +190,7 @@ public class VesselChooseProcessExampleScenariosTest {
         prepareCargoDeliverableWithDrone(cargo);
         
         // STEP 1. Cargo is scanned in Warehouse:
-        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
+        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehouseID);
         processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
         // Decision can not be taken for now
         assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
@@ -224,7 +236,7 @@ public class VesselChooseProcessExampleScenariosTest {
         prepareCargoNOTDeliverableWithDrone(cargo);
         
         // STEP 1. Cargo is scanned in Warehouse:
-        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
+        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehouseID);
         processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
         // Decision can not be taken for now
         assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
@@ -272,7 +284,7 @@ public class VesselChooseProcessExampleScenariosTest {
         prepareCargoDeliverableWithDrone(cargo);
         
         // STEP 1. Cargo is scanned in Warehouse:
-        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehausID);
+        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehouseID);
         processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
         // Decision can not be taken for now
         assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
@@ -289,7 +301,7 @@ public class VesselChooseProcessExampleScenariosTest {
         
         // STEP 3. Drone is now available:
         DroneAggregate drone = createOneAvailableDrone();
-        DroneAvaliableEvent droneAvaliableEvent = new DroneAvaliableEvent(drone.getDroneType());
+        DroneAvaliableEvent droneAvaliableEvent = new DroneAvaliableEvent(warehouseID, drone.getDroneType());
         processUnderTest.droneAvaliable(droneAvaliableEvent);
         
         // final decision should be taken
@@ -298,21 +310,67 @@ public class VesselChooseProcessExampleScenariosTest {
         assertThat(outcomeEvent.getDroneID()).isEqualTo(drone.getDroneID());
     }
     
+    @Test
+    public void shouldIgnoreCargoAlreadyDeliveredWithTruck()
+            throws DroneNotAvaliableException {
+        noAvailableDrone();
+        createNiceWeatherConditions();
+        
+        // STEP 0. Weather evaluation
+        // right now there is no cargo in Warehouse:
+        processUnderTest.periodicalWeatherCheck();
+        // Decision can not be taken for now
+        assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
+        
+        // create Cargo deliverable with Drone
+        Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
+        CargoAggregate cargo = aCargo().likeSmallGift().withCargoID(cargoID).build();
+        prepareCargoDeliverableWithDrone(cargo);
+        
+        // STEP 1. Cargo is scanned in Warehouse:
+        NewCargoInWarehausEvent newCargoInWarehausEvent = new NewCargoInWarehausEvent(cargoID, warehouseID);
+        processUnderTest.newCargoInWarehaus(newCargoInWarehausEvent);
+        // Decision can not be taken for now
+        assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
+        
+        ConsignmentAggregate consignement = assignCargoToNewConsignmentWithNotProfitableTruckDelivery(cargo);
+        
+        // STEP 2. Cargo is added to Consignment
+        // assigned to concrete Truck Delivery:
+        ConsignmentChangedEvent consignmentChangedEvent = new ConsignmentChangedEvent(
+                consignement.getConsignmentID());
+        processUnderTest.consignmentChanged(consignmentChangedEvent);
+        // Decision can not be taken for now
+        assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
+        
+        // STEP 3. Cargo is just delivered with truck
+        TruckDeliveryStartedEvent truckDeliveryStartedEvent = new TruckDeliveryStartedEvent(consignement.getConsignmentID());
+        processUnderTest.truckDeliveryStarted(truckDeliveryStartedEvent);
+        
+        // STEP 4. Drone is now available, but already delivered with truck
+        DroneAggregate drone = createOneAvailableDrone();
+        DroneAvaliableEvent droneAvaliableEvent = new DroneAvaliableEvent(warehouseID, drone.getDroneType());
+        processUnderTest.droneAvaliable(droneAvaliableEvent);
+        
+        // Decision can not be taken
+        assertThat(droneDeliveryDecisionEvent.getEvents()).isEmpty();
+    }
+    
     private DroneAggregate createOneAvailableDrone() throws DroneNotAvaliableException {
         // create one available Drone
         DroneAggregate drone = DroneBuilder.aDrone().likeDocked4RotorsDrone().build();
         AvailableDrones avaliableDrones = anAvaliableDrones().likeNoDronesAvaliable().but().withDrone(drone).build();
         Mockito.reset(dronControlService); // yep, I know...
-        Mockito.when(dronControlService.getAvailableDrones()).thenReturn(avaliableDrones);
-        Mockito.when(dronControlService.reserveDrone(drone.getDroneType())).thenReturn(drone);
+        Mockito.when(dronControlService.getAvailableDrones(Mockito.eq(warehouseID))).thenReturn(avaliableDrones);
+        Mockito.when(dronControlService.reserveDrone(Mockito.eq(warehouseID), Mockito.eq(drone.getDroneType()))).thenReturn(drone);
         return drone;
     }
     
     private void noAvailableDrone() throws DroneNotAvaliableException {
         AvailableDrones avaliableDrones = anAvaliableDrones().likeNoDronesAvaliable().build();
         Mockito.reset(dronControlService); // yep, I know...
-        Mockito.when(dronControlService.getAvailableDrones()).thenReturn(avaliableDrones);
-        Mockito.when(dronControlService.reserveDrone(Mockito.<DroneType> any())).thenThrow(
+        Mockito.when(dronControlService.getAvailableDrones(Mockito.eq(warehouseID))).thenReturn(avaliableDrones);
+        Mockito.when(dronControlService.reserveDrone(Mockito.eq(warehouseID), Mockito.<DroneType> any())).thenThrow(
                 new DroneNotAvaliableException());
     }
     
@@ -325,7 +383,7 @@ public class VesselChooseProcessExampleScenariosTest {
         // change to nice Weather conditions
         Weather niceWeather =
                 WeatherBuilder.aWeather().likeNiceWeather().build();
-        Mockito.when(weatherService.getActualWeather()).thenReturn(niceWeather);
+        Mockito.when(weatherService.getActualWeather(Mockito.anyString())).thenReturn(niceWeather);
         // be sure Weather is acceptable
         assertThat(weatherSpecyfication.isSatisfiedBy(niceWeather))
                 .describedAs("test definition is wrong, Weather should be acceptable for drone flight").isTrue();
@@ -335,11 +393,11 @@ public class VesselChooseProcessExampleScenariosTest {
         // create a BAD Weather conditions
         Weather badWeather =
                 WeatherBuilder.aWeather().likeNiceWeather().but().withWindInMetersPerSecond(1000).build();
-        Mockito.when(weatherService.getActualWeather()).thenReturn(badWeather);
+        Mockito.when(weatherService.getActualWeather(Mockito.anyString())).thenReturn(badWeather);
         // be sure Weather is NOT acceptable
         assertThat(weatherSpecyfication.isSatisfiedBy(badWeather))
                 .describedAs("test definition is wrong, Weather should be NOT acceptable for drone flight").isFalse();
-        VesselChooseProcessCargoStateRepositoryInMem.configure(vesselChooseProcessCargoStateRepository)
+        VesselChooseProcessStateRepositoryInMem.configure(vesselChooseProcessStateRepository)
                 .withWeatherAcceptable(false);
     }
     

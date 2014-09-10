@@ -6,15 +6,20 @@ public class WarehouseTopologyFactory {
     
     public static WarehouseAggregate newWarehouseInBielanyWroclawskie() {
         WarehouseAggregate underConstruction = new WarehouseAggregate();
+        underConstruction.warehouseID = 1;
+        underConstruction.location = "Poland/Wroclaw";
         underConstruction.terminals = Arrays.asList(
-                new TerminalEntity(1),
-                new TerminalEntity(2),
-                new TerminalEntity(3)
+                newTerminal(1),
+                newTerminal(2),
+                newTerminal(3)
                 );
         return underConstruction;
     }
     
     public static TerminalEntity newTerminal(Integer terminalID) {
-        return new TerminalEntity(terminalID);
+        TerminalEntity underConstruction = new TerminalEntity();
+        underConstruction.terminalID = terminalID;
+        underConstruction.position = 42;
+        return underConstruction;
     }
 }

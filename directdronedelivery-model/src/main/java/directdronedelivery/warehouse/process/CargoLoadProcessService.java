@@ -2,7 +2,7 @@ package directdronedelivery.warehouse.process;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -42,7 +42,7 @@ import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
  * Service handles the problem, if it concerns the cargo.
  * 
  */
-@Stateful
+@Stateless
 @LocalBean
 public class CargoLoadProcessService {
     
@@ -53,7 +53,7 @@ public class CargoLoadProcessService {
     @EJB WarehouseEmployeeTaskService warehouseEmployeeTaskService;
     
     @Inject BoxStockRepository boxStockRepository;
-    @Inject Event<DroneLoadedEvent> droneLoadedEvent;
+    @Inject Event<CargoLoadedEvent> cargoLoadedEvent;
     
     public void startCargoLoadProcess(@Observes DroneDeliveryDecisionEvent droneDeliveryDecisionEvent) {
         Integer droneID = droneDeliveryDecisionEvent.getDroneID();
@@ -62,7 +62,7 @@ public class CargoLoadProcessService {
         CargoAggregate cargo = cargoRepository
                 .findCargo(droneDeliveryDecisionEvent.getCargoID());
         
-        BoxChooseSpecification boxChooseRule = new BoxChooseSpecification(cargo);
+        BoxChooseSpecification boxChooseRule = new BoxChooseSpecification(cargo, drone);
         BoxType boxType = boxStockRepository.decrementStockOfAppropriateBoxes(boxChooseRule);
         
         warehouseEmployeeTaskService.addCargoLoadTask(cargo, drone, boxType);
@@ -72,7 +72,7 @@ public class CargoLoadProcessService {
         DroneAggregate drone = droneRepository.findDrone(task.getDroneID());
         drone.attachCargo(task.getCargoID());
         
-        droneLoadedEvent.fire(new DroneLoadedEvent(task.getDroneID(), task.getCargoID()));
+        cargoLoadedEvent.fire(new CargoLoadedEvent(task.getDroneID(), task.getCargoID()));
         
         warehouseEmployeeTaskService.closeTask(task.getTaskID());
     }

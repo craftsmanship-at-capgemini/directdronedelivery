@@ -33,20 +33,20 @@ import directdronedelivery.warehouse.employee.CargoLoadTask;
 import directdronedelivery.warehouse.employee.WarehouseEmployeeTaskService;
 import directdronedelivery.warehouse.process.CargoLoadProcessService;
 import directdronedelivery.warehouse.process.DroneDeliveryDecisionEvent;
-import directdronedelivery.warehouse.process.DroneLoadedEvent;
+import directdronedelivery.warehouse.process.CargoLoadedEvent;
 import directdronedelivery.warehouse.process.VesselChooseProcessService;
 
 public class CargoLoadProcessServiceTest {
     
     @Inject CargoLoadProcessService processUnderTest;
     
-    @Mock CargoRepository ordersInformationService;
+    @Mock CargoRepository cargoRepository;
     @Mock WarehouseEmployeeTaskService warehouseEmployeeService;
     @Mock DronControlService dronFlightControlService;
     @Mock VesselChooseProcessService vesselChooseProcess;
     @Mock BoxStockRepository boxStockRepository;
     @Mock DroneRepository droneRepository;
-    @Inject TestEvent<DroneLoadedEvent> droneLoadedEvent = new TestEvent<>();
+    @Inject TestEvent<CargoLoadedEvent> cargoLoadedEvent = new TestEvent<>();
     @Captor ArgumentCaptor<LinkedList<Problem>> problemsCaptor;
     
     TerminalEntity terminal = WarehouseTopologyFactory.newTerminal(1);
@@ -63,19 +63,19 @@ public class CargoLoadProcessServiceTest {
                 .dockedInTerminal(terminal).build();
         Mockito.when(droneRepository.findDrone(drone.getDroneID())).thenReturn(drone);
         
-        CargoAggregate orderAndCargoInformation = aCargo().likeSmallGift().build();
-        Mockito.when(ordersInformationService.findCargo(orderAndCargoInformation.getCargoID()))
-                .thenReturn(orderAndCargoInformation);
+        CargoAggregate cargo = aCargo().likeSmallGift().build();
+        Mockito.when(cargoRepository.findCargo(cargo.getCargoID()))
+                .thenReturn(cargo);
         Mockito.when(boxStockRepository.decrementStockOfAppropriateBoxes(Mockito.<BoxChooseSpecification> any())).thenReturn(
                 BoxType.SMALL);
         
         // when
         DroneDeliveryDecisionEvent droneTakeOffDecisionEvent = new DroneDeliveryDecisionEvent(drone.getDroneID(),
-                orderAndCargoInformation.getCargoID());
+                cargo.getCargoID());
         processUnderTest.startCargoLoadProcess(droneTakeOffDecisionEvent);
         
         // then
-        Mockito.verify(warehouseEmployeeService).addCargoLoadTask(orderAndCargoInformation, drone, BoxType.SMALL);
+        Mockito.verify(warehouseEmployeeService).addCargoLoadTask(cargo, drone, BoxType.SMALL);
         Mockito.verify(boxStockRepository).decrementStockOfAppropriateBoxes(Mockito.<BoxChooseSpecification> any());
     }
     
@@ -95,10 +95,10 @@ public class CargoLoadProcessServiceTest {
         
         // then
         Mockito.verify(warehouseEmployeeService).closeTask(taskID);
-        // TODO MM: create DroneAssert
-        assertThat(droneLoadedEvent.getEvents()).isNotEmpty();
-        assertThat(droneLoadedEvent.getFirstEvent().getCargoID()).isEqualTo(cargoID);
-        assertThat(droneLoadedEvent.getFirstEvent().getDroneID()).isEqualTo(droneID);
+        assertThat(drone.hasCargoAttached()).isTrue();
+        assertThat(cargoLoadedEvent.getEvents()).isNotEmpty();
+        assertThat(cargoLoadedEvent.getFirstEvent().getCargoID()).isEqualTo(cargoID);
+        assertThat(cargoLoadedEvent.getFirstEvent().getDroneID()).isEqualTo(droneID);
     }
     
     @Test
@@ -127,7 +127,7 @@ public class CargoLoadProcessServiceTest {
         assertThat(problemsCaptor.getValue()).containsOnly(
                 new Problem(ProblemType.DRONE_MISSING, "Drone stolen..."));
         
-        // TODO MM: create DroneAssert
-        assertThat(droneLoadedEvent.getEvents()).isEmpty();
+        assertThat(drone.hasCargoAttached()).isFalse();
+        assertThat(cargoLoadedEvent.getEvents()).isEmpty();
     }
 }

@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Problem {
     
-    @Getter ProblemType droneProblemType;
+    @Getter ProblemType problemType;
     @Getter String log;
     
 }

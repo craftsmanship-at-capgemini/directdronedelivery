@@ -1,4 +1,4 @@
-package directdronedelivery.warehouse.process;
+package directdronedelivery.drone.management;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

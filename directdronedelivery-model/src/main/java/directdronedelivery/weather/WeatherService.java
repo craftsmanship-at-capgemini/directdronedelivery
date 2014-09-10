@@ -2,6 +2,6 @@ package directdronedelivery.weather;
 
 public interface WeatherService {
     
-    Weather getActualWeather();
+    Weather getActualWeather(String location);
     
 }

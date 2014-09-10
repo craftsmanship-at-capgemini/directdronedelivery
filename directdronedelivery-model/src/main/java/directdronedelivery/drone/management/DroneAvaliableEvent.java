@@ -11,6 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DroneAvaliableEvent {
     
+    @Getter private Integer warehouseID;
     @Getter private DroneType droneTyp;
     
 }

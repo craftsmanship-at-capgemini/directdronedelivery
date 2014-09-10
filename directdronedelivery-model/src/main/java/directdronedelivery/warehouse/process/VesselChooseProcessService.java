@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Schedule;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -23,6 +23,8 @@ import directdronedelivery.drone.management.DronControlService;
 import directdronedelivery.drone.management.DroneAvaliableEvent;
 import directdronedelivery.drone.management.DroneNotAvaliableException;
 import directdronedelivery.warehouse.Problem;
+import directdronedelivery.warehouse.WarehouseAggregate;
+import directdronedelivery.warehouse.WarehouseRepository;
 import directdronedelivery.warehouse.businessrules.CargoSpecyfication;
 import directdronedelivery.warehouse.businessrules.DeliveryTimeAcceptanceStrategy;
 import directdronedelivery.warehouse.businessrules.OrderPriorityCalculator;
@@ -52,14 +54,15 @@ import directdronedelivery.weather.WeatherService;
  * the load process.
  * 
  */
-@Stateful
+@Stateless
 @LocalBean
 public class VesselChooseProcessService {
     
     @EJB CargoRepository cargoRepository;
+    @EJB WarehouseRepository warehouseRepository;
     @EJB WeatherService weatherService;
     @EJB DronControlService dronControlService;
-    @EJB VesselChooseProcessCargoStateRepository vesselChooseProcessCargoStateRepository;
+    @EJB VesselChooseProcessStateRepository vesselChooseProcessStateRepository;
     @Inject Event<DroneDeliveryDecisionEvent> droneDeliveryDecisionEvent;
     
     @Inject CargoSpecyfication cargoSpecification;
@@ -72,11 +75,11 @@ public class VesselChooseProcessService {
     
     public void newCargoInWarehaus(@Observes NewCargoInWarehausEvent newCargoInWarehausEvent) {
         Integer cargoId = newCargoInWarehausEvent.getCargoID();
-        Integer warehausId = newCargoInWarehausEvent.getWarehausID();
+        Integer warehausId = newCargoInWarehausEvent.getWarehouseID();
         
         CargoAggregate cargo = cargoRepository.findCargo(cargoId);
         
-        VesselChooseProcessCargoState processState = vesselChooseProcessCargoStateRepository.newProcessState(
+        VesselChooseProcessCargoState processState = vesselChooseProcessStateRepository.newProcessState(
                 warehausId,
                 cargoId,
                 cargo.getOrder().getAcceptableDeliveryTime());
@@ -94,7 +97,7 @@ public class VesselChooseProcessService {
         
         CargoAggregate cargo = cargoRepository.findCargo(cargoId);
         
-        VesselChooseProcessCargoState processState = vesselChooseProcessCargoStateRepository.findProcessState(cargoId);
+        VesselChooseProcessCargoState processState = vesselChooseProcessStateRepository.findProcessState(cargoId);
         boolean originalDecision = processState.isPositive(deliveryTimeAcceptanceStrategy);
         processState.setPossibleDronTypes(
                 cargoSpecification.isSatisfiedForDronTypes(cargo));
@@ -113,7 +116,7 @@ public class VesselChooseProcessService {
         
         for (CargoAggregate cargo : consignment.getCargosInConsignment()) {
             
-            VesselChooseProcessCargoState processState = vesselChooseProcessCargoStateRepository
+            VesselChooseProcessCargoState processState = vesselChooseProcessStateRepository
                     .findProcessState(cargo.getCargoID());
             boolean originalDecision = processState.isPositive(deliveryTimeAcceptanceStrategy);
             processState.setProfitabilityAndPriorityAcceptance(
@@ -134,7 +137,7 @@ public class VesselChooseProcessService {
         
         for (CargoAggregate cargo : consignment.getCargosInConsignment()) {
             
-            VesselChooseProcessCargoState processState = vesselChooseProcessCargoStateRepository
+            VesselChooseProcessCargoState processState = vesselChooseProcessStateRepository
                     .findProcessState(cargo.getCargoID());
             
             processState.setAlreadyDeliveredWithTruck(true);
@@ -143,51 +146,56 @@ public class VesselChooseProcessService {
     
     @Schedule(minute = "*/15")
     protected void periodicalWeatherCheck() {
-        VesselChooseProcessCargoIndependentState cargoIndependentProcessState = vesselChooseProcessCargoStateRepository
-                .getCargoIndependentSubDecisions();
-        boolean currentWeatherConditionsDecision = cargoIndependentProcessState.isWeatherAcceptable();
-        
-        Weather actualWeather = weatherService.getActualWeather();
-        boolean newWeatherConditionsDecision = weatherSpecyfication.isSatisfiedBy(actualWeather);
-        
-        if (currentWeatherConditionsDecision != newWeatherConditionsDecision) {
-            cargoIndependentProcessState.setWeatherAcceptable(newWeatherConditionsDecision);
+        List<WarehouseAggregate> warehouses = warehouseRepository.findAllWarehouses();
+        for (WarehouseAggregate warehouse : warehouses) {
+            VesselChooseProcessWarehouseState warehouseState = 
+                    vesselChooseProcessStateRepository.findWarehouseState(warehouse.getWarehouseID());
+            boolean currentWeatherConditionsDecision = warehouseState.isWeatherAcceptable();
             
-            if (newWeatherConditionsDecision) {
-                takeOffAllAvaliableDrones();
+            Weather actualWeather = weatherService.getActualWeather(warehouse.getLocation());
+            boolean newWeatherConditionsDecision = weatherSpecyfication.isSatisfiedBy(actualWeather);
+            
+            if (currentWeatherConditionsDecision != newWeatherConditionsDecision) {
+                warehouseState.setWeatherAcceptable(newWeatherConditionsDecision);
+                if (newWeatherConditionsDecision) {
+                    takeOffAllAvaliableDrones(warehouse);
+                }
             }
         }
     }
     
     @Schedule(minute = "01,31")
     protected void periodicalDeliveryTimeAcceptanceCheck() {
-        takeOffAllAvaliableDrones();
+        List<WarehouseAggregate> warehouses = warehouseRepository.findAllWarehouses();
+        for (WarehouseAggregate warehouse : warehouses) {
+            takeOffAllAvaliableDrones(warehouse);
+        }
     }
     
     public void handleCargoProblems(Integer cargoID, List<Problem> problems) {
         List<Problem> cargoProblems = new LinkedList<>();
         for (Problem problem : problems) {
-            if (!problem.getDroneProblemType().isCargoDeliverableWithDrone()) {
+            if (!problem.getProblemType().isCargoDeliverableWithDrone()) {
                 cargoProblems.add(problem);
             }
         }
         if (!cargoProblems.isEmpty()) {
-            VesselChooseProcessCargoState processState = vesselChooseProcessCargoStateRepository
+            VesselChooseProcessCargoState processState = vesselChooseProcessStateRepository
                     .findProcessState(cargoID);
             processState.denyDroneDelivery();
-            vesselChooseProcessCargoStateRepository.saveCargoProblems(cargoID, cargoProblems);
+            vesselChooseProcessStateRepository.saveCargoProblems(cargoID, cargoProblems);
         }
     }
     
     public void droneAvaliable(@Observes DroneAvaliableEvent droneAvaliableEvent) {
         try {
             DroneType droneTyp = droneAvaliableEvent.getDroneTyp();
-            List<VesselChooseProcessCargoState> processStates = vesselChooseProcessCargoStateRepository
+            List<VesselChooseProcessCargoState> processStates = vesselChooseProcessStateRepository
                     .findPositiveDecisions(droneTyp,
                             deliveryTimeAcceptanceStrategy, 1);
             
             if (!processStates.isEmpty()) {
-                DroneAggregate drone = dronControlService.reserveDrone(droneTyp);
+                DroneAggregate drone = dronControlService.reserveDrone(droneAvaliableEvent.getWarehouseID(), droneTyp);
                 droneDeliveryDecisionEvent.fire(new DroneDeliveryDecisionEvent(drone.getDroneID(), processStates.get(0)
                         .getCargoID()));
             }
@@ -196,13 +204,13 @@ public class VesselChooseProcessService {
     }
     
     private void takeOffIfDronAvaliable(VesselChooseProcessCargoState processState) {
-        AvailableDrones avaliableDrones = dronControlService.getAvailableDrones();
+        AvailableDrones avaliableDrones = dronControlService.getAvailableDrones(processState.getWarehouseID());
         
         for (DroneType droneTyp : processState.getPossibleDronTypes()) {
             Integer countLimit = avaliableDrones.getCount(droneTyp);
             if (countLimit > 0) {
                 try {
-                    DroneAggregate drone = dronControlService.reserveDrone(droneTyp);
+                    DroneAggregate drone = dronControlService.reserveDrone(processState.getWarehouseID(), droneTyp);
                     droneDeliveryDecisionEvent.fire(new DroneDeliveryDecisionEvent(drone.getDroneID(), processState
                             .getCargoID()));
                     break;
@@ -213,18 +221,18 @@ public class VesselChooseProcessService {
         }
     }
     
-    private void takeOffAllAvaliableDrones() {
-        AvailableDrones avaliableDrones = dronControlService.getAvailableDrones();
+    private void takeOffAllAvaliableDrones(WarehouseAggregate warehouse) {
+        AvailableDrones avaliableDrones = dronControlService.getAvailableDrones(warehouse.getWarehouseID());
         for (DroneType droneTyp : avaliableDrones.getDroneTypesInAscSizeOrder()) {
             Integer droneCount = avaliableDrones.getCount(droneTyp);
             if (droneCount == 0) {
                 continue;
             }
-            List<VesselChooseProcessCargoState> processStates = vesselChooseProcessCargoStateRepository
+            List<VesselChooseProcessCargoState> processStates = vesselChooseProcessStateRepository
                     .findPositiveDecisions(droneTyp, deliveryTimeAcceptanceStrategy, droneCount);
             try {
                 for (VesselChooseProcessCargoState takeOffDecision : processStates) {
-                    DroneAggregate drone = dronControlService.reserveDrone(droneTyp);
+                    DroneAggregate drone = dronControlService.reserveDrone(warehouse.getWarehouseID(), droneTyp);
                     droneDeliveryDecisionEvent
                             .fire(new DroneDeliveryDecisionEvent(drone.getDroneID(), takeOffDecision.getCargoID()));
                 }
