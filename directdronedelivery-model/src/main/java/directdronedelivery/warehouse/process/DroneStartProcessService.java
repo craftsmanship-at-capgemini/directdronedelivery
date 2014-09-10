@@ -5,14 +5,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Observes;
 
-import directdronedelivery.cargo.CargoAggregate;
 import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.drone.DroneAggregate;
 import directdronedelivery.drone.DroneRepository;
 import directdronedelivery.drone.management.DronControlService;
-import directdronedelivery.drone.management.communication.AnswerFromDrone;
-import directdronedelivery.drone.management.communication.StartCheckList;
-import directdronedelivery.drone.management.communication.DeliveryRoute;
 
 /**
  * The last element of the whole process in the warehouse is the Drone Start
@@ -45,22 +41,7 @@ public class DroneStartProcessService {
      *            Event that Vessel is loaded
      */
     public void initDroneStartProcess(@Observes CargoLoadedEvent cargoLoadedEvent) {
-        Integer cargoId = cargoLoadedEvent.getCargoID();
-        Integer droneId = cargoLoadedEvent.getDroneID();
         
-        CargoAggregate cargo = cargoRepository.findCargo(cargoId);
-        DroneAggregate drone = droneRepository.findDrone(droneId);
-        
-        DeliveryRoute route = droneControlService
-                .calculateDeliveryRoute(drone.getPosition(), cargo.getOrder().getDeliveryAddress());
-        
-        AnswerFromDrone answer = drone.uploadDeliveryRoute(route);
-        
-        if (answer.isPositiv()) {
-            performStartProcedure(drone);
-        } else {
-            droneControlService.handleDroneProblems(answer.getDroneID(), answer.getProblems());
-        }
     }
     
     /**
@@ -70,13 +51,7 @@ public class DroneStartProcessService {
      * @param drone
      */
     private void performStartProcedure(DroneAggregate drone) {
-        AnswerFromDrone answer = drone.performStartCheckList(StartCheckList.newStartCheckList(drone.getDroneType()));
         
-        if (answer.isPositiv()) {
-            droneControlService.takeOff(drone);
-        } else {
-            droneControlService.handleDroneProblems(answer.getDroneID(), answer.getProblems());
-        }
     }
     
 }
