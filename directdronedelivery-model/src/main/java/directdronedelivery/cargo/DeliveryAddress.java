@@ -8,18 +8,20 @@ import lombok.ToString;
 @ToString
 public class DeliveryAddress {
     
-    @Getter protected String houseNumber;
-    @Getter protected String streetName;
+    @Getter protected String city;
     @Getter protected String postalCode;
+    @Getter protected String streetName;
+    @Getter protected String houseNumber;
     
     protected DeliveryAddress() {
     }
     
-    public static DeliveryAddress newAddress(String houseNumber, String streetName, String postalCode) {
+    public static DeliveryAddress newAddress(String city, String postalCode, String streetName, String houseNumber) {
         DeliveryAddress address = new DeliveryAddress();
-        address.houseNumber = houseNumber;
-        address.streetName = streetName;
+        address.city = city;
         address.postalCode = postalCode;
+        address.streetName = streetName;
+        address.houseNumber = houseNumber;
         
         return address;
     }

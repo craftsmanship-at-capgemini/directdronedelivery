@@ -11,13 +11,15 @@ import lombok.ToString;
 @ToString
 public class ConsignmentAggregate {
     
-    @Getter protected int consignmentID;
-    protected List<CargoAggregate> cargosInConsignment;
+    @Getter protected Integer consignmentID;
+    @Getter protected List<CargoAggregate> cargosInConsignment;
     
     protected ConsignmentAggregate() {
     }
     
-    public List<CargoAggregate> getCargosInConsignment() {
-        return Collections.unmodifiableList(cargosInConsignment);
+    protected ConsignmentAggregate(Integer consignmentID, List<CargoAggregate> cargosInConsignment) {
+        this.consignmentID = consignmentID;
+        this.cargosInConsignment = Collections.unmodifiableList(cargosInConsignment);
     }
+    
 }

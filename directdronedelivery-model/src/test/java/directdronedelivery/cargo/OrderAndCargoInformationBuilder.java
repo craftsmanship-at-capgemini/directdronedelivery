@@ -90,8 +90,8 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
-    public OrderAndCargoInformationBuilder withDeliveryAddress(String houseNumber, String streetName, String postalCode) {
-        underConstruction.order.deliveryAddress = DeliveryAddress.newAddress(houseNumber, streetName, postalCode);
+    public OrderAndCargoInformationBuilder withDeliveryAddress(String city, String postalCode, String houseNumber, String streetName) {
+        underConstruction.order.deliveryAddress = DeliveryAddress.newAddress(city, postalCode, houseNumber, streetName);
         return this;
     }
     
