@@ -1,5 +1,6 @@
 package directdronedelivery.cargo;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import directdronedelivery.cargo.AcceptableDeliveryTime;
@@ -33,6 +34,7 @@ public class OrderAndCargoInformationBuilder {
         withFragileCommodity(false);
         withDangerousGoods(false);
         withUnlimitedDeliveryTime();
+        withDeliveryAddress("Wrocław", "50-540", "Jableczna", "13", "123A");
         return this;
     }
     
@@ -90,13 +92,15 @@ public class OrderAndCargoInformationBuilder {
         return this;
     }
     
-    public OrderAndCargoInformationBuilder withDeliveryAddress(String city, String postalCode, String houseNumber, String streetName) {
-        underConstruction.order.deliveryAddress = DeliveryAddress.newAddress(city, postalCode, houseNumber, streetName);
+    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(
+            AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder) {
+        underConstruction.order.acceptableDeliveryTime = acceptableDeliveryTimeBuilder.build();
         return this;
     }
     
-    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(
-            AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder) {
+    public OrderAndCargoInformationBuilder withAcceptableDeliveryTime(List<String> intervals) {
+        AcceptableDeliveryTimeBuilder acceptableDeliveryTimeBuilder = AcceptableDeliveryTimeBuilder.aTime();
+        intervals.stream().forEach(interval -> acceptableDeliveryTimeBuilder.addInterval(interval));
         underConstruction.order.acceptableDeliveryTime = acceptableDeliveryTimeBuilder.build();
         return this;
     }
@@ -104,6 +108,11 @@ public class OrderAndCargoInformationBuilder {
     public OrderAndCargoInformationBuilder withUnlimitedDeliveryTime() {
         underConstruction.order.acceptableDeliveryTime = AcceptableDeliveryTimeBuilder.aTime()
                 .addInterval("00:00-24:00").build();
+        return this;
+    }
+    
+    public OrderAndCargoInformationBuilder withDeliveryAddress(String city, String postalCode, String streetName, String houseNumber, String flatNumber) {
+        underConstruction.order.deliveryAddress = DeliveryAddress.newAddress(city, postalCode, streetName, houseNumber, flatNumber);
         return this;
     }
     

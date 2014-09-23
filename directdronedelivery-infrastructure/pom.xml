@@ -30,6 +30,13 @@
             <version>0.1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>craftsmanship-at-capgemini</groupId>
+            <artifactId>directdronedelivery-model</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

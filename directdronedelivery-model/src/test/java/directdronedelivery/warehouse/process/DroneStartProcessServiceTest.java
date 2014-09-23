@@ -151,7 +151,7 @@ public class DroneStartProcessServiceTest {
     private CargoAggregate prepareCargoDeliverableWithDrone() {
         Integer cargoID = OrderAndCargoInformationBuilder.nextCargoID();
         CargoAggregate cargo = aCargo().likeSmallGift().withCargoID(cargoID).
-                withDeliveryAddress("Wrocław", "47-300", "Strzegomska", "22").build();
+                withDeliveryAddress("Wrocław", "47-300", "Strzegomska", "22", "1").build();
         Mockito.when(cargoRepository.findCargo(cargo.getCargoID()))
                 .thenReturn(cargo);
         

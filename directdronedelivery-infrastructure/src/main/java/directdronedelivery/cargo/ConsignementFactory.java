@@ -2,7 +2,7 @@ package directdronedelivery.cargo;
 
 import java.util.List;
 
-public class CargoAndConsignementFactory {
+public class ConsignementFactory {
 
     public ConsignmentAggregate createConsignment(Integer consignmentID,
             List<CargoAggregate> cargosInConsignment) {

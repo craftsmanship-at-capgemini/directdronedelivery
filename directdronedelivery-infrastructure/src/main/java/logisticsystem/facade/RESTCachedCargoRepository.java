@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import logisticsystem.facade.Configuration.Config;
 import directdronedelivery.cargo.CargoAggregate;
-import directdronedelivery.cargo.CargoAndConsignementFactory;
+import directdronedelivery.cargo.ConsignementFactory;
 import directdronedelivery.cargo.CargoRepository;
 import directdronedelivery.cargo.ConsignmentAggregate;
 import directdronedelivery.cargo.JSONCargoMapper;
@@ -30,7 +30,7 @@ public class RESTCachedCargoRepository implements CargoRepository {
     
     @Inject @Config(BASEURI) String baseUri;
     
-    @Inject CargoAndConsignementFactory factory;
+    @Inject ConsignementFactory factory;
     
     @Override
     public CargoAggregate findCargo(Integer cargoID) {

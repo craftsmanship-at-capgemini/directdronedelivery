@@ -72,9 +72,9 @@ public class CargoLoadProcessService {
         DroneAggregate drone = droneRepository.findDrone(task.getDroneID());
         drone.attachCargo(task.getCargoID());
         
-        cargoLoadedEvent.fire(new CargoLoadedEvent(task.getDroneID(), task.getCargoID()));
-        
         warehouseEmployeeTaskService.closeTask(task.getTaskID());
+        
+        cargoLoadedEvent.fire(new CargoLoadedEvent(task.getDroneID(), task.getCargoID()));
     }
     
     public void abortManuallCargoLoadTask(@Observes @TaskAbort CargoLoadTask task) {
