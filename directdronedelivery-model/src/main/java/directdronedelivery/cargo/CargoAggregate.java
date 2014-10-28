@@ -15,6 +15,8 @@ public class CargoAggregate {
     @Getter protected boolean fragileCommodity;
     @Getter protected boolean dangerousGoods;
     
+    @Getter protected boolean dataNotComplete = false;
+    
     @Getter protected OrderAggregate order;
     
     protected CargoAggregate() {

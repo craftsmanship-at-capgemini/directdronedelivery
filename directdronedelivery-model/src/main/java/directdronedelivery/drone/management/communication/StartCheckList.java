@@ -23,10 +23,10 @@ public class StartCheckList {
         
         checkList.batteryCheck = true;
         switch (droneType) {
-            case SMALL_FOUR_ROTORS:
+            case QUADROCOPTER:
                 checkList.minBatteryCharge = 60;
             break;
-        case BIG_SIX_ROTORS:
+        case HEXACOPTER:
             checkList.minBatteryCharge = 80;
             break;
         }

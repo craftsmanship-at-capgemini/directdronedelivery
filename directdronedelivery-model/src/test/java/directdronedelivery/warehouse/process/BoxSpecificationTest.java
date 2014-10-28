@@ -24,7 +24,7 @@ public class BoxSpecificationTest {
     @Test
     public void shouldPreferSmallFragileBox() {
         CargoAggregate fragileCargo = aCargo().likeSmallGift().but().withFragileCommodity(true).build();
-        DroneAggregate smallDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.SMALL_FOUR_ROTORS).build();
+        DroneAggregate smallDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.QUADROCOPTER).build();
         
         BoxChooseSpecification boxSpecification = new BoxChooseSpecification(fragileCargo, smallDrone);
         BoxType preferredBoxTyp = boxSpecification.preferredBoxTyp();
@@ -35,7 +35,7 @@ public class BoxSpecificationTest {
     @Test
     public void shouldPreferBigFragileBox() {
         CargoAggregate fragileCargo = aCargo().likeSmallGift().but().withFragileCommodity(true).build();
-        DroneAggregate bigDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.BIG_SIX_ROTORS).build();
+        DroneAggregate bigDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.HEXACOPTER).build();
         
         BoxChooseSpecification boxSpecification = new BoxChooseSpecification(fragileCargo, bigDrone);
         BoxType preferredBoxTyp = boxSpecification.preferredBoxTyp();
@@ -46,7 +46,7 @@ public class BoxSpecificationTest {
     @Test
     public void shouldPreferSmallBox() {
         CargoAggregate nonfragileCargo = aCargo().likeSmallGift().but().withFragileCommodity(false).build();
-        DroneAggregate smallDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.SMALL_FOUR_ROTORS).build();
+        DroneAggregate smallDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.QUADROCOPTER).build();
         
         BoxChooseSpecification boxChooseSpecSmall = new BoxChooseSpecification(nonfragileCargo, smallDrone);
         
@@ -56,7 +56,7 @@ public class BoxSpecificationTest {
     @Test
     public void shouldPreferBigBox() {
         CargoAggregate nonfragileCargo = aCargo().likeSmallGift().but().withFragileCommodity(false).build();
-        DroneAggregate bigDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.BIG_SIX_ROTORS).build();
+        DroneAggregate bigDrone = aDrone().likeDocked4RotorsDrone().but().withDroneType(DroneType.HEXACOPTER).build();
         
         BoxChooseSpecification boxSpecification = new BoxChooseSpecification(nonfragileCargo, bigDrone);
         BoxType preferredBoxTyp = boxSpecification.preferredBoxTyp();

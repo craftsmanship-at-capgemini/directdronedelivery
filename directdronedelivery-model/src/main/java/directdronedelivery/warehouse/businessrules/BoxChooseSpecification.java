@@ -21,13 +21,13 @@ public class BoxChooseSpecification {
     
     public BoxType preferredBoxTyp() {
         switch (droneType) {
-        case BIG_SIX_ROTORS:
+        case HEXACOPTER:
             if (fragileCommodity) {
                 return BIG_FRAGILE;
             } else {
                 return BIG;
             }
-        case SMALL_FOUR_ROTORS:
+        case QUADROCOPTER:
             if (fragileCommodity) {
                 return SMALL_FRAGILE;
             } else {

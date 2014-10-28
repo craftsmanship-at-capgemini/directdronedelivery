@@ -30,7 +30,7 @@ public class DroneBuilder {
     
     public DroneBuilder likeDocked4RotorsDrone() {
         withMockedDroneCommunicationProtocol();
-        withDroneType(DroneType.SMALL_FOUR_ROTORS);
+        withDroneType(DroneType.QUADROCOPTER);
         withDroneID(nextDroneID.incrementAndGet());
         withIPAddress("194.13.82.11");
         withFirmware("UAV_DRONECORP_SMALL2013_V14.2.13");
